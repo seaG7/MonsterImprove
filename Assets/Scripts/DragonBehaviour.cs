@@ -1,12 +1,9 @@
 using UnityEngine;
-using System.Collections;
-using UnityEngine.UIElements;
-using System.Transactions;
-using UnityEngine.Rendering;
-
+using UnityEngine.XR.Hands.Samples.GestureSample;
 public class DragonBehaviour : MonoBehaviour
 {
-
+	[SerializeField] private StaticHandGesture _gestures;
+	
 	private GameController _game;
 	public Animator _animator;
 	[SerializeField] public float _hp;
@@ -15,6 +12,7 @@ public class DragonBehaviour : MonoBehaviour
 	[SerializeField] public float _stamina;
 	[SerializeField] public float _strength;
 	
+	
 	void Start()
 	{
 		_game = FindAnyObjectByType<GameController>();
@@ -22,10 +20,34 @@ public class DragonBehaviour : MonoBehaviour
 	}
 	void Update()
 	{
-		if (_game.needToFight)
+		
+	}
+	public void FirstAttack()
+	{
+		if (_game.needToFight && (_game._enemyDragon != null))
 		{
-			
+			_animator.SetInteger("AttackState", 1);
 		}
 	}
-	
+	public void SecondAttack()
+	{
+		if (_game.needToFight && (_game._enemyDragon != null))
+		{
+			_animator.SetInteger("AttackState", 2);
+		}
+	}
+	public void ThirdAttack()
+	{
+		if (_game.needToFight && (_game._enemyDragon != null))
+		{
+			_animator.SetInteger("AttackState", 3);
+		}
+	}
+	public void FourthAttack()
+	{
+		if (_game.needToFight && (_game._enemyDragon != null))
+		{
+			_animator.SetInteger("AttackState", 4);
+		}
+	}
 }

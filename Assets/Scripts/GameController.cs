@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-	public GameController _game;
+	private DragonBehaviour _dragonController;
 	[SerializeField] GameObject[] _eggs;
 	[SerializeField] GameObject[] _dragons;
 	[SerializeField] GameObject[] _enemyDragons;
@@ -17,7 +17,7 @@ public class GameController : MonoBehaviour
 	public bool needToFight = false;
 	void Start()
 	{
-		_game = FindAnyObjectByType<GameController>();
+		
 	}
 	void Update()
 	{
@@ -48,10 +48,27 @@ public class GameController : MonoBehaviour
 		
 		_currentDragon = Instantiate(_dragons[0], _spawnPos, Quaternion.identity);
 		_currentDragon.transform.LookAt(FindAnyObjectByType<Camera>().transform);
+		_dragonController = _currentDragon.GetComponent<DragonBehaviour>();
 		
 		_eggAnimator.SetInteger("Crack", 1);
 		
 		yield return new WaitForSecondsRealtime(3f);
 		Destroy(_hatchingEgg);
+	}
+	public void GestureAttack1()
+	{
+		_dragonController.FirstAttack();
+	}
+	public void GestureAttack2()
+	{
+		_dragonController.SecondAttack();
+	}
+	public void GestureAttack3()
+	{
+		_dragonController.ThirdAttack();
+	}
+	public void GestureAttack4()
+	{
+		_dragonController.FourthAttack();
 	}
 }
