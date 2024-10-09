@@ -1310,6 +1310,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2982947947831359677}
   - component: {fileID: 7547348847135819423}
+  - component: {fileID: 9058924528811013213}
   m_Layer: 20
   m_Name: Black Baby Dragon
   m_TagString: Animal
@@ -1326,7 +1327,7 @@ Transform:
   m_GameObject: {fileID: 8382952876064439943}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.0017116, y: 0, z: 1.6957208}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1355,6 +1356,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &9058924528811013213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8382952876064439943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93a42c185fd82724284c33ac4d35c6df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 0}
 --- !u!1 &8475758602496146566
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,11 +5,15 @@ public class QuickMenuUI : MonoBehaviour
 {
 	[SerializeField] private Button resetRoomButton;
 	[SerializeField] private Button spawnEggButton;
+	[SerializeField] private Button battleButton;
 	[SerializeField] private Button exitButton;
+	private GameController _game;
 	private void Awake()
 	{
+		_game = FindAnyObjectByType<GameController>();
 		resetRoomButton.onClick.AddListener(ResetRoom);
-		spawnEggButton.onClick.AddListener(SpawnEgg);
+		spawnEggButton.onClick.AddListener(_game.SpawnHatchingEgg);
+		battleButton.onClick.AddListener(_game.StartFight);
 	  	exitButton.onClick.AddListener(Exit);
 	}
 	private void Exit()
@@ -20,16 +24,11 @@ public class QuickMenuUI : MonoBehaviour
 		UnityEngine.Application.Quit();
 	#endif
 	}
-	private void SpawnEgg()
-	{
-		var egg = Resources.Load<GameObject>("Prefabs/Interactable Egg");    
-		Instantiate(egg, transform.position - transform.forward * 0.25f, Quaternion.identity);
-	}
 	private void ResetRoom()
 	{
-    	var arSession = FindAnyObjectByType<UnityEngine.XR.ARFoundation.ARSession>();
-    	var success = (arSession.subsystem as UnityEngine.XR.OpenXR.Features.Meta.MetaOpenXRSessionSubsystem)?.TryRequestSceneCapture() ?? false;
-    	Debug.Log($"Запрос на захват сцены Meta OpenXR завершен с результатом: {success}");
+		var arSession = FindAnyObjectByType<UnityEngine.XR.ARFoundation.ARSession>();
+		var success = (arSession.subsystem as UnityEngine.XR.OpenXR.Features.Meta.MetaOpenXRSessionSubsystem)?.TryRequestSceneCapture() ?? false;
+		Debug.Log($"Запрос на захват сцены Meta OpenXR завершен с результатом: {success}");
 	}
 	void Update()
 	{

@@ -1003,6 +1003,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6422032053779159475}
   - component: {fileID: 416411396254780760}
+  - component: {fileID: -8811874121252490188}
   m_Layer: 20
   m_Name: Green Baby Dragon
   m_TagString: Animal
@@ -1019,7 +1020,7 @@ Transform:
   m_GameObject: {fileID: 6210143477941480995}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.09920812, y: 0, z: 3.8597069}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1036,8 +1037,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6210143477941480995}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: c869acf0f32d55340b4dd39f39cc49f3, type: 3}
-  m_Controller: {fileID: 9100000, guid: 02164d6c36c123d40b200258d2e826b8, type: 2}
+  m_Avatar: {fileID: 9000000, guid: e37b3e6637737fd4b802699820ee07bb, type: 3}
+  m_Controller: {fileID: 9100000, guid: 610018dbf6095114f8983f3ecbcbadee, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 1
   m_ApplyRootMotion: 1
@@ -1048,6 +1049,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-8811874121252490188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6210143477941480995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93a42c185fd82724284c33ac4d35c6df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 0}
 --- !u!1 &6245771044248178111
 GameObject:
   m_ObjectHideFlags: 0
