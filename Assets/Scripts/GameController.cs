@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
 	public GameObject _currentDragon;
 	public GameObject _enemyDragon;
 	public bool needToFight = false;
+	public bool isHatching = false;
 	void Start()
 	{
 		
@@ -45,7 +46,7 @@ public class GameController : MonoBehaviour
 		_spawnPos.z -= 0.05f;
 		
 		yield return new WaitForSecondsRealtime(_hatchingTime);
-		
+		isHatching = true;
 		_currentDragon = Instantiate(_dragons[0], _spawnPos, Quaternion.identity);
 		_currentDragon.transform.LookAt(FindAnyObjectByType<Camera>().transform);
 		_dragonController = _currentDragon.GetComponent<DragonBehaviour>();
@@ -70,5 +71,9 @@ public class GameController : MonoBehaviour
 	public void GestureAttack4()
 	{
 		_dragonController.FourthAttack();
+	}
+	public void StopGestureAttack()
+	{
+		_dragonController.StopAttack();
 	}
 }

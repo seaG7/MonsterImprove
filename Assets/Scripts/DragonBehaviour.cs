@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.XR.Hands.Samples.GestureSample;
 public class DragonBehaviour : MonoBehaviour
 {
@@ -17,10 +18,22 @@ public class DragonBehaviour : MonoBehaviour
 	{
 		_game = FindAnyObjectByType<GameController>();
 		_animator = GetComponent<Animator>();
+		if (_game.isHatching)
+			StartCoroutine(SetHatchingFalse());
 	}
 	void Update()
 	{
 		
+	}
+	private void OnCollisionEnter(Collision collision)
+	{
+		_hp -= _game._enemyDragon.GetComponent<EnemyDragonController>()._strength;
+	}
+	public IEnumerator SetHatchingFalse()
+	{
+		_animator.SetBool("IsHatching", true);
+		yield return new WaitForSecondsRealtime(2f);
+		_animator.SetBool("IsHatching", false);
 	}
 	public void FirstAttack()
 	{
@@ -49,5 +62,9 @@ public class DragonBehaviour : MonoBehaviour
 		{
 			_animator.SetInteger("AttackState", 4);
 		}
+	}
+	public void StopAttack()
+	{
+		_animator.SetInteger("AttackState", 0);
 	}
 }
