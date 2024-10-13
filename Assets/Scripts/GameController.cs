@@ -1,8 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using TMPro.EditorUtilities;
-using Unity.VisualScripting;
-using Unity.XR.CoreUtils.GUI;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
