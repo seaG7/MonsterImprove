@@ -1310,7 +1310,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2982947947831359677}
   - component: {fileID: 7547348847135819423}
-  - component: {fileID: 9058924528811013213}
+  - component: {fileID: -6247263819728700534}
   m_Layer: 20
   m_Name: Black Baby Dragon
   m_TagString: Animal
@@ -1345,7 +1345,7 @@ Animator:
   m_GameObject: {fileID: 8382952876064439943}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: c869acf0f32d55340b4dd39f39cc49f3, type: 3}
-  m_Controller: {fileID: 9100000, guid: 02164d6c36c123d40b200258d2e826b8, type: 2}
+  m_Controller: {fileID: 9100000, guid: 610018dbf6095114f8983f3ecbcbadee, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 1
   m_ApplyRootMotion: 1
@@ -1356,7 +1356,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &9058924528811013213
+--- !u!114 &-6247263819728700534
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1365,10 +1365,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8382952876064439943}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93a42c185fd82724284c33ac4d35c6df, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e1e41e348e3e1544bd76acd061e3100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
+  _hp: 50
+  _speed: 1
+  _strength: 5
+  _attackRange: 0.8
 --- !u!1 &8475758602496146566
 GameObject:
   m_ObjectHideFlags: 0

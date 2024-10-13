@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyDragonController : MonoBehaviour
@@ -5,11 +6,9 @@ public class EnemyDragonController : MonoBehaviour
 	private GameController _game;
 	public Animator _animator;
 	[SerializeField] public float _hp;
-	[SerializeField] public float _speed = 4f;
+	[SerializeField] public float _speed;
 	[SerializeField] public float _strength;
-	[SerializeField] public float _lookAtSpeed = 5f;
-	[SerializeField] public float _attackRange = 1.5f;
-	private float _desiredDistance = 1.5f;
+	[SerializeField] public float _attackRange = 1f;
 	void Start()
 	{
 		_game = FindAnyObjectByType<GameController>();
@@ -21,31 +20,30 @@ public class EnemyDragonController : MonoBehaviour
 		{
 			if (_hp <= 0)
 			{
-				
+				_animator.SetBool("IsDie", true);
 			}
 			
 			Vector3 lookAt = _game._currentDragon.transform.position;
 			lookAt.y = transform.position.y;
 			transform.LookAt(lookAt);
-			float distance = Vector3.Distance(gameObject.transform.position, _game._currentDragon.transform.position);
-			if (distance < _attackRange)
+			float distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
+			if (distance <= _attackRange)
 			{
 				if (!_game.needToFight)
-					_animator.SetBool("IsFlying", false);
+					{
+						_animator.SetBool("IsFlying", false);
+						_animator.SetBool("IsLanding", true);
+						_animator.SetInteger("AttackState", 1);
+					}
 				_game.needToFight = true;
 			}
-			else
+			else if (distance + 0.1f > _attackRange)
 			{
-				if (_game.needToFight)
-					_animator.SetBool("IsFlying", true);
+				_animator.SetInteger("AttackState", 0);
+				_animator.SetBool("IsFlying", true);
 				_game.needToFight = false;
 				
-				Vector3 direction = (_game._currentDragon.transform.position - transform.position).normalized;
-				Quaternion targetRotation = Quaternion.LookRotation(direction);
-				transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _lookAtSpeed * Time.deltaTime);
-
-				Vector3 targetPosition = _game._currentDragon.transform.position - direction * _desiredDistance;
-				transform.position = Vector3.Lerp(transform.position, targetPosition, _speed * Time.deltaTime);
+				transform.position = Vector3.MoveTowards(transform.position, lookAt, _speed * Time.deltaTime);
 			}
 		}
 	}

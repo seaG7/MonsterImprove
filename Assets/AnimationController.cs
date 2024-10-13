@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class AnimationController : StateMachineBehaviour
 {
-	// OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	{
-		if (Animator.StringToHash("AttackState") != 0)
-	   	animator.SetInteger("AttackState", Random.Range(1,5));
+		if (animator.GetInteger("AttackState") != 0)
+	   		animator.SetInteger("AttackState", Random.Range(1,5));
 	}
-
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	//override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	//{

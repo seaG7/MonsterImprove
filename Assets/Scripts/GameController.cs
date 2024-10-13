@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
 	public GameObject _currentDragon;
 	public GameObject _enemyDragon;
 	public bool needToFight = false;
+	public bool isFighting = false;
 	public bool isHatching = false;
 	void Start()
 	{
@@ -31,10 +32,11 @@ public class GameController : MonoBehaviour
 	public void StartFight()
 	{
 		Vector3 _spawnPos = _currentDragon.transform.position;
-		_spawnPos.x += 8f;
-		_spawnPos.z += 8f;
+		_spawnPos.x += 4f;
+		_spawnPos.z += 4f;
 		_enemyDragon = Instantiate(_enemyDragons[0], _spawnPos, Quaternion.identity);
 		_currentDragon.transform.LookAt(_enemyDragon.transform);
+		isFighting = true;
 	}
 	public IEnumerator HatchingDragon()
 	{
@@ -53,7 +55,7 @@ public class GameController : MonoBehaviour
 		
 		_eggAnimator.SetInteger("Crack", 1);
 		
-		yield return new WaitForSecondsRealtime(3f);
+		yield return new WaitForSecondsRealtime(2f);
 		Destroy(_hatchingEgg);
 	}
 	public void GestureAttack1()

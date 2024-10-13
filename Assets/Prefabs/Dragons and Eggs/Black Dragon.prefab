@@ -1378,6 +1378,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1881343345104471012}
   - component: {fileID: 7447599916808621910}
+  - component: {fileID: -5400605420912869033}
   m_Layer: 20
   m_Name: Black Dragon
   m_TagString: Animal
@@ -1423,6 +1424,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-5400605420912869033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7336204053598040717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e1e41e348e3e1544bd76acd061e3100, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 0}
+  _hp: 50
+  _speed: 4
+  _strength: 0
+  _attackRange: 1
 --- !u!1 &7362652745513888846
 GameObject:
   m_ObjectHideFlags: 0
