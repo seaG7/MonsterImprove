@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class GameController : MonoBehaviour
 {
@@ -7,10 +8,13 @@ public class GameController : MonoBehaviour
 	[SerializeField] GameObject[] _eggs;
 	[SerializeField] GameObject[] _dragons;
 	[SerializeField] GameObject[] _enemyDragons;
+	[SerializeField] GameObject _target;
 	[SerializeField] public float _hatchingTime;
+	public List<GameObject> _targets = new List<GameObject>();
 	public GameObject _currentDragon;
 	public GameObject _enemyDragon;
 	public bool needToFight = false;
+	public bool isMiniGaming = false;
 	public bool isFighting = false;
 	public bool isHatching = false;
 	void Start()
@@ -53,6 +57,43 @@ public class GameController : MonoBehaviour
 		
 		yield return new WaitForSecondsRealtime(2f);
 		Destroy(_hatchingEgg);
+	}
+	public IEnumerator MinigameFireball()
+	{
+		SpawnTargets();
+		while (isMiniGaming)
+		{
+			
+			yield return null;
+		}
+	}
+	public void SpawnTargets()
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			Vector3 _spawnPos = _currentDragon.transform.position;
+			switch (i)
+			{
+				case 0:
+					_spawnPos.x += 5;
+					_spawnPos.z += 5;
+					break;
+				case 1:
+					_spawnPos.x -= 5;
+					_spawnPos.z -= 5;
+					break;
+				case 2:
+					_spawnPos.x += 5;
+					_spawnPos.z -= 5;
+					break;
+				case 3:
+					_spawnPos.x -= 5;
+					_spawnPos.z += 5;
+					break;
+			}
+			_spawnPos.y += Random.Range(0f, 3f);
+			_targets.Add(Instantiate(_target, _spawnPos, Quaternion.identity));
+		}
 	}
 	public void GestureAttack1()
 	{

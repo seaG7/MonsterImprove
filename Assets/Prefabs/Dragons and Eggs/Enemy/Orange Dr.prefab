@@ -1621,10 +1621,10 @@ GameObject:
   m_Component:
   - component: {fileID: 9120834042150761449}
   - component: {fileID: 8123117618971533272}
-  - component: {fileID: 1156531595629651253}
+  - component: {fileID: 6175418051770521466}
   m_Layer: 20
   m_Name: Orange Dr
-  m_TagString: Player
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1668,7 +1668,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1156531595629651253
+--- !u!114 &6175418051770521466
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1677,14 +1677,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8788515596624696838}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93a42c185fd82724284c33ac4d35c6df, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e1e41e348e3e1544bd76acd061e3100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
   _hp: 50
   _speed: 1
-  _stamina: 40
   _strength: 5
+  _attackRange: 1
   _fireball: {fileID: 0}
   _spawnFirePos: {fileID: 0}
 --- !u!1 &8934849283228588582

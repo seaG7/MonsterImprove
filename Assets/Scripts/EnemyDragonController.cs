@@ -1,17 +1,30 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class EnemyDragonController : MonoBehaviour
 {
 	private GameController _game;
 	public Animator _animator;
+	
+	[Header("Enemy Dragon Stats")]
 	[SerializeField] public float _hp;
 	[SerializeField] public float _speed;
 	[SerializeField] public float _strength;
 	[SerializeField] public float _attackRange = 1f;
+	
+	[Header("Fireball")]
+	[SerializeField] public GameObject _fireball;
+	private Transform _spawnFirePos;
+	private List<GameObject> fireballs = new List<GameObject>();
+	private Vector3 lookAt;
+	private float distance;
+	private int countOfAttacks = 4;
 	void Start()
 	{
 		_game = FindAnyObjectByType<GameController>();
 		_animator = GetComponent<Animator>();
+		distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
 	}
 	void FixedUpdate()
 	{
@@ -22,36 +35,77 @@ public class EnemyDragonController : MonoBehaviour
 				_animator.SetBool("IsDie", true);
 			}
 			
-			Vector3 lookAt = _game._currentDragon.transform.position;
+			lookAt = _game._currentDragon.transform.position;
 			lookAt.y = transform.position.y;
 			transform.LookAt(lookAt);
-			float distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
 			if (distance <= _attackRange)
 			{
 				if (!_game.needToFight)
 					{
+						_game.needToFight = true;
 						_animator.SetBool("IsFlying", false);
 						_animator.SetBool("IsLanding", true);
-						_animator.SetInteger("AttackState", 1);
+						StartCoroutine(Attack());
 					}
-				_game.needToFight = true;
 			}
-			else if (distance + 0.1f > _attackRange)
+			else if (distance > _attackRange)
 			{
-				_animator.SetInteger("AttackState", 0);
-				_animator.SetBool("IsFlying", true);
 				_game.needToFight = false;
-				
-				transform.position = Vector3.MoveTowards(transform.position, lookAt, _speed * Time.deltaTime);
 			}
 		}
 	}
+	
 	void Update()
 	{
 		
 	}
 	private void OnCollisionEnter(Collision collision)
 	{
-		_hp -= _game._currentDragon.GetComponent<DragonBehaviour>()._strength;
+		if (collision.transform.tag == "Player")
+		{
+			_hp -= _game._currentDragon.GetComponent<DragonBehaviour>()._strength;
+		}
+	}
+	public IEnumerator Attack()
+	{
+		while (_game.needToFight)
+		{
+			_animator.SetInteger("AttackState", Random.Range(1,countOfAttacks));
+			Debug.Log("enemy random attack switched");
+			if (_animator.GetInteger("AttackState") == 1)
+			{
+				StartCoroutine(FireballAttack());
+			}
+			yield return new WaitForSecondsRealtime(0.1f);
+			_animator.SetInteger("AttackState", 0);
+			Debug.Log("AttackState enemy = 0");
+			yield return new WaitForSecondsRealtime(Random.Range(0.5f, 1.2f));
+		}
+		StartCoroutine(FlyToTarget());
+	}
+	public IEnumerator FireballAttack()
+	{
+		_spawnFirePos = transform.Find("FireballPos").GetComponent<Transform>();
+		yield return new WaitForSecondsRealtime(0.2f);
+		fireballs.Add(Instantiate(_fireball, _spawnFirePos));
+		Debug.Log("enemy fireball spawned");
+		yield return new WaitForSecondsRealtime(2f);
+		if (fireballs.Count > 0)
+		{
+			Destroy(fireballs[0]);
+			fireballs.RemoveAt(0);
+		}
+	}
+	public IEnumerator FlyToTarget()
+	{
+		while (distance > _attackRange)
+		{
+			lookAt = _game._currentDragon.transform.position;
+			lookAt.y = transform.position.y;
+			transform.LookAt(lookAt);
+			transform.position = Vector3.MoveTowards(transform.position, lookAt, _speed * Time.deltaTime);
+			distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
+			yield return null;
+		}
 	}
 }

@@ -1,18 +1,23 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.XR.Hands.Samples.GestureSample;
-using System.Linq;
 public class DragonBehaviour : MonoBehaviour
 {
 	private GameController _game;
 	public Animator _animator;
 	// private List<StaticHandGesture> _gestures = new List<StaticHandGesture>(4);
 	// [SerializeField] private GameObject _gesturesObject;
+	[Header("Your dragon Stats")]
+	[SerializeField] public int _level;
+	[SerializeField] public int _xp;
 	[SerializeField] public float _hp;
 	[SerializeField] public float _speed;
-	[SerializeField] public float _stamina;
 	[SerializeField] public float _strength;
+	
+	[Header("Fireball")]
+	[SerializeField] public GameObject _fireball;
+	private Transform _spawnFirePos;
+	private List<GameObject> fireballs = new List<GameObject>();
 	
 	void Start()
 	{
@@ -29,7 +34,10 @@ public class DragonBehaviour : MonoBehaviour
 	}
 	private void OnCollisionEnter(Collision collision)
 	{
-		_hp -= _game._enemyDragon.GetComponent<EnemyDragonController>()._strength;
+		if (collision.transform.tag == "Enemy")
+		{
+			_hp -= _game._enemyDragon.GetComponent<EnemyDragonController>()._strength;
+		}
 	}
 	public IEnumerator SetHatchingFalse()
 	{
@@ -43,6 +51,7 @@ public class DragonBehaviour : MonoBehaviour
 		{
 			_animator.SetInteger("AttackState", 1);
 			Debug.Log("first attack activated by the gesture");
+			StartCoroutine(FireballAttack());
 		}
 	}
 	public void SecondAttack()
@@ -72,5 +81,18 @@ public class DragonBehaviour : MonoBehaviour
 	public void StopAttack()
 	{
 		_animator.SetInteger("AttackState", 0);
+	}
+	public IEnumerator FireballAttack()
+	{
+		_spawnFirePos = transform.Find("FireballPos").GetComponent<Transform>();
+		yield return new WaitForSecondsRealtime(0.2f);
+		fireballs.Add(Instantiate(_fireball, _spawnFirePos));
+		Debug.Log("player fireball spawned");
+		yield return new WaitForSecondsRealtime(2f);
+		if (fireballs.Count > 0)
+		{
+			Destroy(fireballs[0]);
+			fireballs.RemoveAt(0);
+		}
 	}
 }

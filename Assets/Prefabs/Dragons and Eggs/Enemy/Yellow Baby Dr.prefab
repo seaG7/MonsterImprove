@@ -265,11 +265,11 @@ GameObject:
   m_Component:
   - component: {fileID: 8777614847587825588}
   - component: {fileID: 8896191985386427655}
-  - component: {fileID: -2943144876947912762}
   - component: {fileID: -838655002875963368}
+  - component: {fileID: -1814604829568313043}
   m_Layer: 20
   m_Name: Yellow Baby Dr
-  m_TagString: Player
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -313,25 +313,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-2943144876947912762
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1327312109483544508}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93a42c185fd82724284c33ac4d35c6df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
-  _hp: 50
-  _speed: 1
-  _stamina: 40
-  _strength: 5
-  _fireball: {fileID: 0}
-  _spawnFirePos: {fileID: 0}
 --- !u!114 &-838655002875963368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,6 +330,25 @@ MonoBehaviour:
   _speed: 0
   _stamina: 0
   _strength: 0
+  _fireball: {fileID: 0}
+  _spawnFirePos: {fileID: 0}
+--- !u!114 &-1814604829568313043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327312109483544508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e1e41e348e3e1544bd76acd061e3100, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 0}
+  _hp: 50
+  _speed: 1
+  _strength: 5
+  _attackRange: 0.75
   _fireball: {fileID: 0}
   _spawnFirePos: {fileID: 0}
 --- !u!1 &2055331600665110542

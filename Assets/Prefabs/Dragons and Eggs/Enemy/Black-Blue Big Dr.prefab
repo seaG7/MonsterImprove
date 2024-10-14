@@ -1205,10 +1205,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7424605773524970452}
   - component: {fileID: 8739049969966929439}
-  - component: {fileID: -7888699324675301934}
+  - component: {fileID: 8652292418711874000}
   m_Layer: 20
   m_Name: Black-Blue Big Dr
-  m_TagString: Player
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1252,7 +1252,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-7888699324675301934
+--- !u!114 &8652292418711874000
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1261,14 +1261,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6251545326004492936}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93a42c185fd82724284c33ac4d35c6df, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e1e41e348e3e1544bd76acd061e3100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
   _hp: 50
   _speed: 1
-  _stamina: 40
   _strength: 5
+  _attackRange: 1.25
   _fireball: {fileID: 0}
   _spawnFirePos: {fileID: 0}
 --- !u!1 &6281200103855334032

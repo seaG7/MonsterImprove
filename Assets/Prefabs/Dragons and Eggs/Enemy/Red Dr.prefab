@@ -814,10 +814,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6479354808193277263}
   - component: {fileID: 5864358048988674420}
-  - component: {fileID: 8833564878044427976}
+  - component: {fileID: -3677770243354544380}
   m_Layer: 20
   m_Name: Red Dr
-  m_TagString: Player
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -861,7 +861,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8833564878044427976
+--- !u!114 &-3677770243354544380
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -870,14 +870,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 3549542650607535916}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93a42c185fd82724284c33ac4d35c6df, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e1e41e348e3e1544bd76acd061e3100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
   _hp: 50
   _speed: 1
-  _stamina: 40
   _strength: 5
+  _attackRange: 1
   _fireball: {fileID: 0}
   _spawnFirePos: {fileID: 0}
 --- !u!1 &3925962597031778207

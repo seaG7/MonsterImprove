@@ -283,10 +283,13 @@ MonoBehaviour:
   - {fileID: 1327312109483544508, guid: 81668d8196ad0cf4e9c5485d257568b2, type: 3}
   _enemyDragons:
   - {fileID: 8289441768737658518, guid: a122b36c68f19a24cb21632cba1463ab, type: 3}
+  _target: {fileID: 0}
   _hatchingTime: 2
+  _targets: []
   _currentDragon: {fileID: 0}
   _enemyDragon: {fileID: 0}
   needToFight: 0
+  isMiniGaming: 0
   isFighting: 0
   isHatching: 0
 --- !u!1 &75951438
