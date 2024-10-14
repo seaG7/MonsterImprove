@@ -1,11 +1,14 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.XR.Hands.Samples.GestureSample;
+using System.Linq;
 public class DragonBehaviour : MonoBehaviour
 {
-	[SerializeField] private StaticHandGesture _gestures;
 	private GameController _game;
 	public Animator _animator;
+	// private List<StaticHandGesture> _gestures = new List<StaticHandGesture>(4);
+	// [SerializeField] private GameObject _gesturesObject;
 	[SerializeField] public float _hp;
 	[SerializeField] public float _speed;
 	[SerializeField] public float _stamina;
@@ -17,6 +20,8 @@ public class DragonBehaviour : MonoBehaviour
 		_animator = GetComponent<Animator>();
 		if (_game.isHatching)
 			StartCoroutine(SetHatchingFalse());
+		// _gestures = _gesturesObject.transform.GetComponentsInChildren<StaticHandGesture>().ToList();
+		// Debug.Log(_gestures);
 	}
 	void Update()
 	{
