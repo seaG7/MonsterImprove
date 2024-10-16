@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
 	[SerializeField] GameObject[] _enemyDragons;
 	[SerializeField] GameObject _target;
 	[SerializeField] public float _hatchingTime;
+	[SerializeField] Camera _mainCamera;
 	public List<GameObject> _targets = new List<GameObject>();
 	public GameObject _currentDragon;
 	public GameObject _enemyDragon;
@@ -27,20 +28,22 @@ public class GameController : MonoBehaviour
 	}
 	public void SpawnHatchingEgg()
 	{
-		StartCoroutine(HatchingDragon());
+		if (!needToFight)
+			StartCoroutine(HatchingDragon());
 	}
 	public void StartFight()
 	{
 		Vector3 _spawnPos = _currentDragon.transform.position;
 		_spawnPos.x += 4f;
-		_spawnPos.z += 4f;
+		_spawnPos.z += 10f;
 		_enemyDragon = Instantiate(_enemyDragons[0], _spawnPos, Quaternion.identity);
 		_currentDragon.transform.LookAt(_enemyDragon.transform);
 		isFighting = true;
 	}
 	public IEnumerator HatchingDragon()
 	{
-		GameObject _hatchingEgg = Instantiate(_eggs[0]);
+		// GameObject _hatchingEgg = Instantiate(_eggs[0]);
+		GameObject _hatchingEgg = SpawnObject(_eggs[0]);
 		Animator _eggAnimator = _hatchingEgg.GetComponent<Animator>();
 		
 		Vector3 _spawnPos = _hatchingEgg.transform.position;
@@ -57,13 +60,43 @@ public class GameController : MonoBehaviour
 		
 		yield return new WaitForSecondsRealtime(2f);
 		Destroy(_hatchingEgg);
+		
 	}
-	public IEnumerator MinigameFireball()
+	public GameObject SpawnObject(GameObject _object)
+	{
+		Ray ray = new Ray(_mainCamera.transform.position, _mainCamera.transform.forward);
+		RaycastHit hit;
+
+		if (Physics.Raycast(ray, out hit))
+		{
+			// Спавн объекта на месте удара
+			GameObject _spawnedObject = Instantiate(_object, hit.point, Quaternion.identity);
+			return _spawnedObject;
+		}
+		return null;
+	}
+	public IEnumerator MinigameFireball(int _countOfTargets)
 	{
 		SpawnTargets();
+		
+		int _destroyedTargetsAmount = 0;
 		while (isMiniGaming)
 		{
 			
+			// if выйти по кнопке -> isMiniGaming = false; break;
+			
+			if (_targets.Count < 4)
+			{
+				_destroyedTargetsAmount++;
+				if (_destroyedTargetsAmount < _countOfTargets)
+				{
+					isMiniGaming = false;
+					break; // мб надо стопить короутину, хз))
+				}
+				_targets.Add(Instantiate(_target, RandomPosAroundDragon(), Quaternion.identity));
+				
+				// звук появления target и чет еще мэйби
+			}
 			yield return null;
 		}
 	}
@@ -71,48 +104,40 @@ public class GameController : MonoBehaviour
 	{
 		for (int i = 0; i < 4; i++)
 		{
-			Vector3 _spawnPos = _currentDragon.transform.position;
-			switch (i)
-			{
-				case 0:
-					_spawnPos.x += 5;
-					_spawnPos.z += 5;
-					break;
-				case 1:
-					_spawnPos.x -= 5;
-					_spawnPos.z -= 5;
-					break;
-				case 2:
-					_spawnPos.x += 5;
-					_spawnPos.z -= 5;
-					break;
-				case 3:
-					_spawnPos.x -= 5;
-					_spawnPos.z += 5;
-					break;
-			}
-			_spawnPos.y += Random.Range(0f, 3f);
-			_targets.Add(Instantiate(_target, _spawnPos, Quaternion.identity));
+			_targets.Add(Instantiate(_target, RandomPosAroundDragon(), Quaternion.identity));
 		}
+	}
+	public Vector3 RandomPosAroundDragon()
+	{
+		Vector3 _spawnPos = _currentDragon.transform.position;
+		_spawnPos.x += Random.Range(-5f, 5f);
+		_spawnPos.z += Random.Range(-5f, 5f);
+		_spawnPos.y += Random.Range(0.8f, 3f);
+		return _spawnPos;
 	}
 	public void GestureAttack1()
 	{
-		_dragonController.FirstAttack();
+		if (needToFight)
+			_dragonController.FirstAttack();
 	}
 	public void GestureAttack2()
 	{
-		_dragonController.SecondAttack();
+		if (needToFight)
+			_dragonController.SecondAttack();
 	}
 	public void GestureAttack3()
 	{
-		_dragonController.ThirdAttack();
+		if (needToFight)
+			_dragonController.ThirdAttack();
 	}
 	public void GestureAttack4()
 	{
-		_dragonController.FourthAttack();
+		if (needToFight)
+			_dragonController.FourthAttack();
 	}
 	public void StopGestureAttack()
 	{
-		_dragonController.StopAttack();
+		if (needToFight)
+			_dragonController.StopAttack();
 	}
 }

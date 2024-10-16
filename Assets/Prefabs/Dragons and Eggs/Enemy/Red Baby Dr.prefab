@@ -1757,6 +1757,6 @@ MonoBehaviour:
   _hp: 50
   _speed: 1
   _strength: 5
-  _attackRange: 0.75
-  _fireball: {fileID: 0}
-  _spawnFirePos: {fileID: 0}
+  _attackRange: 1.5
+  _fireball: {fileID: 5906165136450168134, guid: 61e222fb0060a4142ba543cdabbaa719,
+    type: 3}

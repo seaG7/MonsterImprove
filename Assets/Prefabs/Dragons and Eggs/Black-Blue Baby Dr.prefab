@@ -1523,8 +1523,8 @@ MonoBehaviour:
   _speed: 1.5
   _strength: 5
   _attackRange: 1
-  _fireball: {fileID: 0}
-  _spawnFirePos: {fileID: 0}
+  _fireball: {fileID: 5906165136450168134, guid: 9ab7896ab6d06774f8af13327a73ee5e,
+    type: 3}
 --- !u!114 &8280711041394603077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1538,12 +1538,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
+  _level: 0
+  _xp: 0
   _hp: 50
   _speed: 1
-  _stamina: 40
   _strength: 5
   _fireball: {fileID: 0}
-  _spawnFirePos: {fileID: 0}
+  pointsOfTarget: []
 --- !u!1 &8322601007529446580
 GameObject:
   m_ObjectHideFlags: 0

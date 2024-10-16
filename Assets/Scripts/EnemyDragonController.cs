@@ -11,7 +11,7 @@ public class EnemyDragonController : MonoBehaviour
 	[SerializeField] public float _hp;
 	[SerializeField] public float _speed;
 	[SerializeField] public float _strength;
-	[SerializeField] public float _attackRange = 1f;
+	[SerializeField] public float _attackRange;
 	
 	[Header("Fireball")]
 	[SerializeField] public GameObject _fireball;
@@ -30,10 +30,10 @@ public class EnemyDragonController : MonoBehaviour
 	{
 		if (_game._currentDragon != null)
 		{
-			if (_hp <= 0)
-			{
-				_animator.SetBool("IsDie", true);
-			}
+			// if (_hp <= 0)
+			// {
+			// 	_animator.SetBool("IsDie", true);
+			// }
 			
 			lookAt = _game._currentDragon.transform.position;
 			lookAt.y = transform.position.y;
@@ -50,6 +50,7 @@ public class EnemyDragonController : MonoBehaviour
 			}
 			else if (distance > _attackRange)
 			{
+				StartCoroutine(FlyToTarget());
 				_game.needToFight = false;
 			}
 		}
@@ -103,7 +104,7 @@ public class EnemyDragonController : MonoBehaviour
 			lookAt = _game._currentDragon.transform.position;
 			lookAt.y = transform.position.y;
 			transform.LookAt(lookAt);
-			transform.position = Vector3.MoveTowards(transform.position, lookAt, _speed * Time.deltaTime);
+			transform.position = Vector3.MoveTowards(transform.position, lookAt, _speed);
 			distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
 			yield return null;
 		}

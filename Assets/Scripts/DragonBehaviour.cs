@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 public class DragonBehaviour : MonoBehaviour
 {
 	private GameController _game;
@@ -19,6 +20,9 @@ public class DragonBehaviour : MonoBehaviour
 	private Transform _spawnFirePos;
 	private List<GameObject> fireballs = new List<GameObject>();
 	
+	[Header("Points")]
+	
+	[SerializeField] public Transform[] pointsOfTarget;
 	void Start()
 	{
 		_game = FindAnyObjectByType<GameController>();
@@ -93,6 +97,17 @@ public class DragonBehaviour : MonoBehaviour
 		{
 			Destroy(fireballs[0]);
 			fireballs.RemoveAt(0);
+		}
+	}
+	public IEnumerator Turn(Vector3 lookAt)
+	{
+		float rotationSpeed = 1f;
+		// запустить анимацию
+		while (_animator.GetCurrentAnimatorStateInfo(0).IsName("")) // поменять название
+		{
+			Quaternion targetRotation = Quaternion.LookRotation(lookAt);
+			transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+			yield return null;
 		}
 	}
 }

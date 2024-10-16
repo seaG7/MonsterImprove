@@ -21,19 +21,20 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TigerDrago Real Brown
-  m_Shader: {fileID: 4800000, guid: 313fcf3aebc04cf4ab4f8c5f2850be7f, type: 3}
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords:
+  m_ValidKeywords:
   - _EMISSION
   - _METALLICSPECGLOSSMAP
   - _NORMALMAP
+  m_InvalidKeywords: []
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap: {}
+  stringTagMap:
+    RenderType: Opaque
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
@@ -395,7 +396,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 0.20572595, g: 0.2028302, b: 1, a: 1}
     - _ClipPlane: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0, g: 0.5803921, b: 1, a: 1}
+    - _Color: {r: 0.20572591, g: 0.20283017, b: 1, a: 1}
     - _CoolShadowMultColor: {r: 0.9, g: 0.7, b: 0.75, a: 1}
     - _CoolShadowMultColor2: {r: 0.9, g: 0.7, b: 0.75, a: 1}
     - _CoolShadowMultColor3: {r: 0.9, g: 0.7, b: 0.75, a: 1}

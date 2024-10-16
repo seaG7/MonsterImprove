@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FireballBehaviour : MonoBehaviour
@@ -28,14 +29,20 @@ public class FireballBehaviour : MonoBehaviour
 	{
 		while (true)
 		{
-			transform.position = Vector3.MoveTowards(transform.position, lookAt, _speed * Time.deltaTime);
+			transform.position = Vector3.MoveTowards(transform.position, lookAt, _speed);
 			yield return null;
 		}
 	}
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (collision.transform.tag == "Player")
+		if (collision.transform.tag == "Player" || collision.transform.tag == "Enemy")
 		{
+			Destroy(gameObject);
+		}
+		if (collision.transform.tag == "Target")
+		{
+			Destroy(_game._targets[0]);
+			// анимка с получением опыта (айтем над моделькой player dragon)
 			Destroy(gameObject);
 		}
 	}

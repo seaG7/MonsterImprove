@@ -1459,7 +1459,6 @@ GameObject:
   - component: {fileID: 8744272027378607275}
   - component: {fileID: 5222638931086390672}
   - component: {fileID: 1984991651017014005}
-  - component: {fileID: -3509478343835500261}
   m_Layer: 20
   m_Name: Black-Blue Baby Dr
   m_TagString: Enemy
@@ -1522,26 +1521,9 @@ MonoBehaviour:
   _hp: 50
   _speed: 1
   _strength: 5
-  _attackRange: 0.75
-  _fireball: {fileID: 0}
---- !u!114 &-3509478343835500261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8289441768737658518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e1e41e348e3e1544bd76acd061e3100, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
-  _hp: 0
-  _speed: 0
-  _strength: 0
-  _attackRange: 1
-  _fireball: {fileID: 0}
+  _attackRange: 1.5
+  _fireball: {fileID: 5906165136450168134, guid: 61e222fb0060a4142ba543cdabbaa719,
+    type: 3}
 --- !u!1 &8322601007529446580
 GameObject:
   m_ObjectHideFlags: 0
