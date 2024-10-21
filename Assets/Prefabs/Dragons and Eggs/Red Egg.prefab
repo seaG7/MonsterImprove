@@ -266,6 +266,7 @@ GameObject:
   - component: {fileID: 7761068807538262858}
   - component: {fileID: 2505150295819923582}
   - component: {fileID: 2225265920442736533}
+  - component: {fileID: -3992802498383541365}
   m_Layer: 0
   m_Name: Red Egg
   m_TagString: Untagged
@@ -283,7 +284,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3560164444291147324}
@@ -333,6 +334,20 @@ CapsuleCollider:
   m_Height: 0.87
   m_Direction: 1
   m_Center: {x: 0, y: 0.45, z: 0}
+--- !u!114 &-3992802498383541365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6287708499341111943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed50c85804080f44ab85167e0bf1c8f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hatchingTime: 2
+  _dragon: {fileID: 8900471468109283889, guid: 57b9af467fe902245891d9defebe7a0b, type: 3}
 --- !u!1 &6817354836511078280
 GameObject:
   m_ObjectHideFlags: 0

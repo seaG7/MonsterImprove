@@ -76,6 +76,7 @@ GameObject:
   - component: {fileID: 3550659411757689230}
   - component: {fileID: 8524721151191442361}
   - component: {fileID: 1733287776234504218}
+  - component: {fileID: 8611510808516857412}
   m_Layer: 0
   m_Name: Orange Egg
   m_TagString: Untagged
@@ -93,7 +94,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6072389763510980627}
@@ -143,6 +144,20 @@ CapsuleCollider:
   m_Height: 0.87
   m_Direction: 1
   m_Center: {x: 0, y: 0.45, z: 0}
+--- !u!114 &8611510808516857412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2390676427672395494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed50c85804080f44ab85167e0bf1c8f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hatchingTime: 2
+  _dragon: {fileID: 5501522680847571009, guid: b2d482f8936c0474d85e5f696a7dce79, type: 3}
 --- !u!1 &3285440460753920400
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,6 +292,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7261569772506696063}
   - component: {fileID: 5994237594012449111}
+  - component: {fileID: 5087292481640678561}
   m_Layer: 0
   m_Name: EggMesh
   m_TagString: Untagged
@@ -358,6 +374,18 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.18330488, y: -0.13459426, z: 0.03227204}
     m_Extent: {x: 0.3693911, y: 0.36939132, z: 0.43617266}
   m_DirtyAABB: 0
+--- !u!114 &5087292481640678561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5138810056658013690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9828f5949871aa1478b4518c6cbd8d5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7840246335510128727
 GameObject:
   m_ObjectHideFlags: 0

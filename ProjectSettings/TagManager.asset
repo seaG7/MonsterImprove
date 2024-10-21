@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Animal
   - Enemy
+  - Target
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Raycast Check
   - Water
   - UI
   - 

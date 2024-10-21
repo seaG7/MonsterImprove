@@ -13,7 +13,9 @@ public class FireballBehaviour : MonoBehaviour
 		if (_game.needToFight)
 		{
 			lookAt = _game._currentDragon.transform.position;
-			lookAt.y = transform.position.y;
+			Vector3 lookPos = lookAt - transform.position;
+			lookPos.y = 0;
+	   		transform.rotation = Quaternion.LookRotation(lookPos);
 		}
 		else
 		{
@@ -27,9 +29,10 @@ public class FireballBehaviour : MonoBehaviour
 	}
 	public IEnumerator Fly()
 	{
+
 		while (true)
 		{
-			transform.position = Vector3.MoveTowards(transform.position, lookAt, _speed);
+			transform.position = Vector3.MoveTowards(transform.position, transform.forward, _speed * Time.deltaTime);
 			yield return null;
 		}
 	}

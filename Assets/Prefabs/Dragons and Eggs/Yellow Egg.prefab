@@ -385,6 +385,7 @@ GameObject:
   - component: {fileID: 6376045650486138344}
   - component: {fileID: 6962223587439459323}
   - component: {fileID: 1943160171338330754}
+  - component: {fileID: -5610812416021615589}
   m_Layer: 0
   m_Name: Yellow Egg
   m_TagString: Untagged
@@ -402,7 +403,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1766165832242922759}
@@ -452,6 +453,20 @@ CapsuleCollider:
   m_Height: 0.87
   m_Direction: 1
   m_Center: {x: 0, y: 0.45, z: 0}
+--- !u!114 &-5610812416021615589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7410744224797299731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed50c85804080f44ab85167e0bf1c8f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hatchingTime: 2
+  _dragon: {fileID: 1327312109483544508, guid: 81668d8196ad0cf4e9c5485d257568b2, type: 3}
 --- !u!1 &8938901774542820564
 GameObject:
   m_ObjectHideFlags: 0

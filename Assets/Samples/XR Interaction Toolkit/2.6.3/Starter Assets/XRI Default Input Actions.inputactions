@@ -2743,6 +2743,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Spawner Multicolored cubes",
+                    "type": "Button",
+                    "id": "90c16b4a-f765-43ff-ba1c-726b1c7e5c9b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Switch Spawner Multicolored Cubes",
+                    "type": "PassThrough",
+                    "id": "65b23dae-603d-4fbe-b1d6-af02af3c9ced",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -2754,6 +2772,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Switching Debug Mode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "650fe72a-a39c-4695-ad14-ffe2ef0deb2b",
+                    "path": "<XRController>{RightHand}/triggerButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Spawner Multicolored cubes",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8cc56364-8587-439a-8d24-f57796301cfc",
+                    "path": "<XRController>{RightHand}/primary2DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Switch Spawner Multicolored Cubes",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
