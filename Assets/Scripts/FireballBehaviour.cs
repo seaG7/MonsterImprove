@@ -1,38 +1,43 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class FireballBehaviour : MonoBehaviour
 {
 	[SerializeField] public float _speed;
 	private GameController _game;
-	private Vector3 lookAt;
+	private Vector3 _targetPos;
 	void Start()
 	{
 		_game = FindAnyObjectByType<GameController>();
 		if (_game.needToFight)
 		{
-			lookAt = _game._currentDragon.transform.position;
-			Vector3 lookPos = lookAt - transform.position;
-			lookPos.y = 0;
-	   		transform.rotation = Quaternion.LookRotation(lookPos);
+			if (gameObject.CompareTag("Enemy"))
+				_targetPos = _game._currentDragon.transform.position;
+			else
+				_targetPos = _game._enemyDragon.transform.position;
+			_targetPos.y += 0.1f;
+		}
+		else if (_game.isMiniGaming)
+		{
+			_targetPos = _game._selectedTargets[0].transform.position;
+			_game._selectedTargets.RemoveAt(0);
+			_targetPos.y += 0.1f;
 		}
 		else
 		{
-			// направить файрбол туда, куда нажали
+			_targetPos = _game._currentDragon.transform.forward;
 		}
-		StartCoroutine(Fly());
+		StartCoroutine(Fly(_targetPos));
 	}
 	void Update()
 	{
 		
 	}
-	public IEnumerator Fly()
+	public IEnumerator Fly(Vector3 targetPos)
 	{
-
 		while (true)
 		{
-			transform.position = Vector3.MoveTowards(transform.position, transform.forward, _speed * Time.deltaTime);
+			transform.position = Vector3.MoveTowards(transform.position, targetPos, _speed * Time.deltaTime);
 			yield return null;
 		}
 	}

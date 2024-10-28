@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour
 	[SerializeField] GameObject _target;
 	public GameObject _objectToPlace;
 	public List<GameObject> _targets = new List<GameObject>();
+	public List<GameObject> _selectedTargets = new List<GameObject>();
 	public GameObject _currentDragon;
 	public GameObject _enemyDragon;
 	public bool needToFight = false;
@@ -51,10 +52,11 @@ public class GameController : MonoBehaviour
 			if (_targets.Count < 4)
 			{
 				_destroyedTargetsAmount++;
-				if (_destroyedTargetsAmount < _countOfTargets)
+				if (_destroyedTargetsAmount >= _countOfTargets)
 				{
 					isMiniGaming = false;
-					break; // мб надо стопить короутину, хз))
+					StopCoroutine(MinigameFireball(_countOfTargets));
+					break;
 				}
 				_targets.Add(Instantiate(_target, RandomPosAroundDragon(), Quaternion.identity));
 				
@@ -75,15 +77,15 @@ public class GameController : MonoBehaviour
 	{
 		Vector3 _startPos = _currentDragon.transform.position;
 		Vector3 _spawnPos = _startPos;
-		_spawnPos.x += Random.Range(-1f, 1f);
-		_spawnPos.z += Random.Range(-1f, 1f);
-		_spawnPos.y += Random.Range(0.2f, 1.5f);
+		_spawnPos.x += Random.Range(-1.5f, 1.5f);
+		_spawnPos.z += Random.Range(-1.5f, 1.5f);
+		_spawnPos.y += Random.Range(0.15f, 1.4f);
 		while (Physics.Raycast(_startPos, _spawnPos, 10, _layer))
 		{
 			_spawnPos = _startPos;
-			_spawnPos.x += Random.Range(-5f, 5f);
-			_spawnPos.z += Random.Range(-5f, 5f);
-			_spawnPos.y += Random.Range(0.8f, 3f);
+			_spawnPos.x += Random.Range(-1.5f, 1.5f);
+			_spawnPos.z += Random.Range(-1.5f, 1.5f);
+			_spawnPos.y += Random.Range(0.15f, 1.4f);
 		}
 		return _spawnPos;
 	}
@@ -125,5 +127,11 @@ public class GameController : MonoBehaviour
 		}
 		Debug.Log("ERROR: NO OBJECT TO TAKE");
 		return null;
+	}
+	public IEnumerator Kill(GameObject _object)
+	{
+		yield return new WaitForSecondsRealtime(2f);
+		
+		Destroy(_object);
 	}
 }

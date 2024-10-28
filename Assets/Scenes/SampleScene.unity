@@ -281,7 +281,7 @@ MonoBehaviour:
   _dragonController: {fileID: 0}
   _layer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   _eggs:
   - {fileID: 2390676427672395494, guid: 063866958a7568940b8beed48754d2b6, type: 3}
   _dragons:
@@ -291,6 +291,7 @@ MonoBehaviour:
   _target: {fileID: 5906165136450168134, guid: 5a71f6ed58b844c4b9dd441735ee5f89, type: 3}
   _objectToPlace: {fileID: 0}
   _targets: []
+  _selectedTargets: []
   _currentDragon: {fileID: 0}
   _enemyDragon: {fileID: 0}
   needToFight: 0
@@ -1124,6 +1125,26 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 1064ad4411174b342b23987dc0a20465, type: 2}
+    - target: {fileID: 2758385666808066033, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758385666808066033, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758385666808066033, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.r
+      value: 0.85679054
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758385666808066033, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.m_ColorSpace
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3104411857632636852, guid: 5eccbf4be2c00e94689ee8062e4e7276,
         type: 3}
       propertyPath: m_RaycastMask.m_Bits
@@ -1237,7 +1258,7 @@ PrefabInstance:
     - target: {fileID: 7822482028367199063, guid: 5eccbf4be2c00e94689ee8062e4e7276,
         type: 3}
       propertyPath: m_RaycastMask.m_Bits
-      value: 2147483689
+      value: 41
       objectReference: {fileID: 0}
     - target: {fileID: 7990873191231833673, guid: 5eccbf4be2c00e94689ee8062e4e7276,
         type: 3}
@@ -2543,37 +2564,6 @@ MonoBehaviour:
   battleButton: {fileID: 812484338}
   exitButton: {fileID: 1615930595}
   minigameButton: {fileID: 1704374137}
---- !u!1 &1273130495
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1273130496}
-  m_Layer: 0
-  m_Name: ---------Hands---------
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1273130496
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1273130495}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.36666748, y: 1.4326863, z: 2.4678605}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1296457568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2708,37 +2698,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1296457568}
   m_CullTransparentMesh: 1
---- !u!1 &1392939010
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1392939011}
-  m_Layer: 0
-  m_Name: ARBoundingBoxColored
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1392939011
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1392939010}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.149966, y: 1.2137562, z: 2.9825983}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1455814832
 GameObject:
   m_ObjectHideFlags: 0
@@ -3864,8 +3823,6 @@ SceneRoots:
   - {fileID: 1886461314}
   - {fileID: 70243683}
   - {fileID: 832116006816972859}
-  - {fileID: 1392939011}
-  - {fileID: 1273130496}
   - {fileID: 788189674}
   - {fileID: 937565646}
   - {fileID: 1726521824}

@@ -1,25 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlacingBehaviour : MonoBehaviour
 {
 	PlacementManager _placementManager;
-	Color _color;
-	Color _placingColor = new Color(1,1,1,1);
+	Material _material;
+	[SerializeField] Material _placingMaterial;
 	void Start()
 	{
-		_color = GetComponent<Renderer>().material.color;
+		_material = GetComponent<SkinnedMeshRenderer>().materials.First();
 		StartCoroutine(WaitForConfirm());
 	}
 
 	private IEnumerator WaitForConfirm()
 	{
-		GetComponent<Renderer>().material.color = _placingColor;
+		GetComponent<SkinnedMeshRenderer>().material = _placingMaterial;
 		while (!_placementManager.isDragged)
 		{
 			yield return null;
 		}
-		GetComponent<Renderer>().material.color = _color;
+		GetComponent<SkinnedMeshRenderer>().material = _material;
 	}
 }

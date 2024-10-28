@@ -28,6 +28,8 @@ public class PlacementManager : MonoBehaviour
 	public void SpawnObject()
 	{
 		isDragged = true;
+		if (_object.transform.Find("SelectionVisualization") != null)
+			_object.transform.Find("SelectionVisualization").gameObject.SetActive(false);
 		_spawnedPlaneObjects.Add(_object);
 	}
 	private IEnumerator DropToPlane()
@@ -69,9 +71,10 @@ public class PlacementManager : MonoBehaviour
 		{
 			if (xrRayInteractor.enabled && xrRayInteractor.TryGetCurrent3DRaycastHit(out var raycastHit, out _))
 			{
-				if (raycastHit.transform.gameObject.CompareTag("Target"))
+				if (raycastHit.transform.gameObject.CompareTag("Target") && !_game._selectedTargets.Contains(raycastHit.transform.gameObject))
 				{
-					Destroy(raycastHit.transform.gameObject);
+					_game.GestureAttack1();
+					_game._selectedTargets.Add(raycastHit.transform.gameObject);
 				}
 			}
 			yield return null;
