@@ -32,6 +32,7 @@ public class DragonBehaviour : MonoBehaviour
 	[Header("Value Setting")]
 	[SerializeField] private int _minigameBallXP;
 	[SerializeField] private float _dragonBattleWinMultiplier;
+	private bool _isMovingToHand = false;
 	void Start()
 	{
 		// StartCoroutine(Init());
@@ -72,7 +73,7 @@ public class DragonBehaviour : MonoBehaviour
 		yield return new WaitForSecondsRealtime(3f);
 		_animator.SetBool("IsInspecting", false);
 	}
-	private void GainXP(int amount)
+	public void GainXP(int amount)
 	{
 		_xp += amount;
 		if (_currentLevelXp >= _maxLevelXp)
@@ -212,5 +213,28 @@ public class DragonBehaviour : MonoBehaviour
 		transform.LookAt(lookAt);
 		transform.position = Vector3.MoveTowards(transform.position, lookAt, 0.3f * Time.deltaTime);
 		yield return new WaitForSeconds(1f);
+	}
+	public IEnumerator MoveToHand()
+	{
+		if (!_isMovingToHand && Vector3.Distance(transform.position, GameObject.Find("Right Hand Interaction Visual").transform.position) > 0.3f)
+		{
+			_isMovingToHand = true;
+			_animator.SetBool("IsLanding", false);
+			_animator.SetBool("IsFlying", true);
+			Vector3 _movePos = GameObject.Find("Right Hand Interaction Visual").transform.position;
+			_movePos.y = transform.position.y;
+			while (transform.position != _movePos)
+			{
+				transform.position = Vector3.MoveTowards(transform.position, _movePos, _speed * Time.deltaTime);
+				yield return null;
+			}
+			_movePos = GameObject.Find("Right Hand Interaction Visual").transform.position;
+			while (transform.position != _movePos)
+			{
+				transform.position = Vector3.MoveTowards(transform.position, _movePos, _speed * Time.deltaTime);
+				yield return null;
+			}
+		}
+		_isMovingToHand = false;
 	}
 }

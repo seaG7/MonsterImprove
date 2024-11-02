@@ -21,6 +21,8 @@ public class EnemyDragonController : MonoBehaviour
 	private float distance;
 	private int countOfAttacks = 4;
 	private bool isNear = true;
+	[Header("XP Rewards")]
+	[SerializeField] private int _xpByKill;
 	void Start()
 	{
 		StartCoroutine(Init());
@@ -65,6 +67,7 @@ public class EnemyDragonController : MonoBehaviour
 			// any visualization of losing hp (effect)
 			if (_hp <= 0)
 			{
+				_game._currentDragon.GetComponent<DragonBehaviour>().GainXP(_xpByKill);
 				_animator.SetBool("IsDie", true);
 				StartCoroutine(_game.Kill(gameObject));
 			}
@@ -75,13 +78,10 @@ public class EnemyDragonController : MonoBehaviour
 		while (isNear)
 		{
 			Turn(_game._currentDragon.transform.position);
-			_animator.SetInteger("AttackState", Random.Range(1,countOfAttacks));
+			_animator.SetInteger("AttackState", Random.Range(2,countOfAttacks+1));
 			Debug.Log("enemy random attack switched");
 			switch (_animator.GetInteger("AttackState"))
 			{
-				case 1:
-					StartCoroutine(SpawnFireball());
-					break;
 				case 2:
 					StartCoroutine(SpawnFireball());
 					break;
@@ -92,7 +92,6 @@ public class EnemyDragonController : MonoBehaviour
 					StartCoroutine(ComeCloser());
 					break;
 			}
-			
 			yield return new WaitForSecondsRealtime(0.1f);
 			_animator.SetInteger("AttackState", 0);
 			Debug.Log("AttackState enemy = 0");
@@ -117,8 +116,13 @@ public class EnemyDragonController : MonoBehaviour
 	{
 		_animator.SetBool("IsFlying", true);
 		_animator.SetBool("IsLanding", false);
+		bool forfun = true;
 		while (distance > _attackRange)
 		{
+			if (forfun)
+			{
+				StartCoroutine(FlyAttack());
+			}
 			lookAt = _game._currentDragon.transform.position;
 			lookAt.y = transform.position.y;
 			transform.LookAt(lookAt);
@@ -130,6 +134,17 @@ public class EnemyDragonController : MonoBehaviour
 		_animator.SetBool("IsFlying", false);
 		_animator.SetBool("IsLanding", true);
 		StartCoroutine(DistanceCheck());
+	}
+	private IEnumerator FlyAttack()
+	{
+		while (!isNear)
+		{
+			yield return new WaitForSeconds(Random.Range(0.5f, 2f));
+			_animator.SetInteger("AttackState", 1);
+			yield return new WaitForSeconds(0.2f);
+			_animator.SetInteger("AttackState", 0);
+			yield return new WaitForSeconds(2f);
+		}
 	}
 	public void Turn(Vector3 lookAt)
 	{
@@ -153,7 +168,6 @@ public class EnemyDragonController : MonoBehaviour
 	}
 	private IEnumerator ComeCloser()
 	{
-		Vector3 nextLookAt = transform.position;
 		lookAt = _game._currentDragon.transform.position;
 		lookAt.y = transform.position.y;
 		transform.LookAt(lookAt);
