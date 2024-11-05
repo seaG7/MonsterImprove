@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class GameController : MonoBehaviour
 {
 	[SerializeField] private PlacementManager _placementManager;
-	public DragonBehaviour _dragonController;
+	public DragonBehaviour _cdController;
 	[SerializeField] private LayerMask _layer;
 	[SerializeField] GameObject[] _eggs;
 	[SerializeField] GameObject[] _dragons;
@@ -18,6 +18,8 @@ public class GameController : MonoBehaviour
 	public GameObject _enemyDragon;
 	public bool needToFight = false;
 	public bool isMiniGaming = false;
+	public int _destroyedTargetsAmount = 0;
+	public Animator _cdAnimator;
 	void Start()
 	{
 		
@@ -42,23 +44,21 @@ public class GameController : MonoBehaviour
 	public IEnumerator MinigameFireball(int _countOfTargets)
 	{
 		SpawnTargets();
-		
-		int _destroyedTargetsAmount = 0;
 		isMiniGaming = true;
+		_destroyedTargetsAmount = 0;
+		StartCoroutine(_placementManager.AimTarget());
+		StartCoroutine(_cdController.DestroyTargets());
 		while (isMiniGaming)
 		{
 			// if выйти по кнопке -> isMiniGaming = false; break;
-			
 			if (_targets.Count < 4)
 			{
-				_destroyedTargetsAmount++;
 				if (_destroyedTargetsAmount >= _countOfTargets)
 				{
 					isMiniGaming = false;
-					StopCoroutine(MinigameFireball(_countOfTargets));
-					break;
 				}
-				_targets.Add(Instantiate(_target, RandomPosAroundDragon(), Quaternion.identity));
+				else if (_countOfTargets - _destroyedTargetsAmount >= 4)
+					_targets.Add(Instantiate(_target, RandomPosAroundDragon(), Quaternion.identity));
 				
 				// звук появления target и чет еще мэйби
 			}
@@ -77,37 +77,41 @@ public class GameController : MonoBehaviour
 	{
 		Vector3 _startPos = _currentDragon.transform.position;
 		Vector3 _spawnPos = _startPos;
-		_spawnPos.x += Random.Range(-1.5f, 1.5f);
-		_spawnPos.z += Random.Range(-1.5f, 1.5f);
-		_spawnPos.y += Random.Range(0.15f, 1.4f);
-		while (Physics.Raycast(_startPos, _spawnPos, 10, _layer))
-		{
-			_spawnPos = _startPos;
-			_spawnPos.x += Random.Range(-1.5f, 1.5f);
-			_spawnPos.z += Random.Range(-1.5f, 1.5f);
-			_spawnPos.y += Random.Range(0.15f, 1.4f);
-		}
+		_spawnPos.x += Random.Range(-1.2f, 1.2f);
+		_spawnPos.z += Random.Range(-1.2f, 1.2f);
+		_spawnPos.y += Random.Range(0.25f, 1.4f);
+		// while (Physics.Raycast(_startPos, _spawnPos, 10, _layer))
+		// {
+		// 	_spawnPos = _startPos;
+		// 	_spawnPos.x += Random.Range(-1.2f, 1.2f);
+		// 	_spawnPos.z += Random.Range(-1.2f, 1.2f);
+		// 	_spawnPos.y += Random.Range(0.25f, 1.4f);
+		// }
 		return _spawnPos;
 	}
 	public void GestureAttack1()
 	{
-		_dragonController.FirstAttack();
+		_cdController.Turn(_enemyDragon.transform.position);
+		StartCoroutine(_cdController.SetAttackState(1));
 	}
 	public void GestureAttack2()
 	{
-		_dragonController.SecondAttack();
+		_cdController.Turn(_enemyDragon.transform.position);
+		StartCoroutine(_cdController.SetAttackState(2));
 	}
 	public void GestureAttack3()
 	{
-		_dragonController.ThirdAttack();
+		_cdController.Turn(_enemyDragon.transform.position);
+		StartCoroutine(_cdController.SetAttackState(3));
 	}
 	public void GestureAttack4()
 	{
-		_dragonController.FourthAttack();
+		_cdController.Turn(_enemyDragon.transform.position);
+		StartCoroutine(_cdController.SetAttackState(4));
 	}
 	public void StopGestureAttack()
 	{
-		_dragonController.StopAttack();
+		StartCoroutine(_cdController.SetAttackState(0));
 	}
 	public void ToQueueSpawn(GameObject _prefab)
 	{
@@ -133,5 +137,9 @@ public class GameController : MonoBehaviour
 		yield return new WaitForSecondsRealtime(2f);
 		
 		Destroy(_object);
+	}
+	public void ShootFromGCScript()
+	{
+		_cdController.FlyIdleShoot();
 	}
 }

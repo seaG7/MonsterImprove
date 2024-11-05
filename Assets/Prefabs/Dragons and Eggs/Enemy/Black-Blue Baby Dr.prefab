@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7708201254797088252}
   - component: {fileID: 7549594295103542282}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: R Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -181,7 +181,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4689861500872493178}
   - component: {fileID: 8670405601304331410}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: L Finger0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -395,7 +395,7 @@ GameObject:
   m_Component:
   - component: {fileID: 571529460255649469}
   - component: {fileID: 9146232591000524344}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Spine1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -926,7 +926,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1324246635737928586}
   - component: {fileID: 7338779806587075835}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1251,7 +1251,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4542341440197274274}
   - component: {fileID: 6344600479062701438}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: R Finger0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1303,7 +1303,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8387594260631076047}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: FireballPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1646,7 +1646,7 @@ GameObject:
   m_Component:
   - component: {fileID: 266583163146591916}
   - component: {fileID: 5114760436865770706}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: L Foot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2272,7 +2272,7 @@ GameObject:
   - component: {fileID: 8744272027378607275}
   - component: {fileID: 5222638931086390672}
   - component: {fileID: 1984991651017014005}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Black-Blue Baby Dr
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -2333,11 +2333,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
   _hp: 50
-  _speed: 0.55
+  _speed: 0.7
   _strength: 5
-  _attackRange: 0.45
+  _attackRange: 0.55
   _fireball: {fileID: 5906165136450168134, guid: 61e222fb0060a4142ba543cdabbaa719,
     type: 3}
+  _xpByKill: 0
 --- !u!1 &8322601007529446580
 GameObject:
   m_ObjectHideFlags: 0
@@ -2456,7 +2457,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2238252094010515460}
   - component: {fileID: 8882998321969399420}
-  m_Layer: 20
+  m_Layer: 0
   m_Name: Spine
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -12,7 +12,7 @@ public class PlacementManager : MonoBehaviour
 	public List<GameObject> _prefabsToSpawn = new List<GameObject>(0);
 	public List<GameObject> _spawnedPlaneObjects = new List<GameObject>(0);
 	public bool isDragged = true;
-	private bool pointAtPerformed = false;
+	private bool pointAt = false;
 	private GameObject _object;
 	void Start()
 	{
@@ -65,7 +65,7 @@ public class PlacementManager : MonoBehaviour
 			yield return null;
 		}
 	}
-	private IEnumerator AimTarget()
+	public IEnumerator AimTarget()
 	{
 		while (_game.isMiniGaming)
 		{
@@ -73,19 +73,23 @@ public class PlacementManager : MonoBehaviour
 			{
 				if (raycastHit.transform.gameObject.CompareTag("Target") && !_game._selectedTargets.Contains(raycastHit.transform.gameObject))
 				{
-					_game.GestureAttack1();
+					Debug.Log("Target selected");
 					_game._selectedTargets.Add(raycastHit.transform.gameObject);
 				}
+				_game._cdController.Turn(raycastHit.transform.position);
 			}
 			yield return null;
 		}
-		pointAtPerformed = false;
 	}
-	public void StartAimCheck()
+	public void PointAtStarted()
 	{
-		if (!pointAtPerformed && _game.isMiniGaming)
-			StartCoroutine(AimTarget());
-		pointAtPerformed = true;
+		if (!pointAt && _game.isMiniGaming)
+			pointAt = true;
+	}
+	public void PointAtEnded()
+	{
+		if (pointAt && _game.isMiniGaming)
+			pointAt = false;
 	}
 	void Update()
 	{

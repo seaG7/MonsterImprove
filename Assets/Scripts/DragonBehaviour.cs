@@ -39,7 +39,7 @@ public class DragonBehaviour : MonoBehaviour
 		_inventory = FindAnyObjectByType<InventorySystem>();
 		_game = FindAnyObjectByType<GameController>();
 		_game._currentDragon = gameObject;
-		_game._dragonController = GetComponent<DragonBehaviour>();
+		_game._cdController = GetComponent<DragonBehaviour>();
 		_animator = GetComponent<Animator>();
 		Turn(FindAnyObjectByType<Camera>().transform.position);
 		StartCoroutine(SetHatchingFalse());
@@ -126,7 +126,7 @@ public class DragonBehaviour : MonoBehaviour
 		yield return new WaitForSecondsRealtime(0.2f);
 		fireballs.Add(Instantiate(_fireball, _spawnFirePos, Quaternion.identity));
 		Debug.Log("player fireball spawned");
-		yield return new WaitForSecondsRealtime(2f);
+		yield return new WaitForSeconds(2f);
 		if (fireballs.Count > 0)
 		{
 			Destroy(fireballs[0]);
@@ -147,80 +147,37 @@ public class DragonBehaviour : MonoBehaviour
 		}
 		_game = FindAnyObjectByType<GameController>();
 		_game._currentDragon = gameObject;
-		_game._dragonController = GetComponent<DragonBehaviour>();
-		_animator = GetComponent<Animator>();
+		_game._cdController = GetComponent<DragonBehaviour>();
+		_game._cdAnimator = _animator = GetComponent<Animator>();
 		Turn(FindAnyObjectByType<Camera>().transform.position);
 		StartCoroutine(SetHatchingFalse());
 	}
-	public IEnumerator ShootBall()
+	public void FlyIdleShoot()
 	{
-		if (_game.isMiniGaming)
+		Turn(_game._selectedTargets[0].transform.position);
+		StartCoroutine(SetAttackState(10));
+		StartCoroutine(FireballAttack());
+	}
+	public IEnumerator SetAttackState(int _number)
+	{
+		if (_animator.GetInteger("AttackState") == 0)
 		{
-			_animator.SetInteger("AttackState", 1);
-			StartCoroutine(FireballAttack());
-			yield return new WaitForSeconds(0.3f);
-			_animator.SetInteger("AttackState", 0);
+			_animator.SetInteger("AttackState", _number);
+			if (_number == 4)
+				StartCoroutine(FireballAttack());
+			if (_number != 0)
+			{
+				yield return new WaitForSeconds(0.2f);
+				_animator.SetInteger("AttackState", 0);
+			}
 		}
-	}
-	public void FirstAttack()
-	{
-		if (_game.needToFight)
-		{
-			Turn(_game._enemyDragon.transform.position);
-			_animator.SetInteger("AttackState", 1);
-			Debug.Log("first attack activated by the gesture");
-			StartCoroutine(FireballAttack());
-		}
-	}
-	public void SecondAttack()
-	{
-		if (_game.needToFight)
-		{
-			Turn(_game._enemyDragon.transform.position);
-			_animator.SetInteger("AttackState", 2);
-			Debug.Log("second attack activated by the gesture");
-			StartCoroutine(FireballAttack());
-		}
-	}
-	public void ThirdAttack()
-	{
-		if (_game.needToFight)
-		{
-			Turn(_game._enemyDragon.transform.position);
-			_animator.SetInteger("AttackState", 3);
-			StartCoroutine(ComeCloser());
-			Debug.Log("third attack activated by the gesture");
-		}
-	}
-	public void FourthAttack()
-	{
-		if (_game.needToFight)
-		{
-			_animator.SetInteger("AttackState", 4);
-			StartCoroutine(ComeCloser());
-			Debug.Log("fourth attack activated by the gesture");
-		}
-	}
-	public void StopAttack()
-	{
-		_animator.SetInteger("AttackState", 0);
-	}
-	private IEnumerator ComeCloser()
-	{
-		Vector3 nextLookAt = transform.position;
-		Vector3 lookAt = _game._enemyDragon.transform.position;
-		lookAt.y = transform.position.y;
-		transform.LookAt(lookAt);
-		transform.position = Vector3.MoveTowards(transform.position, lookAt, 0.3f * Time.deltaTime);
-		yield return new WaitForSeconds(1f);
 	}
 	public IEnumerator MoveToHand()
 	{
 		if (!_isMovingToHand && Vector3.Distance(transform.position, GameObject.Find("Right Hand Interaction Visual").transform.position) > 0.3f)
 		{
 			_isMovingToHand = true;
-			_animator.SetBool("IsLanding", false);
-			_animator.SetBool("IsFlying", true);
+			_animator.SetInteger("FlyState", 2);
 			Vector3 _movePos = GameObject.Find("Right Hand Interaction Visual").transform.position;
 			_movePos.y = transform.position.y;
 			while (transform.position != _movePos)
@@ -228,6 +185,7 @@ public class DragonBehaviour : MonoBehaviour
 				transform.position = Vector3.MoveTowards(transform.position, _movePos, _speed * Time.deltaTime);
 				yield return null;
 			}
+			_animator.SetInteger("FlyState", 1);
 			_movePos = GameObject.Find("Right Hand Interaction Visual").transform.position;
 			while (transform.position != _movePos)
 			{
@@ -236,5 +194,42 @@ public class DragonBehaviour : MonoBehaviour
 			}
 		}
 		_isMovingToHand = false;
+	}
+	public IEnumerator DestroyTargets()
+	{
+		float _height = 1f;
+		_animator.SetInteger("FlyState", 1);
+		yield return new WaitForSeconds(0.7f);
+		Vector3 _movePos = transform.position;
+		_movePos.y += _height;
+		while (transform.position != _movePos)
+		{
+			transform.position = Vector3.MoveTowards(transform.position, _movePos, _speed * Time.deltaTime);
+			yield return null;
+		}
+		while (_game.isMiniGaming)
+		{
+			if (_game._selectedTargets.Count > 0)
+			{
+				FlyIdleShoot();
+				yield return new WaitForSeconds(3f);
+			}
+			yield return null;
+		}
+		_movePos.y -= _height;
+		while (transform.position != _movePos)
+		{
+			transform.position = Vector3.MoveTowards(transform.position, _movePos, _speed * Time.deltaTime);
+			yield return null;
+		}
+		_animator.SetInteger("FlyState", 0);
+	}
+	private IEnumerator Move(Vector3 _movePos)
+	{
+		while (transform.position != _movePos)
+		{
+			transform.position = Vector3.MoveTowards(transform.position, _movePos, _speed * Time.deltaTime);
+			yield return null;
+		}
 	}
 }

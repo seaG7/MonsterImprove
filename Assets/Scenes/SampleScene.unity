@@ -278,7 +278,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _placementManager: {fileID: 928382277}
-  _dragonController: {fileID: 0}
+  _cdController: {fileID: 0}
   _layer:
     serializedVersion: 2
     m_Bits: 8
@@ -296,6 +296,8 @@ MonoBehaviour:
   _enemyDragon: {fileID: 0}
   needToFight: 0
   isMiniGaming: 0
+  _destroyedTargetsAmount: 0
+  _cdAnimator: {fileID: 0}
 --- !u!1 &116267664
 GameObject:
   m_ObjectHideFlags: 0
@@ -1115,6 +1117,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 635909054196492854, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_LineWidth
+      value: 0.005
+      objectReference: {fileID: 0}
     - target: {fileID: 865075385244835223, guid: 5eccbf4be2c00e94689ee8062e4e7276,
         type: 3}
       propertyPath: m_Name
@@ -1147,13 +1154,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3104411857632636852, guid: 5eccbf4be2c00e94689ee8062e4e7276,
         type: 3}
+      propertyPath: m_UseForceGrab
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3104411857632636852, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_HitDetectionType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3104411857632636852, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_AllowAnchorControl
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3104411857632636852, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
       propertyPath: m_RaycastMask.m_Bits
-      value: 2147483689
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 3104411857632636852, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_InteractionLayers.m_Bits
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 5575692022074380336, guid: 5eccbf4be2c00e94689ee8062e4e7276,
         type: 3}
       propertyPath: m_LineWidth
       value: 0.004
+      objectReference: {fileID: 0}
+    - target: {fileID: 5713146243821485781, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_LineWidth
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 5713146243821485781, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_OverrideInteractorLineLength
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5773256366622995465, guid: 5eccbf4be2c00e94689ee8062e4e7276,
         type: 3}
@@ -1257,8 +1294,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7822482028367199063, guid: 5eccbf4be2c00e94689ee8062e4e7276,
         type: 3}
+      propertyPath: m_UseForceGrab
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7822482028367199063, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_HitDetectionType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7822482028367199063, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_AllowAnchorControl
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7822482028367199063, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
       propertyPath: m_RaycastMask.m_Bits
-      value: 41
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 7822482028367199063, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_InteractionLayers.m_Bits
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 7990873191231833673, guid: 5eccbf4be2c00e94689ee8062e4e7276,
         type: 3}
@@ -3724,7 +3781,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 928382277}
         m_TargetAssemblyTypeName: PlacementManager, Assembly-CSharp
-        m_MethodName: StartAimCheck
+        m_MethodName: PointAtStarted
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3736,7 +3793,19 @@ MonoBehaviour:
         m_CallState: 2
   m_GestureEnded:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 928382277}
+        m_TargetAssemblyTypeName: PlacementManager, Assembly-CSharp
+        m_MethodName: PointAtEnded
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_MinimumHoldTime: 0.2
   m_GestureDetectionInterval: 0.1
   m_StaticGestures: []
@@ -3757,7 +3826,7 @@ PrefabInstance:
     - target: {fileID: 2058613177097949748, guid: 13a17e8e5861aab4fa269c08358ad94f,
         type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7462951096603394410, guid: 13a17e8e5861aab4fa269c08358ad94f,
         type: 3}
@@ -3807,6 +3876,26 @@ PrefabInstance:
     - target: {fileID: 7462951096603394410, guid: 13a17e8e5861aab4fa269c08358ad94f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080449232344426437, guid: 13a17e8e5861aab4fa269c08358ad94f,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080449232344426437, guid: 13a17e8e5861aab4fa269c08358ad94f,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 0.7880776
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080449232344426437, guid: 13a17e8e5861aab4fa269c08358ad94f,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080449232344426437, guid: 13a17e8e5861aab4fa269c08358ad94f,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.m_ColorSpace
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

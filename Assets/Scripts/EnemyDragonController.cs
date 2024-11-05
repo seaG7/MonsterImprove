@@ -40,21 +40,28 @@ public class EnemyDragonController : MonoBehaviour
 	{
 		while (true)
 		{
-			if (_game._currentDragon != null)
+			distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
+			lookAt = _game._currentDragon.transform.position;
+			lookAt.y = transform.position.y;
+			transform.LookAt(lookAt);
+			if (distance > _attackRange && isNear)
 			{
-				lookAt = _game._currentDragon.transform.position;
-				lookAt.y = transform.position.y;
-				transform.LookAt(lookAt);
-				if (distance <= _attackRange && !isNear)
-				{
-					isNear = true;
-					StartCoroutine(Attack());
-				}
-				else if (distance > _attackRange && isNear)
-				{
-					isNear = false;
-					StartCoroutine(FlyToTarget());
-				}
+				isNear = false;
+				_animator.SetBool("IsClose", false);
+				_game._cdAnimator.SetBool("IsClose", false);
+				StartCoroutine(FlyToTarget());
+			}
+			else if (distance - _attackRange < -0.1f && isNear)
+			{
+				_animator.SetBool("IsClose", true);
+				_game._cdAnimator.SetBool("IsClose", true);
+			}
+			else if (distance <= _attackRange && !isNear)
+			{
+				isNear = true;
+				_animator.SetBool("IsClose", false);
+				_game._cdAnimator.SetBool("IsClose", false);
+				StartCoroutine(Attack());
 			}
 			yield return null;
 		}
@@ -78,24 +85,16 @@ public class EnemyDragonController : MonoBehaviour
 		while (isNear)
 		{
 			Turn(_game._currentDragon.transform.position);
-			_animator.SetInteger("AttackState", Random.Range(2,countOfAttacks+1));
+			_animator.SetInteger("AttackState", Random.Range(1,countOfAttacks+1));
 			Debug.Log("enemy random attack switched");
-			switch (_animator.GetInteger("AttackState"))
+			if (_animator.GetInteger("AttackState") == 4)
 			{
-				case 2:
-					StartCoroutine(SpawnFireball());
-					break;
-				case 3:
-					StartCoroutine(ComeCloser());
-					break;
-				case 4:
-					StartCoroutine(ComeCloser());
-					break;
+				StartCoroutine(SpawnFireball());
 			}
-			yield return new WaitForSecondsRealtime(0.1f);
+			yield return new WaitForSeconds(0.2f);
 			_animator.SetInteger("AttackState", 0);
 			Debug.Log("AttackState enemy = 0");
-			yield return new WaitForSecondsRealtime(Random.Range(0.5f, 1.2f));
+			yield return new WaitForSeconds(Random.Range(0.5f, 1.2f));
 		}
 		StartCoroutine(FlyToTarget());
 	}
@@ -114,15 +113,14 @@ public class EnemyDragonController : MonoBehaviour
 	}
 	public IEnumerator FlyToTarget()
 	{
-		_animator.SetBool("IsFlying", true);
-		_animator.SetBool("IsLanding", false);
-		bool forfun = true;
+		_animator.SetInteger("FlyState", 2);
+		// bool forfun = true;
 		while (distance > _attackRange)
 		{
-			if (forfun)
-			{
-				StartCoroutine(FlyAttack());
-			}
+			// if (forfun)
+			// {
+			// 	StartCoroutine(FlyAttack());
+			// }
 			lookAt = _game._currentDragon.transform.position;
 			lookAt.y = transform.position.y;
 			transform.LookAt(lookAt);
@@ -131,8 +129,7 @@ public class EnemyDragonController : MonoBehaviour
 			yield return null;
 		}
 		isNear = true;
-		_animator.SetBool("IsFlying", false);
-		_animator.SetBool("IsLanding", true);
+		_animator.SetInteger("FlyState", 0);
 		StartCoroutine(DistanceCheck());
 	}
 	private IEnumerator FlyAttack()
