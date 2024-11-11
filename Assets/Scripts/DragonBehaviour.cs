@@ -33,6 +33,7 @@ public class DragonBehaviour : MonoBehaviour
 	[SerializeField] private int _minigameBallXP;
 	[SerializeField] private float _dragonBattleWinMultiplier;
 	private bool _isMovingToHand = false;
+	public Vector3 _moveRot;
 	void Start()
 	{
 		// StartCoroutine(Init());
@@ -41,7 +42,7 @@ public class DragonBehaviour : MonoBehaviour
 		_game._currentDragon = gameObject;
 		_game._cdController = GetComponent<DragonBehaviour>();
 		_animator = GetComponent<Animator>();
-		Turn(FindAnyObjectByType<Camera>().transform.position);
+		StartCoroutine(Turn(FindAnyObjectByType<Camera>().transform.position));
 		StartCoroutine(SetHatchingFalse());
 		
 		_inventory.LoadStats(_id);
@@ -55,7 +56,7 @@ public class DragonBehaviour : MonoBehaviour
 	{
 		if (collision.transform.tag == "Enemy")
 		{
-			_hp -= _game._enemyDragon.GetComponent<EnemyDragonController>()._strength;
+			_hp -= _game._enemyDragon.GetComponent<EnemyDragonBehaviour>()._strength;
 			// any visualization of losing hp (effect)
 			if (_hp <= 0)
 			{
@@ -120,24 +121,45 @@ public class DragonBehaviour : MonoBehaviour
 		}
 		return _levelsXp[_levelsXp.Count];
 	}
-	public IEnumerator FireballAttack()
+	public IEnumerator SpawnFireball()
 	{
 		_spawnFirePos = transform.Find("FireballPos").GetComponent<Transform>().position;
 		yield return new WaitForSecondsRealtime(0.2f);
 		fireballs.Add(Instantiate(_fireball, _spawnFirePos, Quaternion.identity));
 		Debug.Log("player fireball spawned");
-		yield return new WaitForSeconds(2f);
+		yield return new WaitForSeconds(3f);
 		if (fireballs.Count > 0)
 		{
 			Destroy(fireballs[0]);
 			fireballs.RemoveAt(0);
 		}
 	}
-	public void Turn(Vector3 lookAt)
+	public IEnumerator Turn(Vector3 lookAt)
 	{
-		Vector3 lookPos = lookAt - transform.position;
-		lookPos.y = 0;
-	   	transform.rotation = Quaternion.LookRotation(lookPos);
+		lookAt = lookAt - transform.position;
+		Quaternion _targetRot = Quaternion.LookRotation(lookAt);
+		_targetRot.x = transform.rotation.x;
+		_targetRot.z = transform.rotation.z;
+		while (transform.rotation != _targetRot)
+		{
+			transform.rotation = Quaternion.Slerp(transform.rotation, _targetRot, 4 * Time.deltaTime);
+			yield return null;
+		}
+	}
+	public IEnumerator FlyTurn()
+	{
+		_game._cdController._moveRot = _game._cdController._moveRot - transform.position;
+		Quaternion _targetRot = Quaternion.LookRotation(_moveRot);
+		_targetRot.x = transform.rotation.x;
+		_targetRot.z = transform.rotation.z;
+		while (_game.isMiniGaming)
+		{
+			if (_game._selectedTargets.Count > 0 && transform.rotation != _targetRot)
+			{
+				transform.rotation = Quaternion.Slerp(transform.rotation, _targetRot, 4 * Time.deltaTime);
+			}
+			yield return null;
+		}
 	}
 	private IEnumerator Init()
 	{
@@ -149,14 +171,13 @@ public class DragonBehaviour : MonoBehaviour
 		_game._currentDragon = gameObject;
 		_game._cdController = GetComponent<DragonBehaviour>();
 		_game._cdAnimator = _animator = GetComponent<Animator>();
-		Turn(FindAnyObjectByType<Camera>().transform.position);
+		StartCoroutine(Turn(FindAnyObjectByType<Camera>().transform.position));
 		StartCoroutine(SetHatchingFalse());
 	}
 	public void FlyIdleShoot()
 	{
-		Turn(_game._selectedTargets[0].transform.position);
 		StartCoroutine(SetAttackState(10));
-		StartCoroutine(FireballAttack());
+		StartCoroutine(SpawnFireball());
 	}
 	public IEnumerator SetAttackState(int _number)
 	{
@@ -164,10 +185,10 @@ public class DragonBehaviour : MonoBehaviour
 		{
 			_animator.SetInteger("AttackState", _number);
 			if (_number == 4)
-				StartCoroutine(FireballAttack());
+				StartCoroutine(SpawnFireball());
 			if (_number != 0)
 			{
-				yield return new WaitForSeconds(0.2f);
+				yield return new WaitForSeconds(0.1f);
 				_animator.SetInteger("AttackState", 0);
 			}
 		}
@@ -207,10 +228,12 @@ public class DragonBehaviour : MonoBehaviour
 			transform.position = Vector3.MoveTowards(transform.position, _movePos, _speed * Time.deltaTime);
 			yield return null;
 		}
+		StartCoroutine(FlyTurn());
 		while (_game.isMiniGaming)
 		{
 			if (_game._selectedTargets.Count > 0)
 			{
+				Debug.Log(_game._selectedTargets.Count);
 				FlyIdleShoot();
 				yield return new WaitForSeconds(3f);
 			}

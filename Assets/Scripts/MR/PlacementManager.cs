@@ -67,6 +67,7 @@ public class PlacementManager : MonoBehaviour
 	}
 	public IEnumerator AimTarget()
 	{
+		xrRayInteractor.maxRaycastDistance = 100f;
 		while (_game.isMiniGaming)
 		{
 			if (xrRayInteractor.enabled && xrRayInteractor.TryGetCurrent3DRaycastHit(out var raycastHit, out _))
@@ -75,8 +76,8 @@ public class PlacementManager : MonoBehaviour
 				{
 					Debug.Log("Target selected");
 					_game._selectedTargets.Add(raycastHit.transform.gameObject);
+					_game._cdController._moveRot = _game._cdController._moveRot - transform.position;
 				}
-				_game._cdController.Turn(raycastHit.transform.position);
 			}
 			yield return null;
 		}

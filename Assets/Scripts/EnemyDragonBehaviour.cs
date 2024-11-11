@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class EnemyDragonController : MonoBehaviour
+public class EnemyDragonBehaviour : MonoBehaviour
 {
 	private GameController _game;
 	public Animator _animator;
@@ -84,7 +84,7 @@ public class EnemyDragonController : MonoBehaviour
 	{
 		while (isNear)
 		{
-			Turn(_game._currentDragon.transform.position);
+			StartCoroutine(Turn(_game._currentDragon.transform.position));
 			_animator.SetInteger("AttackState", Random.Range(1,countOfAttacks+1));
 			Debug.Log("enemy random attack switched");
 			if (_animator.GetInteger("AttackState") == 4)
@@ -132,22 +132,15 @@ public class EnemyDragonController : MonoBehaviour
 		_animator.SetInteger("FlyState", 0);
 		StartCoroutine(DistanceCheck());
 	}
-	private IEnumerator FlyAttack()
-	{
-		while (!isNear)
-		{
-			yield return new WaitForSeconds(Random.Range(0.5f, 2f));
-			_animator.SetInteger("AttackState", 1);
-			yield return new WaitForSeconds(0.2f);
-			_animator.SetInteger("AttackState", 0);
-			yield return new WaitForSeconds(2f);
-		}
-	}
-	public void Turn(Vector3 lookAt)
+	public IEnumerator Turn(Vector3 lookAt)
 	{
 		Vector3 lookPos = lookAt - transform.position;
 		lookPos.y = 0;
-	   	transform.rotation = Quaternion.LookRotation(lookPos);
+		while (transform.rotation != Quaternion.LookRotation(lookPos))
+		{
+			transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookPos), 4 * Time.deltaTime);
+			yield return null;
+		}
 	}
 	private IEnumerator Init()
 	{
@@ -159,7 +152,7 @@ public class EnemyDragonController : MonoBehaviour
 		_animator = GetComponent<Animator>();
 		_game.needToFight = true;
 		_game._enemyDragon = gameObject;
-		_game._currentDragon.GetComponent<DragonBehaviour>().Turn(transform.position);
+		StartCoroutine(Turn(_game._currentDragon.transform.position));
 		distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
 		StartCoroutine(DistanceCheck());
 	}

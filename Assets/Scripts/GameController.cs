@@ -14,6 +14,7 @@ public class GameController : MonoBehaviour
 	public GameObject _objectToPlace;
 	public List<GameObject> _targets = new List<GameObject>();
 	public List<GameObject> _selectedTargets = new List<GameObject>();
+	public int _countSelectedTargets = 0;
 	public GameObject _currentDragon;
 	public GameObject _enemyDragon;
 	public bool needToFight = false;
@@ -44,6 +45,7 @@ public class GameController : MonoBehaviour
 	public IEnumerator MinigameFireball(int _countOfTargets)
 	{
 		SpawnTargets();
+		needToFight = false;
 		isMiniGaming = true;
 		_destroyedTargetsAmount = 0;
 		StartCoroutine(_placementManager.AimTarget());
@@ -77,15 +79,15 @@ public class GameController : MonoBehaviour
 	{
 		Vector3 _startPos = _currentDragon.transform.position;
 		Vector3 _spawnPos = _startPos;
-		_spawnPos.x += Random.Range(-1.2f, 1.2f);
-		_spawnPos.z += Random.Range(-1.2f, 1.2f);
-		_spawnPos.y += Random.Range(0.25f, 1.4f);
+		_spawnPos.x += Random.Range(-1f, 1f);
+		_spawnPos.z += Random.Range(-1f, 1f);
+		_spawnPos.y += Random.Range(0.25f, 1.2f);
 		// while (Physics.Raycast(_startPos, _spawnPos, 10, _layer))
 		// {
 		// 	_spawnPos = _startPos;
-		// 	_spawnPos.x += Random.Range(-1.2f, 1.2f);
-		// 	_spawnPos.z += Random.Range(-1.2f, 1.2f);
-		// 	_spawnPos.y += Random.Range(0.25f, 1.4f);
+		// 	_spawnPos.x += Random.Range(-1f, 1f);
+		// 	_spawnPos.z += Random.Range(-1f, 1f);
+		// 	_spawnPos.y += Random.Range(0.25f, 1.2f);
 		// }
 		return _spawnPos;
 	}

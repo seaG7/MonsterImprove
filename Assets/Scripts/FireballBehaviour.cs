@@ -49,10 +49,8 @@ public class FireballBehaviour : MonoBehaviour
 		}
 		if (collision.transform.tag == "Target")
 		{
-			_game._destroyedTargetsAmount--;
-			GameObject _target = _game._targets[0];
-			_game._targets.RemoveAt(0);
-			Destroy(_target);
+			_game._destroyedTargetsAmount++;
+			Destroy(collision.transform.gameObject);
 			// анимка с получением опыта (айтем над моделькой player dragon)
 			Destroy(gameObject);
 		}
