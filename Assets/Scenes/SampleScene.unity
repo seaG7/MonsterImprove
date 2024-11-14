@@ -278,26 +278,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _placementManager: {fileID: 928382277}
-  _cdController: {fileID: 0}
-  _layer:
-    serializedVersion: 2
-    m_Bits: 8
-  _eggs:
-  - {fileID: 2390676427672395494, guid: 063866958a7568940b8beed48754d2b6, type: 3}
-  _dragons:
-  - {fileID: 5501522680847571009, guid: b2d482f8936c0474d85e5f696a7dce79, type: 3}
-  _enemyDragons:
-  - {fileID: 8289441768737658518, guid: 03a9b0b9fac3dd4438f9e2051d11e257, type: 3}
-  _target: {fileID: 5906165136450168134, guid: 5a71f6ed58b844c4b9dd441735ee5f89, type: 3}
-  _objectToPlace: {fileID: 0}
-  _targets: []
-  _selectedTargets: []
-  _currentDragon: {fileID: 0}
-  _enemyDragon: {fileID: 0}
+  _farms:
+  - {fileID: 1508331827010614432, guid: ec754be21cbf1df4792533220c2d15ed, type: 3}
+  _maxFarmsAmount: 5
+  _farmsAmount: 0
   needToFight: 0
-  isMiniGaming: 0
-  _destroyedTargetsAmount: 0
-  _cdAnimator: {fileID: 0}
 --- !u!1 &116267664
 GameObject:
   m_ObjectHideFlags: 0
@@ -2617,10 +2602,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resetRoomButton: {fileID: 744847362}
-  spawnEggButton: {fileID: 228669395}
-  battleButton: {fileID: 812484338}
+  spawnFarmButton: {fileID: 228669395}
   exitButton: {fileID: 1615930595}
-  minigameButton: {fileID: 1704374137}
 --- !u!1 &1296457568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2678,7 +2661,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Spawn egg
+  m_text: 'Place Farm
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3721,7 +3706,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1886461313}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
