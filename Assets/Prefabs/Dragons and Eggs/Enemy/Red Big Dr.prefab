@@ -1685,6 +1685,7 @@ GameObject:
   - component: {fileID: 3968179531333833824}
   - component: {fileID: 2184479404819712782}
   - component: {fileID: 716139258381644427}
+  - component: {fileID: 7402535008707053493}
   m_Layer: 20
   m_Name: Red Big Dr
   m_TagString: Enemy
@@ -1750,3 +1751,31 @@ MonoBehaviour:
   _attackRange: 1.5
   _fireball: {fileID: 5906165136450168134, guid: 61e222fb0060a4142ba543cdabbaa719,
     type: 3}
+  _xpByKill: 0
+--- !u!54 &7402535008707053493
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9007516591372245527}
+  serializedVersion: 4
+  m_Mass: 70
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 1

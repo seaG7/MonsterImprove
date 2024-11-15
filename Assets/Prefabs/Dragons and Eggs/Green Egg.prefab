@@ -225,6 +225,7 @@ GameObject:
   - component: {fileID: 8937904714461804317}
   - component: {fileID: 8034690294970953318}
   - component: {fileID: -4225924856013663484}
+  - component: {fileID: -4537034348912681856}
   m_Layer: 0
   m_Name: Green Egg
   m_TagString: Untagged
@@ -307,6 +308,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hatchingTime: 2
   _dragon: {fileID: 6174768809508411018, guid: b8dcc302b5ef1fc47a5965d745051f53, type: 3}
+--- !u!54 &-4537034348912681856
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3785408041053796455}
+  serializedVersion: 4
+  m_Mass: 70
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 1
 --- !u!1 &4262005515951595134
 GameObject:
   m_ObjectHideFlags: 0

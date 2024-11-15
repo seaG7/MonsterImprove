@@ -1033,6 +1033,7 @@ GameObject:
   - component: {fileID: 1101385146030496028}
   - component: {fileID: 3070282137247337417}
   - component: {fileID: -6255591522081727176}
+  - component: {fileID: 8651650506948375493}
   m_Layer: 20
   m_Name: Green Baby Dr
   m_TagString: Enemy
@@ -1099,6 +1100,34 @@ MonoBehaviour:
   _attackRange: 1.5
   _fireball: {fileID: 5906165136450168134, guid: 61e222fb0060a4142ba543cdabbaa719,
     type: 3}
+  _xpByKill: 0
+--- !u!54 &8651650506948375493
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6174768809508411018}
+  serializedVersion: 4
+  m_Mass: 70
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 1
 --- !u!1 &6204133198300142379
 GameObject:
   m_ObjectHideFlags: 0

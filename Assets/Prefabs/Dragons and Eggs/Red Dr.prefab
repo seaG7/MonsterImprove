@@ -815,6 +815,7 @@ GameObject:
   - component: {fileID: 6479354808193277263}
   - component: {fileID: 5864358048988674420}
   - component: {fileID: 8833564878044427976}
+  - component: {fileID: -5893578989611817800}
   m_Layer: 20
   m_Name: Red Dr
   m_TagString: Player
@@ -874,12 +875,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
+  _id: 0
+  _level: 0
+  _xp: 0
   _hp: 50
   _speed: 1
-  _stamina: 40
   _strength: 5
   _fireball: {fileID: 0}
-  _spawnFirePos: {fileID: 0}
+  pointsOfTarget: []
+  _minigameBallXP: 0
+  _dragonBattleWinMultiplier: 0
+  _moveRot: {x: 0, y: 0, z: 0}
+  _startPos: {x: 0, y: 0, z: 0}
+--- !u!54 &-5893578989611817800
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3549542650607535916}
+  serializedVersion: 4
+  m_Mass: 70
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 1
 --- !u!1 &3925962597031778207
 GameObject:
   m_ObjectHideFlags: 0

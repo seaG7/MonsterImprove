@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3131462383791317865}
   - component: {fileID: 4954866533439740441}
   - component: {fileID: -1403976465327216383}
+  - component: {fileID: 7611304409343017722}
   m_Layer: 0
   m_Name: Black-Blue Egg
   m_TagString: Untagged
@@ -94,6 +95,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hatchingTime: 2
   _dragon: {fileID: 8289441768737658518, guid: a122b36c68f19a24cb21632cba1463ab, type: 3}
+--- !u!54 &7611304409343017722
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617138703554020409}
+  serializedVersion: 4
+  m_Mass: 70
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 1
 --- !u!1 &651525224459433811
 GameObject:
   m_ObjectHideFlags: 0

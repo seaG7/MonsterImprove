@@ -522,6 +522,7 @@ GameObject:
   - component: {fileID: 2748133436367170687}
   - component: {fileID: 4686815962653049622}
   - component: {fileID: 4760941833180901458}
+  - component: {fileID: 7249526185926435417}
   m_Layer: 20
   m_Name: Green Dr
   m_TagString: Player
@@ -581,12 +582,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
+  _id: 0
+  _level: 0
+  _xp: 0
   _hp: 50
   _speed: 1
-  _stamina: 40
   _strength: 5
   _fireball: {fileID: 0}
-  _spawnFirePos: {fileID: 0}
+  pointsOfTarget: []
+  _minigameBallXP: 0
+  _dragonBattleWinMultiplier: 0
+  _moveRot: {x: 0, y: 0, z: 0}
+  _startPos: {x: 0, y: 0, z: 0}
+--- !u!54 &7249526185926435417
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3177131752915253185}
+  serializedVersion: 4
+  m_Mass: 70
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 1
 --- !u!1 &3182280691289924470
 GameObject:
   m_ObjectHideFlags: 0

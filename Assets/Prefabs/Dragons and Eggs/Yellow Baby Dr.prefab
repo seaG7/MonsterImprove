@@ -502,6 +502,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
+  _id: 0
   _level: 0
   _xp: 0
   _hp: 50
@@ -510,6 +511,10 @@ MonoBehaviour:
   _fireball: {fileID: 5906165136450168134, guid: 9ab7896ab6d06774f8af13327a73ee5e,
     type: 3}
   pointsOfTarget: []
+  _minigameBallXP: 0
+  _dragonBattleWinMultiplier: 0
+  _moveRot: {x: 0, y: 0, z: 0}
+  _startPos: {x: 0, y: 0, z: 0}
 --- !u!54 &8303829722219111624
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -518,7 +523,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1327312109483544508}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 70
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -535,7 +540,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 116
   m_CollisionDetection: 1
 --- !u!1 &2055331600665110542
 GameObject:

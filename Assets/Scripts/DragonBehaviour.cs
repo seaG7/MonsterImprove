@@ -1,15 +1,11 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using System.Linq;
 public class DragonBehaviour : MonoBehaviour
 {
 	private GameController _game;
 	private InventorySystem _inventory;
 	public Animator _animator;
-	// private List<StaticHandGesture> _gestures = new List<StaticHandGesture>(4);
-	// [SerializeField] private GameObject _gesturesObject;
 	[Header("Your dragon Stats")]
 	[SerializeField] private int _id;
 	[SerializeField] public int _level;
@@ -19,7 +15,7 @@ public class DragonBehaviour : MonoBehaviour
 	[SerializeField] public int _hp;
 	[SerializeField] public float _speed;
 	[SerializeField] public int _strength;
-	private List<int> _levelsXp = new List<int>(6) { 10, 20, 35, 50, 100 };
+	public List<int> _levelsXp = new List<int>(6) { 10, 20, 35, 50, 100 };
 	
 	[Header("Fireball")]
 	[SerializeField] public GameObject _fireball;
@@ -34,6 +30,7 @@ public class DragonBehaviour : MonoBehaviour
 	[SerializeField] private float _dragonBattleWinMultiplier;
 	private bool _isMovingToHand = false;
 	public Vector3 _moveRot;
+	public Vector3 _startPos;
 	void Start()
 	{
 		// StartCoroutine(Init());
@@ -146,21 +143,6 @@ public class DragonBehaviour : MonoBehaviour
 			yield return null;
 		}
 	}
-	public IEnumerator FlyTurn()
-	{
-		_game._cdController._moveRot = _game._cdController._moveRot - transform.position;
-		Quaternion _targetRot = Quaternion.LookRotation(_moveRot);
-		_targetRot.x = transform.rotation.x;
-		_targetRot.z = transform.rotation.z;
-		while (_game.isMiniGaming)
-		{
-			if (_game._selectedTargets.Count > 0 && transform.rotation != _targetRot)
-			{
-				transform.rotation = Quaternion.Slerp(transform.rotation, _targetRot, 4 * Time.deltaTime);
-			}
-			yield return null;
-		}
-	}
 	private IEnumerator Init()
 	{
 		while (FindAnyObjectByType<PlacementManager>().isDragged)
@@ -228,12 +210,12 @@ public class DragonBehaviour : MonoBehaviour
 			transform.position = Vector3.MoveTowards(transform.position, _movePos, _speed * Time.deltaTime);
 			yield return null;
 		}
-		StartCoroutine(FlyTurn());
 		while (_game.isMiniGaming)
 		{
 			if (_game._selectedTargets.Count > 0)
 			{
-				Debug.Log(_game._selectedTargets.Count);
+				StartCoroutine(Turn(_game._enemyDragon.transform.position));
+				yield return new WaitForSeconds(1f);
 				FlyIdleShoot();
 				yield return new WaitForSeconds(3f);
 			}
@@ -247,12 +229,12 @@ public class DragonBehaviour : MonoBehaviour
 		}
 		_animator.SetInteger("FlyState", 0);
 	}
-	private IEnumerator Move(Vector3 _movePos)
-	{
-		while (transform.position != _movePos)
-		{
-			transform.position = Vector3.MoveTowards(transform.position, _movePos, _speed * Time.deltaTime);
-			yield return null;
-		}
-	}
+	// public IEnumerator Stay()
+	// {
+	// 	while (true)
+	// 	{
+	// 		transform.position = Vector3.MoveTowards(transform.position, _startPos, _speed * Time.deltaTime);
+	// 		yield return null;
+	// 	}
+	// }
 }

@@ -37,7 +37,6 @@ public class ARPlaneColorizer : MonoBehaviour
             Debug.LogError("ARPlane или MeshRenderer компонент отсутствует.");
             return;
         }
-
         // Получаем цвет материала по классификации
         _defaultColor = GetColorByClassification(_arPlane.classification);
         _defaultColor.a = DEFAULT_COLOR_ALPHA; // Устанавливаем прозрачность цвета

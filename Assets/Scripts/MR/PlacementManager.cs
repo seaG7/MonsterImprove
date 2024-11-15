@@ -9,6 +9,7 @@ public class PlacementManager : MonoBehaviour
 	private GameController _game;
 	[SerializeField] private XRRayInteractor xrRayInteractor;
 	[SerializeField] private PlaneClassification targetPlaneClassification;
+	[SerializeField] private GameObject _menuWindow;
 	public List<GameObject> _prefabsToSpawn = new List<GameObject>(0);
 	public List<GameObject> _spawnedPlaneObjects = new List<GameObject>(0);
 	public bool isDragged = true;
@@ -76,7 +77,6 @@ public class PlacementManager : MonoBehaviour
 				{
 					Debug.Log("Target selected");
 					_game._selectedTargets.Add(raycastHit.transform.gameObject);
-					_game._cdController._moveRot = _game._cdController._moveRot - transform.position;
 				}
 			}
 			yield return null;
@@ -91,6 +91,14 @@ public class PlacementManager : MonoBehaviour
 	{
 		if (pointAt && _game.isMiniGaming)
 			pointAt = false;
+	}
+	public void OpenMenu()
+	{
+		_menuWindow.SetActive(true);
+	}
+	public void CloseMenu()
+	{
+		_menuWindow.SetActive(false);
 	}
 	void Update()
 	{

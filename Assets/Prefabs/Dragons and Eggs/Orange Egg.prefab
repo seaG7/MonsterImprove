@@ -77,6 +77,7 @@ GameObject:
   - component: {fileID: 8524721151191442361}
   - component: {fileID: 1733287776234504218}
   - component: {fileID: 8611510808516857412}
+  - component: {fileID: 5732979681279107418}
   m_Layer: 0
   m_Name: Orange Egg
   m_TagString: Untagged
@@ -159,6 +160,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hatchingTime: 2
   _dragon: {fileID: 5501522680847571009, guid: b2d482f8936c0474d85e5f696a7dce79, type: 3}
+--- !u!54 &5732979681279107418
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2390676427672395494}
+  serializedVersion: 4
+  m_Mass: 70
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 1
 --- !u!1 &3285440460753920400
 GameObject:
   m_ObjectHideFlags: 0

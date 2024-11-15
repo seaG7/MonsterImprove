@@ -20,7 +20,7 @@ public class EnemyDragonBehaviour : MonoBehaviour
 	private Vector3 lookAt;
 	private float distance;
 	private int countOfAttacks = 4;
-	private bool isNear = true;
+	private bool isNear = false;
 	[Header("XP Rewards")]
 	[SerializeField] private int _xpByKill;
 	void Start()
@@ -36,36 +36,34 @@ public class EnemyDragonBehaviour : MonoBehaviour
 	{
 		
 	}
-	public IEnumerator DistanceCheck()
-	{
-		while (true)
-		{
-			distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
-			lookAt = _game._currentDragon.transform.position;
-			lookAt.y = transform.position.y;
-			transform.LookAt(lookAt);
-			if (distance > _attackRange && isNear)
-			{
-				isNear = false;
-				_animator.SetBool("IsClose", false);
-				_game._cdAnimator.SetBool("IsClose", false);
-				StartCoroutine(FlyToTarget());
-			}
-			else if (distance - _attackRange < -0.1f && isNear)
-			{
-				_animator.SetBool("IsClose", true);
-				_game._cdAnimator.SetBool("IsClose", true);
-			}
-			else if (distance <= _attackRange && !isNear)
-			{
-				isNear = true;
-				_animator.SetBool("IsClose", false);
-				_game._cdAnimator.SetBool("IsClose", false);
-				StartCoroutine(Attack());
-			}
-			yield return null;
-		}
-	}
+	// public IEnumerator DistanceCheck()
+	// {
+	// 	while (_game.needToFight)
+	// 	{
+	// 		distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
+	// 		if (distance > _attackRange && isNear)
+	// 		{
+	// 			isNear = false;
+	// 			_animator.SetBool("IsClose", false);
+	// 			_game._cdAnimator.SetBool("IsClose", false);
+	// 			StartCoroutine(FlyToTarget());
+	// 			yield return null;
+	// 		}
+	// 		if (distance - _attackRange < -0.1f && isNear)
+	// 		{
+	// 			_animator.SetBool("IsClose", true);
+	// 			_game._cdAnimator.SetBool("IsClose", true);
+	// 			yield return null;
+	// 		}
+	// 		if (distance <= _attackRange && !isNear)
+	// 		{
+	// 			isNear = true;
+	// 			StartCoroutine(Attack());
+	// 			yield return null;
+	// 		}
+	// 		yield return null;
+	// 	}
+	// }
 	private void OnCollisionEnter(Collision collision)
 	{
 		if (collision.transform.tag == "Player")
@@ -82,7 +80,7 @@ public class EnemyDragonBehaviour : MonoBehaviour
 	}
 	public IEnumerator Attack()
 	{
-		while (isNear)
+		while (distance <= _attackRange)
 		{
 			StartCoroutine(Turn(_game._currentDragon.transform.position));
 			_animator.SetInteger("AttackState", Random.Range(1,countOfAttacks+1));
@@ -94,6 +92,7 @@ public class EnemyDragonBehaviour : MonoBehaviour
 			yield return new WaitForSeconds(0.2f);
 			_animator.SetInteger("AttackState", 0);
 			Debug.Log("AttackState enemy = 0");
+			distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
 			yield return new WaitForSeconds(Random.Range(0.5f, 1.2f));
 		}
 		StartCoroutine(FlyToTarget());
@@ -114,23 +113,19 @@ public class EnemyDragonBehaviour : MonoBehaviour
 	public IEnumerator FlyToTarget()
 	{
 		_animator.SetInteger("FlyState", 2);
-		// bool forfun = true;
+		StartCoroutine(Turn(_game._currentDragon.transform.position));
+		distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
 		while (distance > _attackRange)
 		{
-			// if (forfun)
-			// {
-			// 	StartCoroutine(FlyAttack());
-			// }
 			lookAt = _game._currentDragon.transform.position;
 			lookAt.y = transform.position.y;
-			transform.LookAt(lookAt);
 			transform.position = Vector3.MoveTowards(transform.position, lookAt, _speed * Time.deltaTime);
 			distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
 			yield return null;
 		}
 		isNear = true;
 		_animator.SetInteger("FlyState", 0);
-		StartCoroutine(DistanceCheck());
+		StartCoroutine(Attack());
 	}
 	public IEnumerator Turn(Vector3 lookAt)
 	{
@@ -153,20 +148,7 @@ public class EnemyDragonBehaviour : MonoBehaviour
 		_game.needToFight = true;
 		_game._enemyDragon = gameObject;
 		StartCoroutine(Turn(_game._currentDragon.transform.position));
-		distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
-		StartCoroutine(DistanceCheck());
-	}
-	private IEnumerator ComeCloser()
-	{
-		lookAt = _game._currentDragon.transform.position;
-		lookAt.y = transform.position.y;
-		transform.LookAt(lookAt);
-		yield return new WaitForSeconds(0.5f);
-		distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
-		while (distance + 0.1f > _attackRange)
-		{
-			transform.position = Vector3.MoveTowards(transform.position, lookAt, 0.3f * Time.deltaTime);
-			distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
-		}
+		StartCoroutine(FindAnyObjectByType<DragonBehaviour>().Turn(gameObject.transform.position));
+		StartCoroutine(FlyToTarget());
 	}
 }

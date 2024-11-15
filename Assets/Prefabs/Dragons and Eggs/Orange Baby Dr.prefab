@@ -1467,6 +1467,7 @@ GameObject:
   - component: {fileID: 3541999918416592674}
   - component: {fileID: 6186983166424473602}
   - component: {fileID: -6400430998580348552}
+  - component: {fileID: 3171013059734118391}
   m_Layer: 20
   m_Name: Orange Baby Dr
   m_TagString: Player
@@ -1529,12 +1530,43 @@ MonoBehaviour:
   _id: 0
   _level: 0
   _xp: 0
-  _hp: 50
+  _hp: 1000
   _speed: 1
   _strength: 5
   _fireball: {fileID: 5906165136450168134, guid: 9ab7896ab6d06774f8af13327a73ee5e,
     type: 3}
   pointsOfTarget: []
+  _minigameBallXP: 0
+  _dragonBattleWinMultiplier: 0
+  _moveRot: {x: 0, y: 0, z: 0}
+  _startPos: {x: 0, y: 0, z: 0}
+--- !u!54 &3171013059734118391
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5501522680847571009}
+  serializedVersion: 4
+  m_Mass: 70
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 1
 --- !u!1 &5851047411740051028
 GameObject:
   m_ObjectHideFlags: 0

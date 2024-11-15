@@ -1,15 +1,17 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.XR.ARFoundation;
 
 public class GameController : MonoBehaviour
 {
+	[SerializeField] private InventorySystem _inventory;
 	[SerializeField] private PlacementManager _placementManager;
 	public DragonBehaviour _cdController;
 	[SerializeField] private LayerMask _layer;
 	[SerializeField] GameObject[] _eggs;
-	[SerializeField] GameObject[] _dragons;
-	[SerializeField] GameObject[] _enemyDragons;
+	[SerializeField] GameObject[] _CDs;
+	[SerializeField] GameObject[] _EDs;
 	[SerializeField] GameObject _target;
 	public GameObject _objectToPlace;
 	public List<GameObject> _targets = new List<GameObject>();
@@ -40,7 +42,24 @@ public class GameController : MonoBehaviour
 	public void StartFight()
 	{
 		ClearQueueSpawn();
-		ToQueueSpawn(_enemyDragons[0]);
+		ToQueueSpawn(_EDs[0]);
+	}
+	public void SelectCD(int index)
+	{
+		ClearQueueSpawn();
+		if (_inventory._xp[index] > 0)
+		{
+			ToQueueSpawn(_CDs[index]);
+		}
+		else
+		{
+			ToQueueSpawn(_eggs[index]);
+		}
+	}
+	public void SelectED(int index)
+	{
+		ClearQueueSpawn();
+		ToQueueSpawn(_EDs[index]);
 	}
 	public IEnumerator MinigameFireball(int _countOfTargets)
 	{
@@ -79,36 +98,42 @@ public class GameController : MonoBehaviour
 	{
 		Vector3 _startPos = _currentDragon.transform.position;
 		Vector3 _spawnPos = _startPos;
-		_spawnPos.x += Random.Range(-1f, 1f);
-		_spawnPos.z += Random.Range(-1f, 1f);
-		_spawnPos.y += Random.Range(0.25f, 1.2f);
-		// while (Physics.Raycast(_startPos, _spawnPos, 10, _layer))
-		// {
-		// 	_spawnPos = _startPos;
-		// 	_spawnPos.x += Random.Range(-1f, 1f);
-		// 	_spawnPos.z += Random.Range(-1f, 1f);
-		// 	_spawnPos.y += Random.Range(0.25f, 1.2f);
-		// }
+		
+		bool isColliding = true;
+
+		while (isColliding)
+		{
+			_spawnPos.x = _startPos.x + Random.Range(-1f, 1f);
+			_spawnPos.z = _startPos.z + Random.Range(-1f, 1f);
+			_spawnPos.y = _startPos.y + Random.Range(0.25f, 1.2f);
+
+			Ray _ray = new Ray(_startPos, _spawnPos - _startPos);
+			RaycastHit _hit;
+
+			Collider _colliderPlane = FindAnyObjectByType<ARPlane>().GetComponent<Collider>();
+			isColliding = _colliderPlane.Raycast(_ray, out _hit, Vector3.Distance(_startPos, _spawnPos));
+		}
+
 		return _spawnPos;
 	}
 	public void GestureAttack1()
 	{
-		_cdController.Turn(_enemyDragon.transform.position);
+		StartCoroutine(TurnCD(_enemyDragon.transform.position));
 		StartCoroutine(_cdController.SetAttackState(1));
 	}
 	public void GestureAttack2()
 	{
-		_cdController.Turn(_enemyDragon.transform.position);
+		StartCoroutine(TurnCD(_enemyDragon.transform.position));
 		StartCoroutine(_cdController.SetAttackState(2));
 	}
 	public void GestureAttack3()
 	{
-		_cdController.Turn(_enemyDragon.transform.position);
+		StartCoroutine(TurnCD(_enemyDragon.transform.position));
 		StartCoroutine(_cdController.SetAttackState(3));
 	}
 	public void GestureAttack4()
 	{
-		_cdController.Turn(_enemyDragon.transform.position);
+		StartCoroutine(TurnCD(_enemyDragon.transform.position));
 		StartCoroutine(_cdController.SetAttackState(4));
 	}
 	public void StopGestureAttack()
@@ -136,12 +161,24 @@ public class GameController : MonoBehaviour
 	}
 	public IEnumerator Kill(GameObject _object)
 	{
-		yield return new WaitForSecondsRealtime(2f);
+		yield return new WaitForSecondsRealtime(4f);
 		
 		Destroy(_object);
 	}
 	public void ShootFromGCScript()
 	{
 		_cdController.FlyIdleShoot();
+	}
+	public IEnumerator TurnCD(Vector3 lookAt)
+	{
+		lookAt = lookAt - _currentDragon.transform.position;
+		Quaternion _targetRot = Quaternion.LookRotation(lookAt);
+		_targetRot.x = _currentDragon.transform.rotation.x;
+		_targetRot.z = _currentDragon.transform.rotation.z;
+		while (transform.rotation != _targetRot)
+		{
+			_currentDragon.transform.rotation = Quaternion.Slerp(_currentDragon.transform.rotation, _targetRot, 4 * Time.deltaTime);
+			yield return null;
+		}
 	}
 }
