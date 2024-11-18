@@ -1,5 +1,6 @@
 using UnityEngine.UI;
 using UnityEngine;
+using TMPro;
 
 public class QuickMenuUI : MonoBehaviour
 {
@@ -28,6 +29,8 @@ public class QuickMenuUI : MonoBehaviour
 		var success = (arSession.subsystem as UnityEngine.XR.OpenXR.Features.Meta.MetaOpenXRSessionSubsystem)?.TryRequestSceneCapture() ?? false;
 		Debug.Log($"Запрос на захват сцены Meta OpenXR завершен с результатом: {success}");
 	}
+	
+	
 
 	
 	void Update()
