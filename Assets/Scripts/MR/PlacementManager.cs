@@ -1,38 +1,61 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
 public class PlacementManager : MonoBehaviour
 {
 	private GameController _game;
+	[SerializeField] private InputActionProperty positionAction;
+	[SerializeField] private InputActionProperty rotationAction;
 	[SerializeField] private XRRayInteractor xrRayInteractor;
 	[SerializeField] private PlaneClassification targetPlaneClassification;
 	public List<GameObject> _prefabsToSpawn = new List<GameObject>(0);
 	public List<GameObject> _spawnedPlaneObjects = new List<GameObject>(0);
-	public bool isDragged = true;
+	public bool buttonPressed = false;
+	public bool isFollowing = false;
+	public bool gestureCompleted = false;
 	private GameObject _object;
-	void Start()
+	private void Start()
 	{
-		_game = FindAnyObjectByType<GameController>();
+		_game = FindFirstObjectByType<GameController>();
 	}
-	public void GrabSpawnableObject()
+	
+	void Update()
 	{
-		if (_prefabsToSpawn.Count > 0 && isDragged)
+		if (isFollowing) 
 		{
-			StartCoroutine(DropToPlane());
+			_object.transform.position = positionAction.action.ReadValue<Vector3>();
+			_object.transform.rotation = rotationAction.action.ReadValue<Quaternion>();
+		}
+		
+	}
+	
+	public void PerformedSpawn() 
+	{
+		if (buttonPressed) 
+		{
+			if (_prefabsToSpawn.Count > 0) 
+			{
+				_object = Instantiate(_prefabsToSpawn[0]);
+				_prefabsToSpawn.RemoveAt(0);
+				
+								
+				isFollowing = true;
+			}
 		}
 	}
-	public void SpawnObject()
+	public void EndedSpawn() 
 	{
-		isDragged = true;
-		if (_object.transform.Find("SelectionVisualization") != null)
-			_object.transform.Find("SelectionVisualization").gameObject.SetActive(false);
-		_game._farmsAmount++;
-		_spawnedPlaneObjects.Add(_object);
+		isFollowing = false;
+		buttonPressed = false;
+		_object.transform.Rotate(new Vector3(0, _object.transform.eulerAngles.y, 0));
 	}
-	private IEnumerator DropToPlane()
+	
+	/*private IEnumerator DropToPlane()
 	{
 		bool inPlane = false;
 		while (!inPlane)
@@ -64,5 +87,5 @@ public class PlacementManager : MonoBehaviour
 			}
 			yield return null;
 		}
-	}
+	}*/
 }

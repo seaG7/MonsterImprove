@@ -17,7 +17,7 @@ public class PlacingBehaviour : MonoBehaviour
 	private IEnumerator WaitForConfirm()
 	{
 		GetComponent<SkinnedMeshRenderer>().material = _placingMaterial;
-		while (!_placementManager.isDragged)
+		while (!_placementManager.isFollowing)
 		{
 			yield return null;
 		}
