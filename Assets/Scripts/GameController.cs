@@ -10,10 +10,16 @@ public class GameController : MonoBehaviour
 	[SerializeField] private int _maxFarmsAmount = 5;
 	public int _farmsAmount = 0;
 	public GameObject _object;
+	public AudioSource _mainAS;
+	[SerializeField] public AudioClip _sellSomething;
+	[SerializeField] public AudioClip _buySomething;
+	[SerializeField] public AudioClip _placeFarm;
+	[SerializeField] public AudioClip[] _clicks;
 	
 	
 	public void Start()
 	{
+		_mainAS = GameObject.FindGameObjectWithTag("MainAS").GetComponent<AudioSource>();
 		_coinAmount = PlayerPrefs.GetInt("Coins");
 	}
 	public void SpawnFarm()
@@ -28,6 +34,12 @@ public class GameController : MonoBehaviour
 	public void ToQueueSpawn(GameObject _prefab)
 	{
 		_placementManager._prefabsToSpawn.Add(_prefab);
+	}
+	
+	public void PlayClick() 
+	{
+		_mainAS.clip = _clicks[Random.Range(0, 2)];
+		_mainAS.Play();
 	}
 	
 	public void ClearQueueSpawn()

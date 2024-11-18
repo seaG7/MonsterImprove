@@ -50,10 +50,29 @@ public class PlacementManager : MonoBehaviour
 	}
 	public void EndedSpawn() 
 	{
-		isFollowing = false;
-		buttonPressed = false;
+		if (buttonPressed) 
+		{
+			isFollowing = false;
+			buttonPressed = false;
+			
+			_game._mainAS.clip = _game._placeFarm;
+			_game._mainAS.Play();
 		
-		if (_object != null)
-			_object.transform.localScale = new Vector3(0.025f, 0.025f, 0.025f);
+			if (_object != null) 
+			{
+				_object.transform.localScale = new Vector3(0.025f, 0.025f, 0.025f);
+				
+				if (Physics.Raycast(new Ray(_object.transform.position, -transform.up), out var hit)) 
+				{
+					if (hit.transform.TryGetComponent(out ARPlane arPlane) && (arPlane.classification & targetPlaneClassification) != 0)
+						{
+							_object.transform.position = hit.point;
+							_object.transform.rotation = Quaternion.Euler(0, _object.transform.rotation.y, 0);
+						}
+				}
+			}
+			
+			_object = null;
+		}
 	}
 }

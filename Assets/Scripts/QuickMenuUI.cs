@@ -13,10 +13,12 @@ public class QuickMenuUI : MonoBehaviour
 		_game = FindAnyObjectByType<GameController>();
 		resetRoomButton.onClick.AddListener(ResetRoom);
 		spawnFarmButton.onClick.AddListener(_game.SpawnFarm);
+		spawnFarmButton.onClick.AddListener(PlayClick);
 	  	exitButton.onClick.AddListener(Exit);
 	}
 	private void Exit()
 	{
+		PlayClick();
 	#if UNITY_EDITOR
 		UnityEditor.EditorApplication.isPlaying = false;
 	#else
@@ -25,16 +27,15 @@ public class QuickMenuUI : MonoBehaviour
 	}
 	private void ResetRoom()
 	{
+		PlayClick();
 		var arSession = FindAnyObjectByType<UnityEngine.XR.ARFoundation.ARSession>();
 		var success = (arSession.subsystem as UnityEngine.XR.OpenXR.Features.Meta.MetaOpenXRSessionSubsystem)?.TryRequestSceneCapture() ?? false;
 		Debug.Log($"Запрос на захват сцены Meta OpenXR завершен с результатом: {success}");
 	}
 	
-	
-
-	
-	void Update()
+	private void PlayClick() 
 	{
-		
+		_game._mainAS.clip = _game._clicks[Random.Range(0, 2)];
+		_game._mainAS.Play();
 	}
 }
