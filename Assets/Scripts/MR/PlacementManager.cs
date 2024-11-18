@@ -30,8 +30,8 @@ public class PlacementManager : MonoBehaviour
 		{
 			_object.transform.position = positionAction.action.ReadValue<Vector3>();
 			_object.transform.rotation = rotationAction.action.ReadValue<Quaternion>();
+			_object.transform.Rotate(180f, 180f, 0);
 		}
-		
 	}
 	
 	public void PerformedSpawn() 
@@ -52,40 +52,8 @@ public class PlacementManager : MonoBehaviour
 	{
 		isFollowing = false;
 		buttonPressed = false;
-		_object.transform.Rotate(new Vector3(0, _object.transform.eulerAngles.y, 0));
+		
+		if (_object != null)
+			_object.transform.localScale = new Vector3(0.025f, 0.025f, 0.025f);
 	}
-	
-	/*private IEnumerator DropToPlane()
-	{
-		bool inPlane = false;
-		while (!inPlane)
-		{
-			if (xrRayInteractor.enabled && xrRayInteractor.TryGetCurrent3DRaycastHit(out var raycastHit, out _) && isDragged)
-			{
-				if (raycastHit.transform.TryGetComponent(out ARPlane arPlane) && (arPlane.classification & targetPlaneClassification) != 0)
-				{
-					inPlane = true;
-					isDragged = false;
-					_object = Instantiate(_prefabsToSpawn[0], raycastHit.point, Quaternion.identity);
-					_prefabsToSpawn.RemoveAt(0);
-					StartCoroutine(Drag());
-				}
-			}
-			yield return null;
-		}
-	}
-	private IEnumerator Drag()
-	{
-		while (!isDragged)
-		{
-			if (xrRayInteractor.enabled && xrRayInteractor.TryGetCurrent3DRaycastHit(out var raycastHit, out _))
-			{
-				if (raycastHit.transform.TryGetComponent(out ARPlane arPlane) && (arPlane.classification & targetPlaneClassification) != 0)
-				{
-					_object.transform.position = raycastHit.point;
-				}
-			}
-			yield return null;
-		}
-	}*/
 }
