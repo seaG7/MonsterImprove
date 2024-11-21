@@ -60,7 +60,7 @@ public class PlacementManager : MonoBehaviour
 		
 			if (_object != null) 
 			{
-				_object.transform.localScale = new Vector3(0.025f, 0.025f, 0.025f);
+				_object.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
 				
 				if (Physics.Raycast(new Ray(_object.transform.position, -transform.up), out var hit)) 
 				{
@@ -71,6 +71,10 @@ public class PlacementManager : MonoBehaviour
 						}
 				}
 			}
+			_game._farmsAmount++;
+			
+			_game._farmAmountTMP.text = _game._farmsAmount.ToString() + "/" + _game._maxFarmsAmount;
+			_game._farmAmountBackTMP.text = _game._farmsAmount.ToString() + "/" + _game._maxFarmsAmount;
 			
 			_object = null;
 		}

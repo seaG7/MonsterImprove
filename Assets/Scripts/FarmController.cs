@@ -12,9 +12,8 @@ public class FarmController : MonoBehaviour
 	[SerializeField] private GameObject _settings;
 	[SerializeField] private GameObject _information;
 	[SerializeField] private GameObject _pinchTransform;
-	
-	[SerializeField] public TextMeshProUGUI _coinAmountTMP;
 	[SerializeField] public TextMeshProUGUI _harvestAmountTMP;
+	[SerializeField] public TextMeshProUGUI _harvestAmountBackTMP;
 	public GameController _gameController;
 
 	public int _maxHarvestAmount = 30;
@@ -31,7 +30,7 @@ public class FarmController : MonoBehaviour
 	{
 		UpdateUI();
 		
-		_gameController._mainAS.clip = _gameController._clicks[Random.Range(0, 2)];
+		_gameController._mainAS.clip = _gameController._click;
 		
 		if (id == 0) 
 		{
@@ -58,20 +57,63 @@ public class FarmController : MonoBehaviour
 	
 	public void UpdateUI() 
 	{
-		_coinAmountTMP.text = GameController._coinAmount.ToString();
+		// _coinAmountTMP.text = GameController._coinAmount.ToString();
 		_harvestAmountTMP.text = _harvestAmount.ToString() + "/" + _maxHarvestAmount.ToString();
+		_harvestAmountBackTMP.text = _harvestAmount.ToString() + "/" + _maxHarvestAmount.ToString();
 	}
 	
 	public void BuyButton(int _tavernID) 
 	{
-		TavernController _tavernC = _taverns[_tavernID].GetComponent<TavernController>();
+		if (GameController._coinAmount >= 15) 
+		{
+			GameController._coinAmount -= 15;
+			
+			GameController.SaveData();
+			
+			_gameController._coinAmountTMP.text = GameController._coinAmount.ToString();
+			_gameController._coinAmountBackTMP.text = GameController._coinAmount.ToString();
+			
+			TavernController _tavernC = _taverns[_tavernID].GetComponent<TavernController>();
 		
-		_tavernC.GetAnimal().SetActive(true);
-		_buttonsUI[_tavernID].SetActive(false);
-		
-		_gameController._mainAS.clip = _gameController._buySomething;
-		_gameController._mainAS.Play();
+			_tavernC.GetAnimal().SetActive(true);
+			_buttonsUI[_tavernID].SetActive(false);
+			
+			_gameController._mainAS.clip = _gameController._buySomething;
+			_gameController._mainAS.Play();
 
-		StartCoroutine(_tavernC.LifeCycle());
+			StartCoroutine(_tavernC.LifeCycle());
+		}
+		
+		else 
+		{
+			_gameController._mainAS.clip = _gameController._noMoney;
+			_gameController._mainAS.Play();
+		}
+	}
+	
+	public void SellButton() 
+	{
+		if (_harvestAmount > 0) 
+		{
+			_harvestAmount--;
+
+			GameController._coinAmount += 5;
+			_gameController._mainAS.clip = _gameController._sellSomething;
+			_gameController._mainAS.Play();
+			
+			GameController.SaveData();
+			
+			_harvestAmountTMP.text = _harvestAmount.ToString() + "/" + _maxHarvestAmount.ToString();
+			_harvestAmountBackTMP.text = _harvestAmount.ToString() + "/" + _maxHarvestAmount.ToString();
+			
+			_gameController._coinAmountTMP.text = GameController._coinAmount.ToString();
+			_gameController._coinAmountBackTMP.text = GameController._coinAmount.ToString();
+		}
+		
+		else 
+		{
+			_gameController._mainAS.clip = _gameController._noMoney;
+			_gameController._mainAS.Play();
+		}
 	}
 }

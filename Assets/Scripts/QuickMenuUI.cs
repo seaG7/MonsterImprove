@@ -6,6 +6,8 @@ public class QuickMenuUI : MonoBehaviour
 {
 	[SerializeField] private Button resetRoomButton;
 	[SerializeField] private Button spawnFarmButton;
+	[SerializeField] private Button statisticsButton;
+	[SerializeField] private GameObject _statisticsFrame;
 	[SerializeField] private Button exitButton;
 	private GameController _game;
 	private void Awake()
@@ -14,6 +16,8 @@ public class QuickMenuUI : MonoBehaviour
 		resetRoomButton.onClick.AddListener(ResetRoom);
 		spawnFarmButton.onClick.AddListener(_game.SpawnFarm);
 		spawnFarmButton.onClick.AddListener(PlayClick);
+		statisticsButton.onClick.AddListener(StatisticsActive);
+		statisticsButton.onClick.AddListener(PlayClick);
 	  	exitButton.onClick.AddListener(Exit);
 	}
 	private void Exit()
@@ -25,6 +29,11 @@ public class QuickMenuUI : MonoBehaviour
 		UnityEngine.Application.Quit();
 	#endif
 	}
+	private void StatisticsActive() 
+	{
+		_statisticsFrame.gameObject.SetActive(!_statisticsFrame.activeSelf);
+	}
+	
 	private void ResetRoom()
 	{
 		PlayClick();
@@ -35,7 +44,7 @@ public class QuickMenuUI : MonoBehaviour
 	
 	private void PlayClick() 
 	{
-		_game._mainAS.clip = _game._clicks[Random.Range(0, 2)];
+		_game._mainAS.clip = _game._click;
 		_game._mainAS.Play();
 	}
 }

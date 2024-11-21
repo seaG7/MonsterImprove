@@ -27,17 +27,31 @@ public class TavernController : MonoBehaviour
 		if (isEat && anyStateActive)
 		{
 			_farmController._harvestAmount++; 
+			GameController._collected++;
+			
 			_farmController._harvestAmountTMP.text = _farmController._harvestAmount.ToString() + "/" + _farmController._maxHarvestAmount.ToString();
+			_farmController._harvestAmountBackTMP.text = _farmController._harvestAmount.ToString() + "/" + _farmController._maxHarvestAmount.ToString();
+			
+			_farmController._gameController._collectedTMP.text = GameController._collected.ToString();
+			_farmController._gameController._collectedBackTMP.text = GameController._collected.ToString();
+			anyStateActive = false;
 		}
 		
 		else if (anyStateActive) 
 		{
 			GameController._coinAmount--;
+			
+			_farmController._gameController._coinAmountTMP.text = GameController._coinAmount.ToString();
+			_farmController._gameController._coinAmountBackTMP.text = GameController._coinAmount.ToString();
+			
 			anyStateActive = false;
 		}
 		
 		_icons[lastState].SetActive(false);
-		_farmController._gameController.SaveCoins();
+		
+		GameController.SaveData();
+		
+		StartCoroutine(LifeCycle());
 	}
 	
 	public IEnumerator LifeCycle() 
@@ -51,17 +65,23 @@ public class TavernController : MonoBehaviour
 			
 			if (randomState == 0) 
 			{
-				isEat = false;
+				isEat = true;
 				anyStateActive = true;
 			}
 			
 			else 
 			{
-				isEat = true;
+				isEat = false;
 				anyStateActive = true;
+				GameController._collected++;
 			}
 		
 			_icons[randomState].SetActive(true);
+			
+			GameController.SaveData();
+			
+			_farmController._gameController._collectedTMP.text = GameController._collected.ToString();
+			_farmController._gameController._collectedBackTMP.text = GameController._collected.ToString();
 		}
 	}
 }
