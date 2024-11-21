@@ -20,7 +20,6 @@ public class EnemyDragonBehaviour : MonoBehaviour
 	private Vector3 lookAt;
 	private float distance;
 	private int countOfAttacks = 4;
-	private bool isNear = false;
 	[Header("XP Rewards")]
 	[SerializeField] private int _xpByKill;
 	void Start()
@@ -36,43 +35,15 @@ public class EnemyDragonBehaviour : MonoBehaviour
 	{
 		
 	}
-	// public IEnumerator DistanceCheck()
-	// {
-	// 	while (_game.needToFight)
-	// 	{
-	// 		distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
-	// 		if (distance > _attackRange && isNear)
-	// 		{
-	// 			isNear = false;
-	// 			_animator.SetBool("IsClose", false);
-	// 			_game._cdAnimator.SetBool("IsClose", false);
-	// 			StartCoroutine(FlyToTarget());
-	// 			yield return null;
-	// 		}
-	// 		if (distance - _attackRange < -0.1f && isNear)
-	// 		{
-	// 			_animator.SetBool("IsClose", true);
-	// 			_game._cdAnimator.SetBool("IsClose", true);
-	// 			yield return null;
-	// 		}
-	// 		if (distance <= _attackRange && !isNear)
-	// 		{
-	// 			isNear = true;
-	// 			StartCoroutine(Attack());
-	// 			yield return null;
-	// 		}
-	// 		yield return null;
-	// 	}
-	// }
 	private void OnCollisionEnter(Collision collision)
 	{
 		if (collision.transform.tag == "Player")
 		{
-			_hp -= _game._currentDragon.GetComponent<DragonBehaviour>()._strength;
+			_hp -= FindAnyObjectByType<InventorySystem>()._strength[_game._cdIndex];
 			// any visualization of losing hp (effect)
 			if (_hp <= 0)
 			{
-				_game._currentDragon.GetComponent<DragonBehaviour>().GainXP(_xpByKill);
+                FindAnyObjectByType<InventorySystem>().GainXp(_game._cdIndex, _xpByKill);
 				_animator.SetBool("IsDie", true);
 				StartCoroutine(_game.Kill(gameObject));
 			}
@@ -123,7 +94,6 @@ public class EnemyDragonBehaviour : MonoBehaviour
 			distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
 			yield return null;
 		}
-		isNear = true;
 		_animator.SetInteger("FlyState", 0);
 		StartCoroutine(Attack());
 	}

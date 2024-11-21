@@ -7,6 +7,7 @@ public class GameController : MonoBehaviour
 {
 	[SerializeField] private InventorySystem _inventory;
 	[SerializeField] private PlacementManager _placementManager;
+	[SerializeField] private MenuController _menuController;
 	public DragonBehaviour _cdController;
 	[SerializeField] private LayerMask _layer;
 	[SerializeField] GameObject[] _eggs;
@@ -17,17 +18,16 @@ public class GameController : MonoBehaviour
 	public List<GameObject> _targets = new List<GameObject>();
 	public List<GameObject> _selectedTargets = new List<GameObject>();
 	public int _countSelectedTargets = 0;
-	public GameObject _currentDragon;
+	public int _targetsCount = 0;
+    public GameObject _currentDragon;
 	public GameObject _enemyDragon;
 	public bool needToFight = false;
 	public bool isMiniGaming = false;
 	public int _destroyedTargetsAmount = 0;
 	public Animator _cdAnimator;
+	public int _cdIndex = -1;
+	public bool isSwitching = false;
 	void Start()
-	{
-		
-	}
-	void Update()
 	{
 		
 	}
@@ -44,16 +44,23 @@ public class GameController : MonoBehaviour
 		ClearQueueSpawn();
 		ToQueueSpawn(_EDs[0]);
 	}
-	public void SelectCD(int index)
+	public void SelectCD(int index) // поставить префабы в порядке синий мал ср бол, красный мал ср бол и тд
 	{
 		ClearQueueSpawn();
-		if (_inventory._xp[index] > 0)
+		switch (_inventory.CalculateLevel(index))
 		{
-			ToQueueSpawn(_CDs[index]);
-		}
-		else
-		{
-			ToQueueSpawn(_eggs[index]);
+			case 0:
+				ToQueueSpawn(_eggs[index]);
+				break;
+			case 1:
+				ToQueueSpawn(_CDs[3*(index+1)-3]);
+				break;
+			case 3:
+				ToQueueSpawn(_CDs[3*(index-1)-2]);
+				break;
+			case 5:
+				ToQueueSpawn(_CDs[3*(index-1)-1]);
+				break;
 		}
 	}
 	public void SelectED(int index)
@@ -63,6 +70,7 @@ public class GameController : MonoBehaviour
 	}
 	public IEnumerator MinigameFireball(int _countOfTargets)
 	{
+		_targetsCount = _countOfTargets;
 		SpawnTargets();
 		needToFight = false;
 		isMiniGaming = true;
@@ -71,7 +79,6 @@ public class GameController : MonoBehaviour
 		StartCoroutine(_cdController.DestroyTargets());
 		while (isMiniGaming)
 		{
-			// if выйти по кнопке -> isMiniGaming = false; break;
 			if (_targets.Count < 4)
 			{
 				if (_destroyedTargetsAmount >= _countOfTargets)
@@ -179,6 +186,22 @@ public class GameController : MonoBehaviour
 		{
 			_currentDragon.transform.rotation = Quaternion.Slerp(_currentDragon.transform.rotation, _targetRot, 4 * Time.deltaTime);
 			yield return null;
+		}
+	}
+	public void SwitchGrowth()
+	{
+		Transform _transform = _currentDragon.transform;
+		Destroy(_currentDragon);
+		switch (_inventory.CalculateLevel(_cdIndex))
+		{
+			case 3:
+				_currentDragon = Instantiate(_CDs[3 * (_cdIndex - 1) - 2]);
+				isSwitching = true;
+				break;
+			case 5:
+				_currentDragon = Instantiate(_CDs[3 * (_cdIndex - 1) - 1]);
+				isSwitching = true;
+				break;
 		}
 	}
 }

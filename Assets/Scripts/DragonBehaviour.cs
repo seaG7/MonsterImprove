@@ -8,14 +8,8 @@ public class DragonBehaviour : MonoBehaviour
 	public Animator _animator;
 	[Header("Your dragon Stats")]
 	[SerializeField] private int _id;
-	[SerializeField] public int _level;
-	[SerializeField] public int _xp;
-	private int _currentLevelXp;
-	private int _maxLevelXp;
-	[SerializeField] public int _hp;
+	[SerializeField] private int _hp;
 	[SerializeField] public float _speed;
-	[SerializeField] public int _strength;
-	public List<int> _levelsXp = new List<int>(6) { 10, 20, 35, 50, 100 };
 	
 	[Header("Fireball")]
 	[SerializeField] public GameObject _fireball;
@@ -33,17 +27,7 @@ public class DragonBehaviour : MonoBehaviour
 	public Vector3 _startPos;
 	void Start()
 	{
-		// StartCoroutine(Init());
-		_inventory = FindAnyObjectByType<InventorySystem>();
-		_game = FindAnyObjectByType<GameController>();
-		_game._currentDragon = gameObject;
-		_game._cdController = GetComponent<DragonBehaviour>();
-		_animator = GetComponent<Animator>();
-		StartCoroutine(Turn(FindAnyObjectByType<Camera>().transform.position));
-		StartCoroutine(SetHatchingFalse());
-		
-		_inventory.LoadStats(_id);
-		_maxLevelXp = CalculateMaxLevelXp();
+		Init();
 	}
 	void Update()
 	{
@@ -53,7 +37,7 @@ public class DragonBehaviour : MonoBehaviour
 	{
 		if (collision.transform.tag == "Enemy")
 		{
-			_hp -= _game._enemyDragon.GetComponent<EnemyDragonBehaviour>()._strength;
+			_hp -= _inventory._strength[_id];
 			// any visualization of losing hp (effect)
 			if (_hp <= 0)
 			{
@@ -64,59 +48,19 @@ public class DragonBehaviour : MonoBehaviour
 	}
 	public IEnumerator SetHatchingFalse()
 	{
-		_animator.SetBool("IsHatching", true);
+		_animator.SetBool("IsLevelUp", true);
+		_inventory.GainXp(_id, 5);
 		yield return new WaitForSecondsRealtime(2f);
-		_animator.SetBool("IsHatching", false);
-		_animator.SetBool("IsInspecting", true);
+		_animator.SetBool("IsLevelUp", false);
+		_animator.SetBool("IsInspect", true);
 		yield return new WaitForSecondsRealtime(3f);
-		_animator.SetBool("IsInspecting", false);
+		_animator.SetBool("IsInspect", false);
 	}
-	public void GainXP(int amount)
+	private IEnumerator Inspect()
 	{
-		_xp += amount;
-		if (_currentLevelXp >= _maxLevelXp)
-		{
-			LevelUp();
-		}
-		else
-		{
-			_currentLevelXp = CalculateCurrentLevelXp();
-			// instantiate effect for gain xp;
-		}
-		_inventory.SaveStats(_id);
-	}
-	private void LevelUp()
-	{
-		// instantiate effect for level up;
-		_currentLevelXp = CalculateCurrentLevelXp();
-		_maxLevelXp = CalculateMaxLevelXp();
-		_level++;
-	}
-	private int CalculateCurrentLevelXp()
-	{
-		int xp = _xp;
-		foreach (int amount in _levelsXp)
-		{
-			if (xp >= amount)
-				xp -= amount;
-			else
-				break;
-		}
-		if (xp > _levelsXp[_levelsXp.Count])
-			return _levelsXp[_levelsXp.Count];
-		return xp;
-	}
-	private int CalculateMaxLevelXp()
-	{
-		int xp = _xp;
-		foreach (int amount in _levelsXp)
-		{
-			if (xp >= amount)
-				xp -= amount;
-			else
-				return amount;
-		}
-		return _levelsXp[_levelsXp.Count];
+		_animator.SetBool("IsInspect", true);
+		yield return new WaitForSecondsRealtime(3f);
+		_animator.SetBool("IsInspect", false);
 	}
 	public IEnumerator SpawnFireball()
 	{
@@ -143,32 +87,47 @@ public class DragonBehaviour : MonoBehaviour
 			yield return null;
 		}
 	}
-	private IEnumerator Init()
+	private void Init()
 	{
-		while (FindAnyObjectByType<PlacementManager>().isDragged)
-		{
-			yield return null;
-		}
+		_inventory = FindAnyObjectByType<InventorySystem>();
 		_game = FindAnyObjectByType<GameController>();
-		_game._currentDragon = gameObject;
+		if (!_game.isSwitching)
+		{
+			while (!FindAnyObjectByType<PlacementManager>().isDragged) {}
+			_game._cdIndex = _id;
+			if (_inventory._xp[_id] != 0)
+			{
+				StartCoroutine(SetHatchingFalse());
+			}
+			else
+			{
+				StartCoroutine(Inspect());
+			}
+		}
 		_game._cdController = GetComponent<DragonBehaviour>();
-		_game._cdAnimator = _animator = GetComponent<Animator>();
+		_animator = GetComponent<Animator>();
 		StartCoroutine(Turn(FindAnyObjectByType<Camera>().transform.position));
-		StartCoroutine(SetHatchingFalse());
 	}
+	public IEnumerator LevelUp()
+	{
+        _animator.SetBool("IsLevelUp", true);
+		// instantiate level up effects (visual + sound)
+        yield return new WaitForSecondsRealtime(2f);
+        _animator.SetBool("IsLevelUp", false);
+    }
 	public void FlyIdleShoot()
 	{
 		StartCoroutine(SetAttackState(10));
 		StartCoroutine(SpawnFireball());
 	}
-	public IEnumerator SetAttackState(int _number)
+	public IEnumerator SetAttackState(int number)
 	{
 		if (_animator.GetInteger("AttackState") == 0)
 		{
-			_animator.SetInteger("AttackState", _number);
-			if (_number == 4)
+			_animator.SetInteger("AttackState", number);
+			if (number == 4)
 				StartCoroutine(SpawnFireball());
-			if (_number != 0)
+			if (number != 0)
 			{
 				yield return new WaitForSeconds(0.1f);
 				_animator.SetInteger("AttackState", 0);
@@ -228,13 +187,9 @@ public class DragonBehaviour : MonoBehaviour
 			yield return null;
 		}
 		_animator.SetInteger("FlyState", 0);
+
+		yield return new WaitForSeconds(0.5f);
+		_inventory.GainXp(_id, _game._targetsCount);
+		_game._targetsCount = 0;
 	}
-	// public IEnumerator Stay()
-	// {
-	// 	while (true)
-	// 	{
-	// 		transform.position = Vector3.MoveTowards(transform.position, _startPos, _speed * Time.deltaTime);
-	// 		yield return null;
-	// 	}
-	// }
 }

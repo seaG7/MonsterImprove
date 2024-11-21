@@ -50,6 +50,7 @@ public class FireballBehaviour : MonoBehaviour
 		if (collision.transform.tag == "Target")
 		{
 			_game._destroyedTargetsAmount++;
+			FindAnyObjectByType<MenuController>().UpdateTargetCountDisplay();
 			Destroy(collision.transform.gameObject);
 			// анимка с получением опыта (айтем над моделькой player dragon)
 			Destroy(gameObject);

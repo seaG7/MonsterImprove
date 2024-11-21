@@ -521,7 +521,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2748133436367170687}
   - component: {fileID: 4686815962653049622}
-  - component: {fileID: 4760941833180901458}
   - component: {fileID: 7249526185926435417}
   m_Layer: 20
   m_Name: Green Dr
@@ -569,31 +568,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4760941833180901458
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3177131752915253185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93a42c185fd82724284c33ac4d35c6df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
-  _id: 0
-  _level: 0
-  _xp: 0
-  _hp: 50
-  _speed: 1
-  _strength: 5
-  _fireball: {fileID: 0}
-  pointsOfTarget: []
-  _minigameBallXP: 0
-  _dragonBattleWinMultiplier: 0
-  _moveRot: {x: 0, y: 0, z: 0}
-  _startPos: {x: 0, y: 0, z: 0}
 --- !u!54 &7249526185926435417
 Rigidbody:
   m_ObjectHideFlags: 0

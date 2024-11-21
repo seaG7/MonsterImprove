@@ -13,7 +13,6 @@ public class PlacementManager : MonoBehaviour
 	public List<GameObject> _prefabsToSpawn = new List<GameObject>(0);
 	public List<GameObject> _spawnedPlaneObjects = new List<GameObject>(0);
 	public bool isDragged = true;
-	private bool pointAt = false;
 	private GameObject _object;
 	void Start()
 	{
@@ -68,7 +67,6 @@ public class PlacementManager : MonoBehaviour
 	}
 	public IEnumerator AimTarget()
 	{
-		xrRayInteractor.maxRaycastDistance = 100f;
 		while (_game.isMiniGaming)
 		{
 			if (xrRayInteractor.enabled && xrRayInteractor.TryGetCurrent3DRaycastHit(out var raycastHit, out _))
@@ -82,16 +80,6 @@ public class PlacementManager : MonoBehaviour
 			yield return null;
 		}
 	}
-	public void PointAtStarted()
-	{
-		if (!pointAt && _game.isMiniGaming)
-			pointAt = true;
-	}
-	public void PointAtEnded()
-	{
-		if (pointAt && _game.isMiniGaming)
-			pointAt = false;
-	}
 	public void OpenMenu()
 	{
 		_menuWindow.SetActive(true);
@@ -99,9 +87,5 @@ public class PlacementManager : MonoBehaviour
 	public void CloseMenu()
 	{
 		_menuWindow.SetActive(false);
-	}
-	void Update()
-	{
-		
 	}
 }
