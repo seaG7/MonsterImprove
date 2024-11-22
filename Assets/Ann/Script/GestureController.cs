@@ -20,6 +20,18 @@ public class GestureController : MonoBehaviour
 		StartCoroutine(GestureEndCD());
 	}
 	
+	public void GunGo() 
+	{
+		GunController _gunController = null;
+		
+		while (_gunController == null) 
+		{
+			_gunController= FindFirstObjectByType<GunController>();
+		}
+		
+		StartCoroutine(_gunController.ShootAndReload());
+	}
+	
 	public IEnumerator GestureEndCD() 
 	{
 		yield return new WaitForSeconds(0.2f);
