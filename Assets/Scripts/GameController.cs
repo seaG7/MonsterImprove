@@ -10,9 +10,6 @@ public class GameController : MonoBehaviour
 {
 	[SerializeField] private PlacementManager _placementManager;
 	[SerializeField] GameObject[] _camera;
-	public GameObject _objectToPlace;
-	public GameObject _currentDragon;
-	public GameObject _enemyDragon;
 	public bool _cameraSpawned = false;
 	public InputActionProperty _playerPosition;
 	[SerializeField] public GameObject _ghostPrefab;
@@ -20,7 +17,6 @@ public class GameController : MonoBehaviour
 	public int _currentGhostOnMapAmount;
 	public int _maxGhostOnMapAmount = 1;
 	[SerializeField] public AudioClip _spawnEffect;
-	[SerializeField] public AudioSource _effectsAS;
 	[SerializeField] private PlaneClassification targetPlaneClassification;
 	public bool _boardSpawned = false;
 	[SerializeField] private GameObject _boardPrefab;
@@ -103,16 +99,6 @@ public class GameController : MonoBehaviour
 			ClearQueueSpawn();
 			ToQueueSpawn(_camera[0]);
 		}
-	}
-	public Vector3 RandomPosAround()
-	{
-		Vector3 _startPos = _currentDragon.transform.position;
-		Vector3 _spawnPos = _startPos;
-		_spawnPos.x += Random.Range(-1f, 1f);
-		_spawnPos.z += Random.Range(-1f, 1f);
-		_spawnPos.y += Random.Range(0.25f, 1.2f);
-		
-		return _spawnPos;
 	}
 	
 	public void ToQueueSpawn(GameObject _prefab)
