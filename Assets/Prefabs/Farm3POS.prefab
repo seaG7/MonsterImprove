@@ -2442,7 +2442,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.9958, y: 0.54}
+  m_AnchoredPosition: {x: 0.871, y: 0.54}
   m_SizeDelta: {x: 2.992, y: 2.081}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1435672933664395868
@@ -8877,7 +8877,7 @@ GameObject:
   - component: {fileID: 3415011727772556733}
   - component: {fileID: 5210458997015981382}
   m_Layer: 0
-  m_Name: FarmSample 1 1 1
+  m_Name: Farm3POS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17090,11 +17090,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f652a9aa13031df45a1f76deeeded889, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.93
+      value: 4.85
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f652a9aa13031df45a1f76deeeded889, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.39
+      value: 5.03
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f652a9aa13031df45a1f76deeeded889, type: 3}
       propertyPath: m_LocalRotation.w
@@ -17253,11 +17253,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4704548601737856, guid: 54090756da6756143b645958ecc1a6cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.93
+      value: 4.85
       objectReference: {fileID: 0}
     - target: {fileID: 4704548601737856, guid: 54090756da6756143b645958ecc1a6cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.62
+      value: -0.56
       objectReference: {fileID: 0}
     - target: {fileID: 4704548601737856, guid: 54090756da6756143b645958ecc1a6cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -17882,10 +17882,20 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7261228287041773179}
     m_Modifications:
+    - target: {fileID: 1341467486250684640, guid: 52fa0109a94e1994989538311b21a877,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3754075577783504342, guid: 52fa0109a94e1994989538311b21a877,
         type: 3}
       propertyPath: m_Name
       value: CowTavern (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4894671186215783378, guid: 52fa0109a94e1994989538311b21a877,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8190372597430240463, guid: 52fa0109a94e1994989538311b21a877,
         type: 3}

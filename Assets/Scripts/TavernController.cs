@@ -7,6 +7,7 @@ public class TavernController : MonoBehaviour
 	[SerializeField] private FarmController _farmController;
 	[SerializeField] private GameObject[] _icons; // 0 - harvest, 1 - eat
 	[SerializeField] private GameObject _animal;
+	[SerializeField] private AudioSource _harvestAS;
 	public bool anyStateActive = false;
 	public bool isEat = false;
 	public int lastState = -1;
@@ -35,6 +36,7 @@ public class TavernController : MonoBehaviour
 			_farmController._gameController._collectedTMP.text = GameController._collected.ToString();
 			_farmController._gameController._collectedBackTMP.text = GameController._collected.ToString();
 			anyStateActive = false;
+			_harvestAS.Play();
 		}
 		
 		else if (anyStateActive) 
@@ -45,11 +47,13 @@ public class TavernController : MonoBehaviour
 			_farmController._gameController._coinAmountBackTMP.text = GameController._coinAmount.ToString();
 			
 			anyStateActive = false;
+			_harvestAS.Play();
 		}
 		
 		_icons[lastState].SetActive(false);
 		
 		GameController.SaveData();
+		
 		
 		StartCoroutine(LifeCycle());
 	}
@@ -73,7 +77,6 @@ public class TavernController : MonoBehaviour
 			{
 				isEat = false;
 				anyStateActive = true;
-				GameController._collected++;
 			}
 		
 			_icons[randomState].SetActive(true);
