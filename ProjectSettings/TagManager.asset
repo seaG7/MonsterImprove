@@ -11,6 +11,7 @@ TagManager:
   - MainAS
   - Ghost
   - Cone
+  - KillCollider
   layers:
   - Default
   - TransparentFX

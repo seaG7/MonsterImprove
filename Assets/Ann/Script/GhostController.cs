@@ -78,6 +78,11 @@ public class GhostController : MonoBehaviour
 		{
 			_isInvisible = false;
 		}
+		
+		if (other.gameObject.tag == "KillCollider") 
+		{
+			Destroy(gameObject);
+		}
 	}
 	
 	private void OnTriggerExit(Collider other)

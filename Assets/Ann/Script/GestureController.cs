@@ -24,10 +24,7 @@ public class GestureController : MonoBehaviour
 	{
 		GunController _gunController = null;
 		
-		while (_gunController == null) 
-		{
-			_gunController= FindFirstObjectByType<GunController>();
-		}
+		_gunController= FindFirstObjectByType<GunController>();
 		
 		StartCoroutine(_gunController.ShootAndReload());
 	}
