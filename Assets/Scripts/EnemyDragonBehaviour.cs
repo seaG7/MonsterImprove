@@ -26,15 +26,6 @@ public class EnemyDragonBehaviour : MonoBehaviour
 	{
 		StartCoroutine(Init());
 	}
-	void FixedUpdate()
-	{
-		
-	}
-	
-	void Update()
-	{
-		
-	}
 	private void OnCollisionEnter(Collision collision)
 	{
 		if (collision.transform.tag == "Player")
@@ -43,7 +34,9 @@ public class EnemyDragonBehaviour : MonoBehaviour
 			// any visualization of losing hp (effect)
 			if (_hp <= 0)
 			{
-                FindAnyObjectByType<InventorySystem>().GainXp(_game._cdIndex, _xpByKill);
+				_game.needToFight = false;
+				FindAnyObjectByType<MenuController>().edIndex = -1;
+				FindAnyObjectByType<InventorySystem>().GainXp(_game._cdIndex, _xpByKill);
 				_animator.SetBool("IsDie", true);
 				StartCoroutine(_game.Kill(gameObject));
 			}
@@ -51,22 +44,20 @@ public class EnemyDragonBehaviour : MonoBehaviour
 	}
 	public IEnumerator Attack()
 	{
-		while (distance <= _attackRange)
+		while (true)
 		{
 			StartCoroutine(Turn(_game._currentDragon.transform.position));
+			_game._cdController.needToTurn = true;
 			_animator.SetInteger("AttackState", Random.Range(1,countOfAttacks+1));
-			Debug.Log("enemy random attack switched");
 			if (_animator.GetInteger("AttackState") == 4)
 			{
 				StartCoroutine(SpawnFireball());
 			}
 			yield return new WaitForSeconds(0.2f);
 			_animator.SetInteger("AttackState", 0);
-			Debug.Log("AttackState enemy = 0");
 			distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
 			yield return new WaitForSeconds(Random.Range(0.5f, 1.2f));
 		}
-		StartCoroutine(FlyToTarget());
 	}
 	public IEnumerator SpawnFireball()
 	{
@@ -78,7 +69,6 @@ public class EnemyDragonBehaviour : MonoBehaviour
 		if (fireballs.Count > 0)
 		{
 			Destroy(fireballs[0]);
-			fireballs.RemoveAt(0);
 		}
 	}
 	public IEnumerator FlyToTarget()
@@ -117,8 +107,9 @@ public class EnemyDragonBehaviour : MonoBehaviour
 		_animator = GetComponent<Animator>();
 		_game.needToFight = true;
 		_game._enemyDragon = gameObject;
+		_game._cdController.needToTurn = true;
 		StartCoroutine(Turn(_game._currentDragon.transform.position));
-		StartCoroutine(FindAnyObjectByType<DragonBehaviour>().Turn(gameObject.transform.position));
+		StartCoroutine(_game._cdController.TurnInFight());
 		StartCoroutine(FlyToTarget());
 	}
 }

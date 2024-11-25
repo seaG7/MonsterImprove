@@ -2,14 +2,15 @@ using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 public class GameController : MonoBehaviour
 {
 	[SerializeField] private InventorySystem _inventory;
 	[SerializeField] private PlacementManager _placementManager;
 	[SerializeField] private MenuController _menuController;
+	[SerializeField] private PlaneClassification targetPlaneClassification;
 	public DragonBehaviour _cdController;
-	[SerializeField] private LayerMask _layer;
 	[SerializeField] GameObject[] _eggs;
 	[SerializeField] GameObject[] _CDs;
 	[SerializeField] GameObject[] _EDs;
@@ -19,7 +20,7 @@ public class GameController : MonoBehaviour
 	public List<GameObject> _selectedTargets = new List<GameObject>();
 	public int _countSelectedTargets = 0;
 	public int _targetsCount = 0;
-    public GameObject _currentDragon;
+	public GameObject _currentDragon;
 	public GameObject _enemyDragon;
 	public bool needToFight = false;
 	public bool isMiniGaming = false;
@@ -47,26 +48,30 @@ public class GameController : MonoBehaviour
 	public void SelectCD(int index) // поставить префабы в порядке синий мал ср бол, красный мал ср бол и тд
 	{
 		ClearQueueSpawn();
-		switch (_inventory.CalculateLevel(index))
+		if (_CDs.Length > 3*(index-1)-1 && _eggs.Length > index)
 		{
-			case 0:
-				ToQueueSpawn(_eggs[index]);
-				break;
-			case 1:
-				ToQueueSpawn(_CDs[3*(index+1)-3]);
-				break;
-			case 3:
-				ToQueueSpawn(_CDs[3*(index-1)-2]);
-				break;
-			case 5:
-				ToQueueSpawn(_CDs[3*(index-1)-1]);
-				break;
+			switch (_inventory.CalculateLevel(index))
+			{
+				case 0:
+					ToQueueSpawn(_eggs[index]);
+					break;
+				case 1:
+					ToQueueSpawn(_CDs[3*(index+1)-3]);
+					break;
+				case 3:
+					ToQueueSpawn(_CDs[3*(index-1)-2]);
+					break;
+				case 5:
+					ToQueueSpawn(_CDs[3*(index-1)-1]);
+					break;
+			}
 		}
 	}
 	public void SelectED(int index)
 	{
 		ClearQueueSpawn();
-		ToQueueSpawn(_EDs[index]);
+		if (_EDs.Length > index)
+			ToQueueSpawn(_EDs[index]);
 	}
 	public IEnumerator MinigameFireball(int _countOfTargets)
 	{
@@ -106,46 +111,59 @@ public class GameController : MonoBehaviour
 		Vector3 _startPos = _currentDragon.transform.position;
 		Vector3 _spawnPos = _startPos;
 		
-		bool isColliding = true;
-
-		while (isColliding)
+		bool isColliding = false;
+		
+		while (!isColliding)
 		{
 			_spawnPos.x = _startPos.x + Random.Range(-1f, 1f);
 			_spawnPos.z = _startPos.z + Random.Range(-1f, 1f);
 			_spawnPos.y = _startPos.y + Random.Range(0.25f, 1.2f);
 
-			Ray _ray = new Ray(_startPos, _spawnPos - _startPos);
+			Ray _ray = new Ray(_spawnPos, Vector3.down);
 			RaycastHit _hit;
-
-			Collider _colliderPlane = FindAnyObjectByType<ARPlane>().GetComponent<Collider>();
-			isColliding = _colliderPlane.Raycast(_ray, out _hit, Vector3.Distance(_startPos, _spawnPos));
+			if (Physics.Raycast(_ray, out _hit))
+			{
+				isColliding = _hit.transform.TryGetComponent(out ARPlane arPlane) && ((arPlane.classification & targetPlaneClassification) != 0);
+			}
 		}
-
 		return _spawnPos;
 	}
 	public void GestureAttack1()
 	{
-		StartCoroutine(TurnCD(_enemyDragon.transform.position));
-		StartCoroutine(_cdController.SetAttackState(1));
+		if (needToFight)
+		{
+			StartCoroutine(TurnCD(_enemyDragon.transform.position));
+			StartCoroutine(_cdController.SetAttackState(1));
+		}
 	}
 	public void GestureAttack2()
 	{
-		StartCoroutine(TurnCD(_enemyDragon.transform.position));
-		StartCoroutine(_cdController.SetAttackState(2));
+		if (needToFight)
+		{
+			StartCoroutine(TurnCD(_enemyDragon.transform.position));
+			StartCoroutine(_cdController.SetAttackState(2));
+		}
 	}
 	public void GestureAttack3()
 	{
-		StartCoroutine(TurnCD(_enemyDragon.transform.position));
-		StartCoroutine(_cdController.SetAttackState(3));
+		if (needToFight)
+		{
+			StartCoroutine(TurnCD(_enemyDragon.transform.position));
+			StartCoroutine(_cdController.SetAttackState(3));
+		}
 	}
 	public void GestureAttack4()
 	{
-		StartCoroutine(TurnCD(_enemyDragon.transform.position));
-		StartCoroutine(_cdController.SetAttackState(4));
+		if (needToFight)
+		{
+			StartCoroutine(TurnCD(_enemyDragon.transform.position));
+			StartCoroutine(_cdController.SetAttackState(4));
+		}
 	}
 	public void StopGestureAttack()
 	{
-		StartCoroutine(_cdController.SetAttackState(0));
+		if (needToFight)
+			StartCoroutine(_cdController.SetAttackState(0));
 	}
 	public void ToQueueSpawn(GameObject _prefab)
 	{

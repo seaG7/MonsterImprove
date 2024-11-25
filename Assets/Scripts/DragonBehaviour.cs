@@ -25,6 +25,8 @@ public class DragonBehaviour : MonoBehaviour
 	private bool _isMovingToHand = false;
 	public Vector3 _moveRot;
 	public Vector3 _startPos;
+	public bool needToShoot = false;
+	public bool needToTurn = false;
 	void Start()
 	{
 		Init();
@@ -50,16 +52,16 @@ public class DragonBehaviour : MonoBehaviour
 	{
 		_animator.SetBool("IsLevelUp", true);
 		_inventory.GainXp(_id, 5);
-		yield return new WaitForSecondsRealtime(2f);
+		yield return new WaitForSeconds(2f);
 		_animator.SetBool("IsLevelUp", false);
 		_animator.SetBool("IsInspect", true);
-		yield return new WaitForSecondsRealtime(3f);
+		yield return new WaitForSeconds(3f);
 		_animator.SetBool("IsInspect", false);
 	}
 	private IEnumerator Inspect()
 	{
 		_animator.SetBool("IsInspect", true);
-		yield return new WaitForSecondsRealtime(3f);
+		yield return new WaitForSeconds(3f);
 		_animator.SetBool("IsInspect", false);
 	}
 	public IEnumerator SpawnFireball()
@@ -72,7 +74,6 @@ public class DragonBehaviour : MonoBehaviour
 		if (fireballs.Count > 0)
 		{
 			Destroy(fireballs[0]);
-			fireballs.RemoveAt(0);
 		}
 	}
 	public IEnumerator Turn(Vector3 lookAt)
@@ -91,11 +92,11 @@ public class DragonBehaviour : MonoBehaviour
 	{
 		_inventory = FindAnyObjectByType<InventorySystem>();
 		_game = FindAnyObjectByType<GameController>();
+		_animator = GetComponent<Animator>();
 		if (!_game.isSwitching)
 		{
 			while (!FindAnyObjectByType<PlacementManager>().isDragged) {}
-			_game._cdIndex = _id;
-			if (_inventory._xp[_id] != 0)
+			if (_inventory._xp[_id] == 0)
 			{
 				StartCoroutine(SetHatchingFalse());
 			}
@@ -104,21 +105,33 @@ public class DragonBehaviour : MonoBehaviour
 				StartCoroutine(Inspect());
 			}
 		}
+		_game._cdIndex = _id;
 		_game._cdController = GetComponent<DragonBehaviour>();
-		_animator = GetComponent<Animator>();
 		StartCoroutine(Turn(FindAnyObjectByType<Camera>().transform.position));
+		FindAnyObjectByType<MenuController>()._mainMenuButtons[2].gameObject.SetActive(true);
 	}
 	public IEnumerator LevelUp()
 	{
-        _animator.SetBool("IsLevelUp", true);
+		_animator.SetBool("IsLevelUp", true);
 		// instantiate level up effects (visual + sound)
-        yield return new WaitForSecondsRealtime(2f);
-        _animator.SetBool("IsLevelUp", false);
-    }
+		yield return new WaitForSeconds(1.5f);
+		_animator.SetBool("IsLevelUp", false);
+	}
 	public void FlyIdleShoot()
 	{
+		StopCoroutine(FixShootingMinigame());
+		StartCoroutine(FixShootingMinigame());
 		StartCoroutine(SetAttackState(10));
 		StartCoroutine(SpawnFireball());
+	}
+	private IEnumerator FixShootingMinigame()
+	{
+		yield return new WaitForSeconds(3f);
+		if (!needToShoot && _game._selectedTargets.Count > 0)
+		{
+			StartCoroutine(Turn(_game._selectedTargets[0].transform.position));
+			FlyIdleShoot();
+		}
 	}
 	public IEnumerator SetAttackState(int number)
 	{
@@ -171,12 +184,11 @@ public class DragonBehaviour : MonoBehaviour
 		}
 		while (_game.isMiniGaming)
 		{
-			if (_game._selectedTargets.Count > 0)
+			if (needToShoot && _game._selectedTargets.Count > 0)
 			{
-				StartCoroutine(Turn(_game._enemyDragon.transform.position));
-				yield return new WaitForSeconds(1f);
+				needToShoot = false;
+				StartCoroutine(Turn(_game._selectedTargets[0].transform.position));
 				FlyIdleShoot();
-				yield return new WaitForSeconds(3f);
 			}
 			yield return null;
 		}
@@ -189,7 +201,19 @@ public class DragonBehaviour : MonoBehaviour
 		_animator.SetInteger("FlyState", 0);
 
 		yield return new WaitForSeconds(0.5f);
-		_inventory.GainXp(_id, _game._targetsCount);
+		_inventory.GainXp(_id, 10);
 		_game._targetsCount = 0;
+	}
+	public IEnumerator TurnInFight()
+	{
+		while (_game.needToFight)
+		{
+			if (needToTurn)
+			{
+				needToTurn = false;
+				StartCoroutine(Turn(_game._enemyDragon.transform.position));
+			}
+			yield return null;
+		}
 	}
 }

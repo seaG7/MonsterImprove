@@ -4,15 +4,19 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
 public class PlacementManager : MonoBehaviour
 {
 	private GameController _game;
 	[SerializeField] private XRRayInteractor xrRayInteractor;
 	[SerializeField] private PlaneClassification targetPlaneClassification;
 	[SerializeField] private GameObject _menuWindow;
+	[SerializeField] private InputActionProperty _handPositionProperty;
+	[SerializeField] private InputActionProperty _cameraPositionProperty;
 	public List<GameObject> _prefabsToSpawn = new List<GameObject>(0);
 	public List<GameObject> _spawnedPlaneObjects = new List<GameObject>(0);
 	public bool isDragged = true;
+	private bool _isMenuActive;
 	private GameObject _object;
 	void Start()
 	{
@@ -27,10 +31,12 @@ public class PlacementManager : MonoBehaviour
 	}
 	public void SpawnObject()
 	{
-		isDragged = true;
-		if (_object.transform.Find("SelectionVisualization") != null)
+		if (!isDragged)
+		{
+			isDragged = true;
 			_object.transform.Find("SelectionVisualization").gameObject.SetActive(false);
-		_spawnedPlaneObjects.Add(_object);
+			_spawnedPlaneObjects.Add(_object);
+		}
 	}
 	private IEnumerator DropToPlane()
 	{
@@ -73,8 +79,10 @@ public class PlacementManager : MonoBehaviour
 			{
 				if (raycastHit.transform.gameObject.CompareTag("Target") && !_game._selectedTargets.Contains(raycastHit.transform.gameObject))
 				{
-					Debug.Log("Target selected");
+					if (_game._selectedTargets.Count == 0)
+						_game._cdController.needToShoot = true;
 					_game._selectedTargets.Add(raycastHit.transform.gameObject);
+					Debug.Log("новая цель выбрана");
 				}
 			}
 			yield return null;
@@ -82,10 +90,27 @@ public class PlacementManager : MonoBehaviour
 	}
 	public void OpenMenu()
 	{
-		_menuWindow.SetActive(true);
+		if (!_isMenuActive)
+		{
+			_isMenuActive = true;
+			_menuWindow.SetActive(_isMenuActive);
+			StartCoroutine(UpdateMenuPosition());
+		}
 	}
 	public void CloseMenu()
 	{
-		_menuWindow.SetActive(false);
+		_isMenuActive = false;
+		_menuWindow.SetActive(_isMenuActive);
+	}
+	private IEnumerator UpdateMenuPosition()
+	{
+		while (_isMenuActive)
+		{
+			Vector3 _menuPosition = _handPositionProperty.action.ReadValue<Vector3>();
+			_menuWindow.transform.LookAt(_cameraPositionProperty.action.ReadValue<Vector3>());
+			_menuWindow.transform.localRotation = Quaternion.Euler(0, 180, 0);
+			_menuWindow.transform.position = _menuPosition;
+			yield return null;
+		}
 	}
 }

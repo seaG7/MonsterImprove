@@ -20,7 +20,6 @@ public class FireballBehaviour : MonoBehaviour
 		else if (_game.isMiniGaming)
 		{
 			_targetPos = _game._selectedTargets[0].transform.position;
-			_game._selectedTargets.RemoveAt(0);
 			_targetPos.y += 0.1f;
 		}
 		else
@@ -51,6 +50,8 @@ public class FireballBehaviour : MonoBehaviour
 		{
 			_game._destroyedTargetsAmount++;
 			FindAnyObjectByType<MenuController>().UpdateTargetCountDisplay();
+			_game._selectedTargets.RemoveAt(0);
+			_game._cdController.needToShoot = true;
 			Destroy(collision.transform.gameObject);
 			// анимка с получением опыта (айтем над моделькой player dragon)
 			Destroy(gameObject);
