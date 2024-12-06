@@ -12,60 +12,27 @@ public class GameController : MonoBehaviour
 	[SerializeField] public int _maxFarmsAmount = 3;
 	public int _farmsAmount = 0;
 	public GameObject _object;
-	public AudioSource _mainAS;
-	[SerializeField] public AudioClip _sellSomething;
-	[SerializeField] public AudioClip _buySomething;
-	[SerializeField] public AudioClip _placeFarm;
-	[SerializeField] public AudioClip _click;
-	[SerializeField] public AudioClip _noMoney;
-	[SerializeField] public TextMeshProUGUI _farmAmountTMP;
-	[SerializeField] public TextMeshProUGUI _farmAmountBackTMP;
-	[SerializeField] public TextMeshProUGUI _coinAmountTMP;
-	[SerializeField] public TextMeshProUGUI _coinAmountBackTMP;
-	[SerializeField] public TextMeshProUGUI _collectedTMP;
-	[SerializeField] public TextMeshProUGUI _collectedBackTMP;
+	public GameObject _objectPrefab;
+	public Transform _playerTransform;
 	
 
 	public void Start()
-	{
-		_mainAS = GameObject.FindGameObjectWithTag("MainAS").GetComponent<AudioSource>();
-		if (PlayerPrefs.GetInt("Coins") <= 0) 
-		{
-			_coinAmount = 100;
-		}
+	{ 	
 		
-		else 
-		{
-			_coinAmount = PlayerPrefs.GetInt("Coins");
-		}
-		
-		_collected = PlayerPrefs.GetInt("Collected");
-		
-		_coinAmountTMP.text = _coinAmount.ToString();
-		_coinAmountBackTMP.text = _coinAmount.ToString();
-		
-		_collectedTMP.text = _collected.ToString();
-		_collectedBackTMP.text = _collected.ToString();
 	}
 	public void SpawnFarm()
 	{
-		if (_farmsAmount < _maxFarmsAmount)
-		{
-			ClearQueueSpawn();
-			ToQueueSpawn(_farms[0]);
-			_placementManager.buttonPressed = true;
-		}
+		float _newxpos = _playerTransform.position.x + Random.Range(-3f, 1.5f);
+        float _newypos = _playerTransform.position.y + Random.Range(1f, 2f);
+        float _newzpos = _playerTransform.position.z + Random.Range(-3f, 1.5f);
+
+        Instantiate(_objectPrefab, new Vector3(_newxpos, _newypos, _newzpos), new Quaternion(0, 0, 0, 0));
 	}
 	public void ToQueueSpawn(GameObject _prefab)
 	{
 		_placementManager._prefabsToSpawn.Add(_prefab);
 	}
 	
-	public void PlayClick() 
-	{
-		_mainAS.clip = _click;
-		_mainAS.Play();
-	}
 	
 	public void ClearQueueSpawn()
 	{

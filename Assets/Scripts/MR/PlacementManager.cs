@@ -54,9 +54,6 @@ public class PlacementManager : MonoBehaviour
 		{
 			isFollowing = false;
 			buttonPressed = false;
-			
-			_game._mainAS.clip = _game._placeFarm;
-			_game._mainAS.Play();
 		
 			if (_object != null) 
 			{
@@ -73,8 +70,6 @@ public class PlacementManager : MonoBehaviour
 			}
 			_game._farmsAmount++;
 			
-			_game._farmAmountTMP.text = _game._farmsAmount.ToString() + "/" + _game._maxFarmsAmount;
-			_game._farmAmountBackTMP.text = _game._farmsAmount.ToString() + "/" + _game._maxFarmsAmount;
 			
 			_object = null;
 		}
