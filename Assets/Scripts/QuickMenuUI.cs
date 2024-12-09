@@ -4,20 +4,21 @@ using UnityEngine;
 public class QuickMenuUI : MonoBehaviour
 {
 	[SerializeField] private Button resetRoomButton;
-	[SerializeField] private Button spawnEggButton;
-	[SerializeField] private Button battleButton;
 	[SerializeField] private Button exitButton;
-	[SerializeField] private Button minigameButton;
-	private GameController _game;
+	[SerializeField] private Button createcube;
+	[SerializeField] private GameObject cube;
 	private void Awake()
 	{
-		_game = FindAnyObjectByType<GameController>();
 		resetRoomButton.onClick.AddListener(ResetRoom);
-		spawnEggButton.onClick.AddListener(_game.SpawnHatchingEgg);
-		battleButton.onClick.AddListener(_game.StartFight);
 	  	exitButton.onClick.AddListener(Exit);
-		minigameButton.onClick.AddListener(StartMinigame);
+		createcube.onClick.AddListener(Create);
 	}
+	public void Create()
+	{
+		GameObject cube1 = Instantiate(cube,new Vector3(FindAnyObjectByType<QuickMenuUI>().transform.position.x, FindAnyObjectByType<QuickMenuUI>().transform.position.y-0.4f, FindAnyObjectByType<QuickMenuUI>().transform.position.z),Quaternion.identity);
+	}
+
+
 	private void Exit()
 	{
 	#if UNITY_EDITOR
@@ -26,15 +27,7 @@ public class QuickMenuUI : MonoBehaviour
 		UnityEngine.Application.Quit();
 	#endif
 	}
-	private void StartMinigame()
-	{
-		if (_game._enemyDragon != null)
-		{
-			_game.needToFight = false;
-			Destroy(_game._enemyDragon);
-		}
-		StartCoroutine(_game.MinigameFireball(Random.Range(5, 10)));
-	}
+
 	private void ResetRoom()
 	{
 		var arSession = FindAnyObjectByType<UnityEngine.XR.ARFoundation.ARSession>();
