@@ -1266,18 +1266,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
-  _id: 0
-  _level: 0
-  _xp: 0
+  _id: 3
   _hp: 50
   _speed: 1
-  _strength: 5
   _fireball: {fileID: 0}
   pointsOfTarget: []
+  _hpSlider: {fileID: 0}
+  _gestureIcons: []
   _minigameBallXP: 0
   _dragonBattleWinMultiplier: 0
   _moveRot: {x: 0, y: 0, z: 0}
   _startPos: {x: 0, y: 0, z: 0}
+  needToShoot: 0
+  needToTurn: 0
+  isAttacking: 0
+  _rb: {fileID: 0}
 --- !u!54 &-5319159219051299988
 Rigidbody:
   m_ObjectHideFlags: 0

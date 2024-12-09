@@ -5,6 +5,7 @@ using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 public class PlacementManager : MonoBehaviour
 {
 	private GameController _game;
@@ -34,7 +35,7 @@ public class PlacementManager : MonoBehaviour
 		if (!isDragged)
 		{
 			isDragged = true;
-			_object.transform.Find("SelectionVisualization").gameObject.SetActive(false);
+			StartCoroutine(ObjectPlacementConfirmation());
 			_spawnedPlaneObjects.Add(_object);
 		}
 	}
@@ -77,16 +78,28 @@ public class PlacementManager : MonoBehaviour
 		{
 			if (xrRayInteractor.enabled && xrRayInteractor.TryGetCurrent3DRaycastHit(out var raycastHit, out _))
 			{
-				if (raycastHit.transform.gameObject.CompareTag("Target") && !_game._selectedTargets.Contains(raycastHit.transform.gameObject))
+				if (raycastHit.transform.gameObject.CompareTag("Target"))
 				{
-					if (_game._selectedTargets.Count == 0)
-						_game._cdController.needToShoot = true;
 					_game._selectedTargets.Add(raycastHit.transform.gameObject);
-					Debug.Log("новая цель выбрана");
 				}
 			}
 			yield return null;
 		}
+	}
+	private IEnumerator ObjectPlacementConfirmation()
+	{
+		Vector3 _localScale = _object.transform.localScale;
+		while (_object.transform.localScale.x > _localScale.x*0.8f)
+		{
+			_object.transform.localScale = new Vector3(_object.transform.localScale.x*0.98f,_object.transform.localScale.y*0.98f,_object.transform.localScale.z*0.98f);
+			yield return null;
+		}
+		while (_object.transform.localScale.x < _localScale.x)
+		{
+			_object.transform.localScale = new Vector3(_object.transform.localScale.x*1.02f,_object.transform.localScale.y*1.02f,_object.transform.localScale.z*1.02f);
+			yield return null;
+		}
+		_object.transform.Find("SelectionVisualization").gameObject.SetActive(false);
 	}
 	public void OpenMenu()
 	{

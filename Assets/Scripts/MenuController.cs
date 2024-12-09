@@ -10,9 +10,10 @@ public class MenuController : MonoBehaviour
 	[SerializeField] Button[] _selectionButtons;
 	[SerializeField] Button[] _dragonButtons;
 	[SerializeField] Button[] _enemyDragonButtons;
-	[SerializeField] public Button[] _mainMenuButtons; // 0 - reset room 1 - exit 2 - minigame
+	[SerializeField] public Button[] _mainMenuButtons; // 0 - reset room 1 - exit 2 - minigame 3 - volume changer
 	[SerializeField] Button[] _exitModeButtons; // 0 - exit minigame 1 - exit battle
 	[Header("GameObjects")]
+	[SerializeField] GameObject _volumeChangerWindow;
 	[SerializeField] GameObject _sectionIconsWindow;
 	[SerializeField] GameObject[] _selectionWindows; // 0 - main menu 1 - dragons 2 - battle
 	[SerializeField] GameObject[] _selectionFocuses; // outline for slot
@@ -28,10 +29,13 @@ public class MenuController : MonoBehaviour
 	[SerializeField] Slider[] _cdXpSliders;
 	[SerializeField] Slider _volumeSlider;
 	[SerializeField] Slider _targetCountSlider;
+	[Header("Audio")]
+	[SerializeField] AudioSource _music;
+	[SerializeField] public AudioSource _sounds;
 	private int selectionIndex = 0;
-	private int cdIndex = -1;
+	public int cdIndex = -1;
 	public int edIndex = -1;
-	private float _volume;
+	private float _volume = 0.4f;
 	private GameController _game;
 	private InventorySystem _inventory;
 	
@@ -50,6 +54,10 @@ public class MenuController : MonoBehaviour
 		_mainMenuButtons[2].onClick.AddListener(StartMiniGame);
 		foreach (var exitModeButton in _exitModeButtons)
 			exitModeButton.onClick.AddListener(ExitMode);
+		_volumeSlider.onValueChanged.AddListener(SetVolume);
+		_volumeSlider.value = _volume;
+		_music.volume = _volume;
+		_sounds.volume = _volume;
 	}
 	private void SelectionInit()
 	{
@@ -71,7 +79,6 @@ public class MenuController : MonoBehaviour
 		_mainMenuButtons[2].gameObject.SetActive(false);
 		UpdateDragonsDisplay();
 		UpdateEnemyDragonsDisplay();
-		// _volumeSlider.onValueChanged.AddListener(SetVolume); ДОБАВИТЬ VOLUME SLIDER
 	}
 	private void ToSelection()
 	{
@@ -169,12 +176,11 @@ public class MenuController : MonoBehaviour
 		UnityEngine.Application.Quit();
 	#endif
 	}
-	private void ExitMode()
+	public void ExitMode()
 	{
 		if (_game.needToFight)
 		{
 			_game.needToFight = false;
-			Destroy(_game._enemyDragon);
 			_exitModeButtons[0].gameObject.SetActive(false);
 		}
 		else if (_game.isMiniGaming)
@@ -192,6 +198,7 @@ public class MenuController : MonoBehaviour
 		}
 		_mainMenuButtons[2].gameObject.SetActive(false);
 		_sectionIconsWindow.SetActive(true);
+		_volumeChangerWindow.SetActive(true);
 	}
 	public void StartMiniGame()
 	{
@@ -216,6 +223,7 @@ public class MenuController : MonoBehaviour
 		}
 		_exitMiniGameWindow.SetActive(true);
 		_sectionIconsWindow.SetActive(false);
+		_volumeChangerWindow.SetActive(false);
 	}
 	public void StartBattle()
 	{
@@ -229,6 +237,7 @@ public class MenuController : MonoBehaviour
 		}
 		_exitModeButtons[0].gameObject.SetActive(true);
 		_sectionIconsWindow.SetActive(false);
+		_volumeChangerWindow.SetActive(false);
 		StartCoroutine(_game.TurnCD(_game._enemyDragon.transform.position));
 	}
 	public void UpdateTargetCountDisplay()
@@ -239,5 +248,21 @@ public class MenuController : MonoBehaviour
 	private void SetVolume(float volume)
 	{
 		_volume = _volumeSlider.value = volume;
+		_music.volume = _volume;
+		_sounds.volume = _volume;
+	}
+	public void ResetChosenSprites(bool state)
+	{
+		if (state)
+		{
+			for (int i = 0; i < _dragonButtons.Length; i++)
+			{
+				_chosenCDSprites[i].SetActive(false);
+			}
+		}
+		for (int i = 0; i < _enemyDragonButtons.Length; i++)
+		{
+			_chosenEDSprites[i].SetActive(false);
+		}
 	}
 }

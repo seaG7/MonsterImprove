@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class EnemyDragonBehaviour : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class EnemyDragonBehaviour : MonoBehaviour
 	[SerializeField] public float _speed;
 	[SerializeField] public int _strength;
 	[SerializeField] public float _attackRange;
+	private bool _collisionDetected = false;
+	public bool isAttacking = false;
 	
 	[Header("Fireball")]
 	[SerializeField] public GameObject _fireball;
@@ -21,42 +24,56 @@ public class EnemyDragonBehaviour : MonoBehaviour
 	private float distance;
 	private int countOfAttacks = 4;
 	[Header("XP Rewards")]
-	[SerializeField] private int _xpByKill;
+	[SerializeField] public int _xpByKill;
+	[SerializeField] public Slider _hpSlider;
+	public Rigidbody _rb;
 	void Start()
 	{
 		StartCoroutine(Init());
 	}
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (collision.transform.tag == "Player")
+		if ((collision.gameObject.tag == "Player") && !_collisionDetected)
 		{
-			_hp -= FindAnyObjectByType<InventorySystem>()._strength[_game._cdIndex];
-			// any visualization of losing hp (effect)
-			if (_hp <= 0)
+			if (isAttacking)
 			{
-				_game.needToFight = false;
-				FindAnyObjectByType<MenuController>().edIndex = -1;
-				FindAnyObjectByType<InventorySystem>().GainXp(_game._cdIndex, _xpByKill);
-				_animator.SetBool("IsDie", true);
-				StartCoroutine(_game.Kill(gameObject));
+				Instantiate(_game._fightEffects[Random.Range(1, _game._fightEffects.Length)], collision.contacts[0].point, Quaternion.identity);
+				if (!FindAnyObjectByType<MenuController>()._sounds.isPlaying)
+				{
+					FindAnyObjectByType<MenuController>()._sounds.PlayOneShot(FindAnyObjectByType<MenuController>()._sounds.clip);
+				}
 			}
+			StartCoroutine(DealDamage());
+		}
+	}
+	private void OnTriggerEnter(Collider other)
+	{
+		if (other.CompareTag("Player") && !_collisionDetected)
+		{
+			StartCoroutine(DealDamage());
 		}
 	}
 	public IEnumerator Attack()
 	{
-		while (true)
+		int lastNumber = 0;
+		while (_game.needToFight)
 		{
 			StartCoroutine(Turn(_game._currentDragon.transform.position));
-			_game._cdController.needToTurn = true;
-			_animator.SetInteger("AttackState", Random.Range(1,countOfAttacks+1));
-			if (_animator.GetInteger("AttackState") == 4)
-			{
-				StartCoroutine(SpawnFireball());
-			}
+			FindAnyObjectByType<DragonBehaviour>().needToTurn = true;
+			int number = lastNumber;
+			while (lastNumber == number)
+				number = Random.Range(1,countOfAttacks+1);
+			_animator.SetInteger("AttackState", number);
+			lastNumber = number;
+			isAttacking = true;
+			// if (_animator.GetInteger("AttackState") == 4)
+			// {
+			// 	StartCoroutine(SpawnFireball());
+			// }
 			yield return new WaitForSeconds(0.2f);
 			_animator.SetInteger("AttackState", 0);
 			distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
-			yield return new WaitForSeconds(Random.Range(0.5f, 1.2f));
+			yield return new WaitForSeconds(Random.Range(1f, 4f));
 		}
 	}
 	public IEnumerator SpawnFireball()
@@ -99,17 +116,63 @@ public class EnemyDragonBehaviour : MonoBehaviour
 	}
 	private IEnumerator Init()
 	{
+		FindAnyObjectByType<DragonBehaviour>()._hpSlider.maxValue = FindAnyObjectByType<InventorySystem>()._hp[FindAnyObjectByType<DragonBehaviour>()._id];
+		_hpSlider.maxValue = _hp;
+		transform.Find("Canvas").gameObject.SetActive(false);
 		while (!FindAnyObjectByType<PlacementManager>().isDragged)
 		{
 			yield return null;
 		}
+		FindAnyObjectByType<DragonBehaviour>()._hpSlider.value = FindAnyObjectByType<InventorySystem>()._hp[FindAnyObjectByType<DragonBehaviour>()._id];
+		_hpSlider.value = _hp;
+		transform.Find("Canvas").gameObject.SetActive(true);
+		FindAnyObjectByType<DragonBehaviour>().transform.Find("Canvas").gameObject.SetActive(true);
 		_game = FindAnyObjectByType<GameController>();
 		_animator = GetComponent<Animator>();
 		_game.needToFight = true;
 		_game._enemyDragon = gameObject;
-		_game._cdController.needToTurn = true;
+		FindAnyObjectByType<DragonBehaviour>().needToTurn = true;
+		FindAnyObjectByType<DragonBehaviour>().AnimGestureIcons();
+		_game._enemyStrength = _strength;
 		StartCoroutine(Turn(_game._currentDragon.transform.position));
-		StartCoroutine(_game._cdController.TurnInFight());
+		StartCoroutine(FindAnyObjectByType<DragonBehaviour>().TurnInFight());
 		StartCoroutine(FlyToTarget());
+		_rb = GetComponent<Rigidbody>();
+	}
+	public IEnumerator DealDamage()
+	{
+		if (isAttacking)
+		{
+			_collisionDetected = true;
+			isAttacking = false;
+			FindAnyObjectByType<DragonBehaviour>()._hp -= _strength;
+			FindAnyObjectByType<DragonBehaviour>()._hpSlider.value = FindAnyObjectByType<DragonBehaviour>()._hp;
+			Debug.Log($"СD got damage, hp = {FindAnyObjectByType<DragonBehaviour>()._hp}");
+			if (FindAnyObjectByType<DragonBehaviour>()._hp <= 0)
+			{
+				FindAnyObjectByType<MenuController>().ResetChosenSprites(true);
+				FindAnyObjectByType<DragonBehaviour>().EndAnimGestureIcons();
+				FindAnyObjectByType<MenuController>().cdIndex = -1;
+				FindAnyObjectByType<MenuController>().edIndex = -1;
+				FindAnyObjectByType<DragonBehaviour>()._animator.SetBool("IsDie", true);
+				StartCoroutine(_game.Kill(_game._currentDragon));
+				StartCoroutine(_game.Kill(_game._enemyDragon));
+				FindAnyObjectByType<MenuController>().ExitMode();
+			}
+			yield return new WaitForSeconds(0.6f);
+			_collisionDetected = false;
+		}
+		StopCoroutine(FindAnyObjectByType<DragonBehaviour>().ComeCloser());
+		StartCoroutine(FindAnyObjectByType<DragonBehaviour>().ComeCloser());
+	}
+	public IEnumerator ComeCloser()
+	{
+		float distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
+		while (distance > _attackRange && _game.needToFight)
+		{
+			transform.position = Vector3.MoveTowards(transform.position, _game._currentDragon.transform.position, 0.3f * Time.deltaTime);
+			distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
+			yield return null;
+		}
 	}
 }

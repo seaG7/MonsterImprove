@@ -42,10 +42,38 @@ public class FireballBehaviour : MonoBehaviour
 	}
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (collision.transform.tag == "Player" || collision.transform.tag == "Enemy")
-		{
-			Destroy(gameObject);
-		}
+		// if (collision.transform.tag == "Player")
+		// {
+		// 	FindAnyObjectByType<EnemyDragonBehaviour>().isAttacking = true;
+		// 	FindAnyObjectByType<DragonBehaviour>()._hp -= FindAnyObjectByType<EnemyDragonBehaviour>()._strength;
+		// 	FindAnyObjectByType<DragonBehaviour>()._hpSlider.value = FindAnyObjectByType<DragonBehaviour>()._hp;
+		// 	FindAnyObjectByType<EnemyDragonBehaviour>().DealDamage();
+		// 	if (FindAnyObjectByType<DragonBehaviour>()._hp <= 0)
+		// 	{
+		// 		FindAnyObjectByType<MenuController>().ResetChosenSprites(true);
+		// 		FindAnyObjectByType<DragonBehaviour>().EndAnimGestureIcons();
+		// 		FindAnyObjectByType<MenuController>().cdIndex = -1;
+		// 		FindAnyObjectByType<MenuController>().edIndex = -1;
+		// 		FindAnyObjectByType<DragonBehaviour>()._animator.SetBool("IsDie", true);
+		// 		StartCoroutine(_game.Kill(_game._currentDragon));
+		// 		FindAnyObjectByType<MenuController>().ExitMode();
+		// 	}
+		// }
+		// else if (collision.transform.tag == "Enemy")
+		// {
+		// 	FindAnyObjectByType<EnemyDragonBehaviour>()._hp -= FindAnyObjectByType<InventorySystem>()._strength[FindAnyObjectByType<DragonBehaviour>()._id];
+		// 	FindAnyObjectByType<EnemyDragonBehaviour>()._hpSlider.value = FindAnyObjectByType<EnemyDragonBehaviour>()._hp;
+		// 	if (FindAnyObjectByType<EnemyDragonBehaviour>()._hp <= 0)
+		// 	{
+		// 		FindAnyObjectByType<MenuController>().ResetChosenSprites(false);
+		// 		FindAnyObjectByType<DragonBehaviour>().EndAnimGestureIcons();
+		// 		FindAnyObjectByType<MenuController>().edIndex = -1;
+		// 		FindAnyObjectByType<EnemyDragonBehaviour>()._animator.SetBool("IsDie", true);
+		// 		FindAnyObjectByType<InventorySystem>().GainXp(FindAnyObjectByType<DragonBehaviour>()._id, FindAnyObjectByType<EnemyDragonBehaviour>()._xpByKill);
+		// 		StartCoroutine(_game.Kill(_game._enemyDragon));
+		// 		FindAnyObjectByType<MenuController>().ExitMode();
+		// 	}
+		// }
 		if (collision.transform.tag == "Target")
 		{
 			_game._destroyedTargetsAmount++;

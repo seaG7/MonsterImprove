@@ -1,15 +1,19 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine.UI;
+using UnityEngine.Rendering;
 public class DragonBehaviour : MonoBehaviour
 {
 	private GameController _game;
 	private InventorySystem _inventory;
 	public Animator _animator;
 	[Header("Your dragon Stats")]
-	[SerializeField] private int _id;
-	[SerializeField] private int _hp;
+	[SerializeField] public int _id;
+	[SerializeField] public int _hp;
 	[SerializeField] public float _speed;
+	private bool _collisionDetected = false;
 	
 	[Header("Fireball")]
 	[SerializeField] public GameObject _fireball;
@@ -18,6 +22,8 @@ public class DragonBehaviour : MonoBehaviour
 	
 	[Header("Points")]
 	[SerializeField] public Transform[] pointsOfTarget;
+	[SerializeField] public Slider _hpSlider;
+	[SerializeField] public GameObject[] _gestureIcons;
 	
 	[Header("Value Setting")]
 	[SerializeField] private int _minigameBallXP;
@@ -25,8 +31,10 @@ public class DragonBehaviour : MonoBehaviour
 	private bool _isMovingToHand = false;
 	public Vector3 _moveRot;
 	public Vector3 _startPos;
-	public bool needToShoot = false;
+	public bool needToShoot = true;
 	public bool needToTurn = false;
+	public bool isAttacking = false;
+	public Rigidbody _rb;
 	void Start()
 	{
 		Init();
@@ -37,15 +45,24 @@ public class DragonBehaviour : MonoBehaviour
 	}
 	private void OnCollisionEnter(Collision collision)
 	{
-		if (collision.transform.tag == "Enemy")
+		if ((collision.gameObject.tag == "Enemy") && !_collisionDetected)
 		{
-			_hp -= _inventory._strength[_id];
-			// any visualization of losing hp (effect)
-			if (_hp <= 0)
+			if (isAttacking)
 			{
-				_animator.SetBool("IsDie", true);
-				StartCoroutine(_game.Kill(gameObject));
+				Instantiate(_game._fightEffects[Random.Range(1,_game._fightEffects.Length)], collision.contacts[0].point, Quaternion.identity);
+				if (!FindAnyObjectByType<MenuController>()._sounds.isPlaying)
+				{
+					FindAnyObjectByType<MenuController>()._sounds.PlayOneShot(FindAnyObjectByType<MenuController>()._sounds.clip);
+				}
 			}
+			StartCoroutine(DealDamage());
+		}
+	}
+	private void OnTriggerEnter(Collider other)
+	{
+		if (other.CompareTag("Enemy") && !_collisionDetected)
+		{
+			StartCoroutine(DealDamage());
 		}
 	}
 	public IEnumerator SetHatchingFalse()
@@ -84,9 +101,10 @@ public class DragonBehaviour : MonoBehaviour
 		_targetRot.z = transform.rotation.z;
 		while (transform.rotation != _targetRot)
 		{
-			transform.rotation = Quaternion.Slerp(transform.rotation, _targetRot, 4 * Time.deltaTime);
+			transform.rotation = Quaternion.Slerp(transform.rotation, _targetRot, 5 * Time.deltaTime);
 			yield return null;
 		}
+		needToTurn = true;
 	}
 	private void Init()
 	{
@@ -105,10 +123,45 @@ public class DragonBehaviour : MonoBehaviour
 				StartCoroutine(Inspect());
 			}
 		}
+		_hp = _inventory._hp[_id];
+		Debug.Log(_hp);
 		_game._cdIndex = _id;
 		_game._cdController = GetComponent<DragonBehaviour>();
 		StartCoroutine(Turn(FindAnyObjectByType<Camera>().transform.position));
 		FindAnyObjectByType<MenuController>()._mainMenuButtons[2].gameObject.SetActive(true);
+		_rb = GetComponent<Rigidbody>();
+	}
+	public void AnimGestureIcons()
+	{
+		_hpSlider.gameObject.SetActive(true);
+		foreach (var icon in _gestureIcons)
+		{
+			icon.SetActive(true);
+		}
+		// Quaternion targetRotation = Quaternion.Euler(_gestureIcons[0].transform.rotation.eulerAngles.x, _gestureIcons[0].transform.rotation.eulerAngles.y, -20);
+		// while ((_gestureIcons[0].transform.rotation.z > -20) && _game.needToFight)
+		// {
+		// 	transform.rotation = Quaternion.Slerp(_gestureIcons[0].transform.rotation, targetRotation, 3f);
+		// 	transform.rotation = Quaternion.Slerp(_gestureIcons[1].transform.rotation, targetRotation, 3f);
+		// 	yield return null;
+		// }
+		// while ((_gestureIcons[0].transform.rotation.z < -20) && _game.needToFight)
+		// {
+		// 	transform.rotation = Quaternion.Slerp(_gestureIcons[0].transform.rotation, targetRotation, 3f);
+		// 	transform.rotation = Quaternion.Slerp(_gestureIcons[1].transform.rotation, targetRotation, 3f);
+		// 	yield return null;
+		// }
+		// if (_game.needToFight)
+		// 	StartCoroutine(AnimGestureIcons());
+	}
+	public void EndAnimGestureIcons()
+	{
+		foreach (var icon in _gestureIcons)
+		{
+			icon.SetActive(false);
+		}
+		transform.Find("Canvas").gameObject.SetActive(false);
+		FindAnyObjectByType<EnemyDragonBehaviour>().transform.Find("Canvas").gameObject.SetActive(false);
 	}
 	public IEnumerator LevelUp()
 	{
@@ -119,8 +172,8 @@ public class DragonBehaviour : MonoBehaviour
 	}
 	public void FlyIdleShoot()
 	{
-		StopCoroutine(FixShootingMinigame());
-		StartCoroutine(FixShootingMinigame());
+		StartCoroutine(Turn(_game._selectedTargets[0].transform.position));
+		// StopCoroutine(FixShootingMinigame());
 		StartCoroutine(SetAttackState(10));
 		StartCoroutine(SpawnFireball());
 	}
@@ -129,7 +182,6 @@ public class DragonBehaviour : MonoBehaviour
 		yield return new WaitForSeconds(3f);
 		if (!needToShoot && _game._selectedTargets.Count > 0)
 		{
-			StartCoroutine(Turn(_game._selectedTargets[0].transform.position));
 			FlyIdleShoot();
 		}
 	}
@@ -138,13 +190,14 @@ public class DragonBehaviour : MonoBehaviour
 		if (_animator.GetInteger("AttackState") == 0)
 		{
 			_animator.SetInteger("AttackState", number);
-			if (number == 4)
-				StartCoroutine(SpawnFireball());
+			// if (number == 4)
+			// 	StartCoroutine(SpawnFireball());
 			if (number != 0)
 			{
 				yield return new WaitForSeconds(0.1f);
 				_animator.SetInteger("AttackState", 0);
 			}
+			isAttacking = true;
 		}
 	}
 	public IEnumerator MoveToHand()
@@ -184,11 +237,11 @@ public class DragonBehaviour : MonoBehaviour
 		}
 		while (_game.isMiniGaming)
 		{
-			if (needToShoot && _game._selectedTargets.Count > 0)
+			if (_game._selectedTargets.Count > 0 && needToShoot)
 			{
 				needToShoot = false;
-				StartCoroutine(Turn(_game._selectedTargets[0].transform.position));
 				FlyIdleShoot();
+				StartCoroutine(ShootDelay());
 			}
 			yield return null;
 		}
@@ -204,15 +257,56 @@ public class DragonBehaviour : MonoBehaviour
 		_inventory.GainXp(_id, 10);
 		_game._targetsCount = 0;
 	}
+	public IEnumerator ShootDelay()
+	{
+		yield return new WaitForSeconds(0.7f);
+		needToShoot = true;
+	}
 	public IEnumerator TurnInFight()
 	{
-		while (_game.needToFight)
+		while (_game.needToFight && _hp > 0)
 		{
 			if (needToTurn)
 			{
 				needToTurn = false;
 				StartCoroutine(Turn(_game._enemyDragon.transform.position));
 			}
+			yield return null;
+		}
+	}
+	public IEnumerator DealDamage()
+	{
+		if (isAttacking)
+		{
+			_collisionDetected = true;
+			isAttacking = false;
+			FindAnyObjectByType<EnemyDragonBehaviour>()._hp -= _inventory._strength[_id];
+			FindAnyObjectByType<EnemyDragonBehaviour>()._hpSlider.value = FindAnyObjectByType<EnemyDragonBehaviour>()._hp;
+			Debug.Log($"ED got damage, hp = {FindAnyObjectByType<EnemyDragonBehaviour>()._hp}");
+			if (FindAnyObjectByType<EnemyDragonBehaviour>()._hp <= 0)
+			{
+				FindAnyObjectByType<MenuController>().ResetChosenSprites(false);
+				EndAnimGestureIcons();
+				FindAnyObjectByType<MenuController>().edIndex = -1;
+				FindAnyObjectByType<EnemyDragonBehaviour>()._animator.SetBool("IsDie", true);
+				FindAnyObjectByType<InventorySystem>().GainXp(_id, FindAnyObjectByType<EnemyDragonBehaviour>()._xpByKill);
+				StartCoroutine(_game.Kill(_game._enemyDragon));
+				FindAnyObjectByType<MenuController>().ExitMode();
+			}
+			
+			yield return new WaitForSeconds(0.6f);
+			_collisionDetected = false;
+		}
+		StopCoroutine(FindAnyObjectByType<EnemyDragonBehaviour>().ComeCloser());
+		StartCoroutine(FindAnyObjectByType<EnemyDragonBehaviour>().ComeCloser());
+	}
+	public IEnumerator ComeCloser()
+	{
+		float distance = Vector3.Distance(transform.position, _game._enemyDragon.transform.position);
+		while (distance > FindAnyObjectByType<EnemyDragonBehaviour>()._attackRange && _game.needToFight)
+		{
+			transform.position = Vector3.MoveTowards(transform.position, _game._enemyDragon.transform.position, 0.05f * Time.deltaTime);
+			distance = Vector3.Distance(transform.position, _game._enemyDragon.transform.position);
 			yield return null;
 		}
 	}

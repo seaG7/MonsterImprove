@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,8 +15,8 @@ public class InventorySystem : MonoBehaviour
 	private List<int> _currentLevelXp = new List<int>(8) { 0, 0, 0, 0, 0, 0, 0, 0 };
 	private List<int> _maxLevelXp = new List<int>(8) { 0, 0, 0, 0, 0, 0, 0, 0 };
 	[SerializeField] public List<int> _levelsXp = new List<int>(6) { 10, 20, 50, 100 };
-	public List<int> _strength = new List<int>(8) { 0, 0, 0, 0, 0, 0, 0, 0 };
-	public List<int> _hp = new List<int>(8) { 0, 0, 0, 0, 0, 0, 0, 0 };
+	public List<int> _strength = new List<int>(8) { 5, 5, 5, 5, 5, 5, 5, 5 };
+	public List<int> _hp = new List<int>(8) { 1000, 100, 100, 100, 100, 100, 100, 100 };
 	
 	void Start()
 	{
@@ -65,7 +66,17 @@ public class InventorySystem : MonoBehaviour
 		_xp[id] += amount;
 		if (CalculateCurrentLevelXp(id) >= CalculateMaxLevelXp(id))
 		{
+			_strength[id] *= 3;
 			_game._cdController.LevelUp();
+			if (CalculateLevel(id) > 1)
+			{
+				_hp[id] += 50;
+				_strength[id] += 5;
+			}
+			if (CalculateLevel(id) == 3)
+			{
+				_dragonIndexes.Add(_dragonIndexes.Max()+1);
+			}
 		}
 		else
 		{

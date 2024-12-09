@@ -27,7 +27,9 @@ public class GameController : MonoBehaviour
 	public int _destroyedTargetsAmount = 0;
 	public Animator _cdAnimator;
 	public int _cdIndex = -1;
+	public int _enemyStrength = 0;
 	public bool isSwitching = false;
+	[SerializeField] public GameObject[] _fightEffects;
 	void Start()
 	{
 		
@@ -84,16 +86,10 @@ public class GameController : MonoBehaviour
 		StartCoroutine(_cdController.DestroyTargets());
 		while (isMiniGaming)
 		{
-			if (_targets.Count < 4)
+			if (_destroyedTargetsAmount >= _countOfTargets)
 			{
-				if (_destroyedTargetsAmount >= _countOfTargets)
-				{
-					isMiniGaming = false;
-				}
-				else if (_countOfTargets - _destroyedTargetsAmount >= 4)
-					_targets.Add(Instantiate(_target, RandomPosAroundDragon(), Quaternion.identity));
-				
-				// звук появления target и чет еще мэйби
+				_menuController.ExitMode();
+				isMiniGaming = false;
 			}
 			yield return null;
 		}
@@ -118,13 +114,13 @@ public class GameController : MonoBehaviour
 			_spawnPos.x = _startPos.x + Random.Range(-1f, 1f);
 			_spawnPos.z = _startPos.z + Random.Range(-1f, 1f);
 			_spawnPos.y = _startPos.y + Random.Range(0.25f, 1.2f);
-
-			Ray _ray = new Ray(_spawnPos, Vector3.down);
-			RaycastHit _hit;
-			if (Physics.Raycast(_ray, out _hit))
-			{
-				isColliding = _hit.transform.TryGetComponent(out ARPlane arPlane) && ((arPlane.classification & targetPlaneClassification) != 0);
-			}
+			isColliding = true;
+			// Ray _ray = new Ray(_spawnPos, Vector3.down);
+			// RaycastHit _hit;
+			// if (Physics.Raycast(_ray, out _hit))
+			// {
+			// 	isColliding = _hit.transform.TryGetComponent(out ARPlane arPlane) && ((arPlane.classification & targetPlaneClassification) != 0);
+			// }
 		}
 		return _spawnPos;
 	}
@@ -186,7 +182,7 @@ public class GameController : MonoBehaviour
 	}
 	public IEnumerator Kill(GameObject _object)
 	{
-		yield return new WaitForSecondsRealtime(4f);
+		yield return new WaitForSecondsRealtime(2f);
 		
 		Destroy(_object);
 	}
