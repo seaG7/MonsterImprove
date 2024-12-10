@@ -26,7 +26,7 @@ public class InventorySystem : MonoBehaviour
 	public int CalculateLevel(int id)
 	{
 		int xp = _xp[id];
-		int level = 1;
+		int level = 0;
 		foreach (int amount in _levelsXp)
 		{
 			if (xp >= amount)
@@ -37,7 +37,7 @@ public class InventorySystem : MonoBehaviour
 			else
 				break;
 		}
-		if (_currentLevelXp[id] >= _levelsXp[_levelsXp.Count-1])
+		if (CalculateCurrentLevelXp(id) >= _levelsXp[_levelsXp.Count-1])
 			return _levelsXp.Count;
 		if (level == 1 && xp == 0)
 			return 0;
@@ -71,7 +71,6 @@ public class InventorySystem : MonoBehaviour
 			if (CalculateLevel(id) > 1)
 			{
 				_hp[id] += 50;
-				_strength[id] += 5;
 			}
 			if (CalculateLevel(id) == 3)
 			{

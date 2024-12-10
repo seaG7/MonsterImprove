@@ -37,7 +37,7 @@ public class DragonBehaviour : MonoBehaviour
 	public Rigidbody _rb;
 	void Start()
 	{
-		Init();
+		StartCoroutine(Init());
 	}
 	void Update()
 	{
@@ -106,14 +106,17 @@ public class DragonBehaviour : MonoBehaviour
 		}
 		needToTurn = true;
 	}
-	private void Init()
+	private IEnumerator Init()
 	{
 		_inventory = FindAnyObjectByType<InventorySystem>();
 		_game = FindAnyObjectByType<GameController>();
 		_animator = GetComponent<Animator>();
 		if (!_game.isSwitching)
 		{
-			while (!FindAnyObjectByType<PlacementManager>().isDragged) {}
+			while (!FindAnyObjectByType<PlacementManager>().isDragged)
+			{
+				yield return null;
+			}
 			if (_inventory._xp[_id] == 0)
 			{
 				StartCoroutine(SetHatchingFalse());
@@ -123,12 +126,12 @@ public class DragonBehaviour : MonoBehaviour
 				StartCoroutine(Inspect());
 			}
 		}
+		_game._currentDragon = gameObject;
 		_hp = _inventory._hp[_id];
-		Debug.Log(_hp);
 		_game._cdIndex = _id;
 		_game._cdController = GetComponent<DragonBehaviour>();
 		StartCoroutine(Turn(FindAnyObjectByType<Camera>().transform.position));
-		FindAnyObjectByType<MenuController>()._mainMenuButtons[2].gameObject.SetActive(true);
+		//FindAnyObjectByType<MenuController>()._mainMenuButtons[2].gameObject.SetActive(true);
 		_rb = GetComponent<Rigidbody>();
 	}
 	public void AnimGestureIcons()
@@ -189,6 +192,7 @@ public class DragonBehaviour : MonoBehaviour
 	{
 		if (_animator.GetInteger("AttackState") == 0)
 		{
+			isAttacking = true;
 			_animator.SetInteger("AttackState", number);
 			// if (number == 4)
 			// 	StartCoroutine(SpawnFireball());
@@ -197,7 +201,6 @@ public class DragonBehaviour : MonoBehaviour
 				yield return new WaitForSeconds(0.1f);
 				_animator.SetInteger("AttackState", 0);
 			}
-			isAttacking = true;
 		}
 	}
 	public IEnumerator MoveToHand()
@@ -280,7 +283,7 @@ public class DragonBehaviour : MonoBehaviour
 		{
 			_collisionDetected = true;
 			isAttacking = false;
-			FindAnyObjectByType<EnemyDragonBehaviour>()._hp -= _inventory._strength[_id];
+			FindAnyObjectByType<EnemyDragonBehaviour>()._hp -= FindAnyObjectByType<InventorySystem>()._strength[_id];
 			FindAnyObjectByType<EnemyDragonBehaviour>()._hpSlider.value = FindAnyObjectByType<EnemyDragonBehaviour>()._hp;
 			Debug.Log($"ED got damage, hp = {FindAnyObjectByType<EnemyDragonBehaviour>()._hp}");
 			if (FindAnyObjectByType<EnemyDragonBehaviour>()._hp <= 0)

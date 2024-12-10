@@ -25,7 +25,7 @@ public class PlacementManager : MonoBehaviour
 	}
 	public void GrabSpawnableObject()
 	{
-		if (_prefabsToSpawn.Count > 0 && isDragged)
+		if (_prefabsToSpawn.Count > 0 && isDragged && _prefabsToSpawn[0] != null)
 		{
 			StartCoroutine(DropToPlane());
 		}
@@ -89,7 +89,7 @@ public class PlacementManager : MonoBehaviour
 	private IEnumerator ObjectPlacementConfirmation()
 	{
 		Vector3 _localScale = _object.transform.localScale;
-		while (_object.transform.localScale.x > _localScale.x*0.8f)
+		while (_object.transform.localScale.x > _localScale.x*0.85f)
 		{
 			_object.transform.localScale = new Vector3(_object.transform.localScale.x*0.98f,_object.transform.localScale.y*0.98f,_object.transform.localScale.z*0.98f);
 			yield return null;

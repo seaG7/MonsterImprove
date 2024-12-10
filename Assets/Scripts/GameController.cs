@@ -50,7 +50,7 @@ public class GameController : MonoBehaviour
 	public void SelectCD(int index) // поставить префабы в порядке синий мал ср бол, красный мал ср бол и тд
 	{
 		ClearQueueSpawn();
-		if (_CDs.Length > 3*(index-1)-1 && _eggs.Length > index)
+		if (_CDs.Length > 3*(index+1)-1 && _eggs.Length > index)
 		{
 			switch (_inventory.CalculateLevel(index))
 			{
@@ -60,8 +60,14 @@ public class GameController : MonoBehaviour
 				case 1:
 					ToQueueSpawn(_CDs[3*(index+1)-3]);
 					break;
+				case 2:
+					ToQueueSpawn(_CDs[3*(index+1)-3]);
+					break;
 				case 3:
 					ToQueueSpawn(_CDs[3*(index-1)-2]);
+					break;
+				case 4:
+					ToQueueSpawn(_CDs[3*(index-1)-1]);
 					break;
 				case 5:
 					ToQueueSpawn(_CDs[3*(index-1)-1]);
@@ -130,6 +136,7 @@ public class GameController : MonoBehaviour
 		{
 			StartCoroutine(TurnCD(_enemyDragon.transform.position));
 			StartCoroutine(_cdController.SetAttackState(1));
+			FindAnyObjectByType<DragonBehaviour>().isAttacking = true;
 		}
 	}
 	public void GestureAttack2()
@@ -138,6 +145,7 @@ public class GameController : MonoBehaviour
 		{
 			StartCoroutine(TurnCD(_enemyDragon.transform.position));
 			StartCoroutine(_cdController.SetAttackState(2));
+			FindAnyObjectByType<DragonBehaviour>().isAttacking = true;
 		}
 	}
 	public void GestureAttack3()
@@ -146,6 +154,7 @@ public class GameController : MonoBehaviour
 		{
 			StartCoroutine(TurnCD(_enemyDragon.transform.position));
 			StartCoroutine(_cdController.SetAttackState(3));
+			FindAnyObjectByType<DragonBehaviour>().isAttacking = true;
 		}
 	}
 	public void GestureAttack4()
@@ -154,6 +163,7 @@ public class GameController : MonoBehaviour
 		{
 			StartCoroutine(TurnCD(_enemyDragon.transform.position));
 			StartCoroutine(_cdController.SetAttackState(4));
+			FindAnyObjectByType<DragonBehaviour>().isAttacking = true;
 		}
 	}
 	public void StopGestureAttack()
