@@ -5,17 +5,15 @@ using TMPro;
 public class QuickMenuUI : MonoBehaviour
 {
 	[SerializeField] private Button resetRoomButton;
-	[SerializeField] private Button spawnFarmButton;
 	[SerializeField] private Button statisticsButton;
 	[SerializeField] private GameObject _statisticsFrame;
 	[SerializeField] private Button exitButton;
 	private GameController _game;
+	
 	private void Awake()
 	{
 		_game = FindAnyObjectByType<GameController>();
 		resetRoomButton.onClick.AddListener(ResetRoom);
-		spawnFarmButton.onClick.AddListener(_game.SpawnFarm);
-		spawnFarmButton.onClick.AddListener(PlayClick);
 		statisticsButton.onClick.AddListener(StatisticsActive);
 		statisticsButton.onClick.AddListener(PlayClick);
 	  	exitButton.onClick.AddListener(Exit);
@@ -42,9 +40,14 @@ public class QuickMenuUI : MonoBehaviour
 		Debug.Log($"Запрос на захват сцены Meta OpenXR завершен с результатом: {success}");
 	}
 	
-	private void PlayClick() 
+	public void PlayClick() 
 	{
 		_game._mainAS.clip = _game._click;
 		_game._mainAS.Play();
+	}
+	
+	public void HandleDropDown(int value) 
+	{
+		_game.id = value;
 	}
 }

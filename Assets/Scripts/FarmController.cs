@@ -51,7 +51,6 @@ public class FarmController : MonoBehaviour
 			_pinchTransform.SetActive(false);
 		}
 		
-		
 		_gameController._mainAS.Play();
 	}
 	
@@ -86,6 +85,7 @@ public class FarmController : MonoBehaviour
 		
 		else 
 		{
+			StartCoroutine(_gameController._showNotification(0));
 			_gameController._mainAS.clip = _gameController._noMoney;
 			_gameController._mainAS.Play();
 		}
@@ -112,6 +112,7 @@ public class FarmController : MonoBehaviour
 		
 		else 
 		{
+			StartCoroutine(_gameController._showNotification(2));
 			_gameController._mainAS.clip = _gameController._noMoney;
 			_gameController._mainAS.Play();
 		}

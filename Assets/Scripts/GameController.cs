@@ -24,12 +24,54 @@ public class GameController : MonoBehaviour
 	[SerializeField] public TextMeshProUGUI _coinAmountBackTMP;
 	[SerializeField] public TextMeshProUGUI _collectedTMP;
 	[SerializeField] public TextMeshProUGUI _collectedBackTMP;
+	[SerializeField] public GameObject _canvasNotification;
+	[SerializeField] public GameObject _goldNotification;
+	[SerializeField] public GameObject _foodNotification;
+	[SerializeField] public GameObject _collectiblesNotification;
+ 	public int id;
+	public bool _generatorPlaced = false;
+	
+	public IEnumerator _showNotification(int id) 
+	{
+		if (id == 0) 
+		{
+			_canvasNotification.SetActive(true);
+			_goldNotification.SetActive(true);
+			
+			yield return new WaitForSeconds(3f);
+		
+			_goldNotification.SetActive(false);
+			_canvasNotification.SetActive(false);
+		}
+		
+		if (id == 1) 
+		{
+			_canvasNotification.SetActive(true);
+			_foodNotification.SetActive(true);
+			
+			yield return new WaitForSeconds(3f);
+		
+			_foodNotification.SetActive(false);
+			_canvasNotification.SetActive(false);
+		}
+		
+		if (id == 2) 
+		{
+			_canvasNotification.SetActive(true);
+			_collectiblesNotification.SetActive(true);
+			
+			yield return new WaitForSeconds(3f);
+			
+			_collectiblesNotification.SetActive(false);
+			_canvasNotification.SetActive(false);
+		}
+	}
 	
 
 	public void Start()
 	{
 		_mainAS = GameObject.FindGameObjectWithTag("MainAS").GetComponent<AudioSource>();
-		if (PlayerPrefs.GetInt("Coins") <= 0) 
+		if (PlayerPrefs.GetInt("Coins") <= 14) 
 		{
 			_coinAmount = 100;
 		}
@@ -49,11 +91,25 @@ public class GameController : MonoBehaviour
 	}
 	public void SpawnFarm()
 	{
-		if (_farmsAmount < _maxFarmsAmount)
+		ClearQueueSpawn();
+		
+		if ((id == 1) || (id == 2)) 
 		{
-			ClearQueueSpawn();
-			ToQueueSpawn(_farms[0]);
-			_placementManager.buttonPressed = true;
+			if (_farmsAmount < _maxFarmsAmount)
+				{
+					ToQueueSpawn(_farms[id - 1]);
+					_placementManager.buttonPressed = true;
+				}
+		}
+		
+		else if (id != 0)
+		{
+			if (!_generatorPlaced) 
+			{
+				ToQueueSpawn(_farms[id - 1]);
+				_placementManager.buttonPressed = true;
+				_generatorPlaced = true;
+			}
 		}
 	}
 	public void ToQueueSpawn(GameObject _prefab)

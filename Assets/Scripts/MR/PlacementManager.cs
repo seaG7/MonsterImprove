@@ -31,7 +31,7 @@ public class PlacementManager : MonoBehaviour
 			_object.transform.position = positionAction.action.ReadValue<Vector3>();
 			_object.transform.rotation = rotationAction.action.ReadValue<Quaternion>();
 			_object.transform.Rotate(180f, 180f, 0);
-		}
+		}	
 	}
 	
 	public void PerformedSpawn() 
@@ -62,19 +62,31 @@ public class PlacementManager : MonoBehaviour
 			{
 				_object.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
 				
+				if (_game.id == 2) 
+				{
+					_object.transform.Rotate(0, 180, 0);
+					_object.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+				}
+				
 				if (Physics.Raycast(new Ray(_object.transform.position, -transform.up), out var hit)) 
 				{
 					if (hit.transform.TryGetComponent(out ARPlane arPlane) && (arPlane.classification & targetPlaneClassification) != 0)
 						{
 							_object.transform.position = hit.point;
 							_object.transform.rotation = Quaternion.Euler(0, _object.transform.rotation.y, 0);
+						
 						}
 				}
 			}
-			_game._farmsAmount++;
 			
-			_game._farmAmountTMP.text = _game._farmsAmount.ToString() + "/" + _game._maxFarmsAmount;
-			_game._farmAmountBackTMP.text = _game._farmsAmount.ToString() + "/" + _game._maxFarmsAmount;
+			
+			if (_game.id != 3) 
+			{
+				_game._farmsAmount++;
+				
+				_game._farmAmountTMP.text = _game._farmsAmount.ToString() + "/" + _game._maxFarmsAmount;
+				_game._farmAmountBackTMP.text = _game._farmsAmount.ToString() + "/" + _game._maxFarmsAmount;
+			}
 			
 			_object = null;
 		}

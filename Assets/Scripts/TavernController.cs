@@ -8,6 +8,7 @@ public class TavernController : MonoBehaviour
 	[SerializeField] private GameObject[] _icons; // 0 - harvest, 1 - eat
 	[SerializeField] private GameObject _animal;
 	[SerializeField] private AudioSource _harvestAS;
+	[SerializeField] private FoodGeneratorController _foodGeneratorC;
 	public bool anyStateActive = false;
 	public bool isEat = false;
 	public int lastState = -1;
@@ -15,6 +16,18 @@ public class TavernController : MonoBehaviour
 	public void Start()
 	{
 		_farmController = gameObject.GetComponentInParent<FarmController>();
+
+		FoodGeneratorController.ActionGeneratorSpawned += GetGeneratorSpawned;
+	}
+	
+	public void OnDisable()
+	{
+		FoodGeneratorController.ActionGeneratorSpawned -= GetGeneratorSpawned;
+	}
+	
+	public void GetGeneratorSpawned() 
+	{
+		_foodGeneratorC = FindAnyObjectByType<FoodGeneratorController>();
 	}
 
 	
@@ -27,8 +40,35 @@ public class TavernController : MonoBehaviour
 	{
 		if (isEat && anyStateActive)
 		{
+			if (_foodGeneratorC != null && _foodGeneratorC._foodAmount > 0) 
+			{
+				_foodGeneratorC._foodAmount--;
+			
+				_foodGeneratorC._foodAmountTMP.text = _foodGeneratorC._foodAmount.ToString() + "/" + _foodGeneratorC._maxFoodAmount.ToString();
+				_foodGeneratorC._foodAmountBackTMP.text = _foodGeneratorC._foodAmount.ToString() + "/" + _foodGeneratorC._maxFoodAmount.ToString();
+			
+				anyStateActive = false;
+				_icons[lastState].SetActive(false);
+				_harvestAS.Play();
+				StartCoroutine(LifeCycle());
+			}
+			
+			else 
+			{
+				StartCoroutine(_farmController._gameController._showNotification(1));
+				_harvestAS.clip = _farmController._gameController._noMoney;
+				_harvestAS.Play();
+			}
+			
+			GameController.SaveData();
+		}
+		
+		else if (anyStateActive) 
+		{
 			_farmController._harvestAmount++; 
 			GameController._collected++;
+			
+			GameController.SaveData();
 			
 			_farmController._harvestAmountTMP.text = _farmController._harvestAmount.ToString() + "/" + _farmController._maxHarvestAmount.ToString();
 			_farmController._harvestAmountBackTMP.text = _farmController._harvestAmount.ToString() + "/" + _farmController._maxHarvestAmount.ToString();
@@ -37,25 +77,13 @@ public class TavernController : MonoBehaviour
 			_farmController._gameController._collectedBackTMP.text = GameController._collected.ToString();
 			anyStateActive = false;
 			_harvestAS.Play();
-		}
-		
-		else if (anyStateActive) 
-		{
-			GameController._coinAmount--;
 			
-			_farmController._gameController._coinAmountTMP.text = GameController._coinAmount.ToString();
-			_farmController._gameController._coinAmountBackTMP.text = GameController._coinAmount.ToString();
+			_icons[lastState].SetActive(false);
 			
-			anyStateActive = false;
-			_harvestAS.Play();
+			StartCoroutine(LifeCycle());
 		}
-		
-		_icons[lastState].SetActive(false);
 		
 		GameController.SaveData();
-		
-		
-		StartCoroutine(LifeCycle());
 	}
 	
 	public IEnumerator LifeCycle() 
@@ -67,7 +95,7 @@ public class TavernController : MonoBehaviour
 			int randomState = Random.Range(0, 2);
 			lastState = randomState;
 			
-			if (randomState == 0) 
+			if (randomState == 1) 
 			{
 				isEat = true;
 				anyStateActive = true;
