@@ -12,16 +12,19 @@ public class GhostController : MonoBehaviour
 {
 	private MeshRenderer _meshRenderer;
 	public bool _isInvisible = true;
+	[SerializeField] public GameController _GC;
 	public InputActionProperty _playerPosition;
 	public AudioSource _AS;
 	[SerializeField] public AudioClip _whoosh;
 	[SerializeField] public AudioClip _spawn;
+	[SerializeField] public AudioClip _die;
 	[SerializeField] private PlaneClassification targetPlaneClassification;
 	
 	void Start()
 	{
 		_meshRenderer = GetComponent<MeshRenderer>();	
 		_AS = GetComponent<AudioSource>();
+		_GC = FindAnyObjectByType<GhostController>().GetComponent<GameController>();
 		StartCoroutine(GhostWalk());
 	}
 	
@@ -81,7 +84,11 @@ public class GhostController : MonoBehaviour
 		
 		if (other.gameObject.tag == "KillCollider") 
 		{
+			AudioSource _SFXAS = GameObject.FindGameObjectWithTag("SFXAS").GetComponent<AudioSource>();
+			_SFXAS.clip = _die;
+			_SFXAS.Play();
 			Destroy(gameObject);
+			_GC._currentGhostOnMapAmount--;
 		}
 	}
 	

@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6ed400ebf866694ebb1e8e54dfaf5a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isInvisible: 0
+  _isInvisible: 1
   _playerPosition:
     m_UseReference: 1
     m_Action:
@@ -116,6 +116,7 @@ MonoBehaviour:
   _AS: {fileID: 5725884462052534343}
   _whoosh: {fileID: 8300000, guid: 002bd9cdfccb91f49b0fd9b11497baf2, type: 3}
   _spawn: {fileID: 8300000, guid: d3aaaea553aa27546b73eb805a275fed, type: 3}
+  _die: {fileID: 8300000, guid: 526234508e4d22044bce61c5656ce7de, type: 3}
   targetPlaneClassification: 2
 --- !u!54 &8486084998018870876
 Rigidbody:

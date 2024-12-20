@@ -227,12 +227,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _placementManager: {fileID: 928382277}
-  _camera: []
+  _camera:
+  - {fileID: 6424650230690202007, guid: 50efd33370ccf154b8cd7b9529423f94, type: 3}
   _cameraSpawned: 0
   _playerPosition:
-    m_UseReference: 0
+    m_UseReference: 1
     m_Action:
-      m_Name: 
+      m_Name: Player Position
       m_Type: 0
       m_ExpectedControlType: 
       m_Id: 9fc4f4fb-a8eb-41aa-a248-b7d16782e689
@@ -240,14 +241,17 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: 0}
-  _ghostPrefab: {fileID: 0}
+    m_Reference: {fileID: 7862207684358717888, guid: c348712bda248c246b8c49b3db54643f,
+      type: 3}
+  _ghostPrefab: {fileID: 4087862088711048256, guid: 0a1169e1c0ae84c4cad95396c495ffe5,
+    type: 3}
   _currentGhostOnMapAmount: 0
   _maxGhostOnMapAmount: 1
-  _spawnEffect: {fileID: 0}
-  targetPlaneClassification: 0
+  _spawnEffect: {fileID: 8300000, guid: d3aaaea553aa27546b73eb805a275fed, type: 3}
+  targetPlaneClassification: 2
   _boardSpawned: 0
-  _boardPrefab: {fileID: 0}
+  _boardPrefab: {fileID: 2156332070985366703, guid: acd76043fe0dc4a468e15ec46a1c0983,
+    type: 3}
 --- !u!1 &81000648
 GameObject:
   m_ObjectHideFlags: 0
@@ -2676,9 +2680,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xrRayInteractor: {fileID: 788189675}
   _playerRotation:
-    m_UseReference: 0
+    m_UseReference: 1
     m_Action:
-      m_Name: 
+      m_Name: Player Rotation
       m_Type: 0
       m_ExpectedControlType: 
       m_Id: 10906716-2dd0-4ac5-85c3-008b91970346
@@ -2686,7 +2690,8 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: 0}
+    m_Reference: {fileID: -530380113134220495, guid: c348712bda248c246b8c49b3db54643f,
+      type: 3}
   targetPlaneClassification: 2
   _prefabsToSpawn: []
   _spawnedPlaneObjects: []
@@ -3185,7 +3190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resetRoomButton: {fileID: 157097038}
-  spawnButton: {fileID: 0}
+  spawnButton: {fileID: 1720011821}
   exitButton: {fileID: 827043315}
 --- !u!114 &1375321980
 MonoBehaviour:
@@ -3434,7 +3439,7 @@ GameObject:
   - component: {fileID: 1497978872}
   m_Layer: 2
   m_Name: Effects AS
-  m_TagString: Untagged
+  m_TagString: SFXAS
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
