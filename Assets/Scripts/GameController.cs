@@ -17,7 +17,9 @@ public class GameController : MonoBehaviour
 	[SerializeField] public AudioClip _buySomething;
 	[SerializeField] public AudioClip _placeFarm;
 	[SerializeField] public AudioClip _click;
-	[SerializeField] public AudioClip _noMoney;
+	[SerializeField] public AudioClip _error;
+	[SerializeField] public AudioClip _eat;
+	[SerializeField] public AudioClip _harvestMilk;
 	[SerializeField] public TextMeshProUGUI _farmAmountTMP;
 	[SerializeField] public TextMeshProUGUI _farmAmountBackTMP;
 	[SerializeField] public TextMeshProUGUI _coinAmountTMP;

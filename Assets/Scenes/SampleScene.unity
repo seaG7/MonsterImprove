@@ -497,7 +497,9 @@ MonoBehaviour:
   _buySomething: {fileID: 8300000, guid: 56696bdcdccfac24b8e8bba345fac4ce, type: 3}
   _placeFarm: {fileID: 8300000, guid: 5193740185c5c444fa5a0393279329ee, type: 3}
   _click: {fileID: 8300000, guid: c80ec55b92c2fed479cbd458de6cf2fd, type: 3}
-  _noMoney: {fileID: 8300000, guid: 76445fa4ecf40be48bf5a2c4b4e60827, type: 3}
+  _error: {fileID: 8300000, guid: 76445fa4ecf40be48bf5a2c4b4e60827, type: 3}
+  _eat: {fileID: 8300000, guid: 1cb6b022180b6644fb63ce3afd60a1f8, type: 3}
+  _harvestMilk: {fileID: 8300000, guid: ddb012fc9eccf2b43a5f249d26c4fe74, type: 3}
   _farmAmountTMP: {fileID: 875984187}
   _farmAmountBackTMP: {fileID: 1978778317}
   _coinAmountTMP: {fileID: 123891735}

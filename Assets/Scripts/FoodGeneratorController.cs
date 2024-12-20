@@ -61,7 +61,7 @@ public class FoodGeneratorController : MonoBehaviour
 		else 
 		{
 			StartCoroutine(_gameController._showNotification(0));
-			_gameController._mainAS.clip = _gameController._noMoney;
+			_gameController._mainAS.clip = _gameController._error;
 			_gameController._mainAS.Play();
 		}
 		

@@ -49,6 +49,7 @@ public class TavernController : MonoBehaviour
 			
 				anyStateActive = false;
 				_icons[lastState].SetActive(false);
+				_harvestAS.clip = _farmController._gameController._eat;
 				_harvestAS.Play();
 				StartCoroutine(LifeCycle());
 			}
@@ -56,7 +57,7 @@ public class TavernController : MonoBehaviour
 			else 
 			{
 				StartCoroutine(_farmController._gameController._showNotification(1));
-				_harvestAS.clip = _farmController._gameController._noMoney;
+				_harvestAS.clip = _farmController._gameController._error;
 				_harvestAS.Play();
 			}
 			
@@ -76,6 +77,8 @@ public class TavernController : MonoBehaviour
 			_farmController._gameController._collectedTMP.text = GameController._collected.ToString();
 			_farmController._gameController._collectedBackTMP.text = GameController._collected.ToString();
 			anyStateActive = false;
+
+			_harvestAS.clip = _farmController._gameController._harvestMilk;
 			_harvestAS.Play();
 			
 			_icons[lastState].SetActive(false);
