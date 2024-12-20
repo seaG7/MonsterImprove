@@ -25,8 +25,8 @@ public class FarmController : MonoBehaviour
 		
 		_gameController = FindFirstObjectByType<GameController>();
 	}
-	
-	public void OpenCloseMenu(int id) 
+
+    public void OpenCloseMenu(int id) 
 	{
 		UpdateUI();
 		

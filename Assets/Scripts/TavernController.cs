@@ -9,6 +9,7 @@ public class TavernController : MonoBehaviour
 	[SerializeField] private GameObject _animal;
 	[SerializeField] private AudioSource _harvestAS;
 	[SerializeField] private FoodGeneratorController _foodGeneratorC;
+	[SerializeField] private GameObject _canvas;
 	public bool anyStateActive = false;
 	public bool isEat = false;
 	public int lastState = -1;
@@ -30,8 +31,12 @@ public class TavernController : MonoBehaviour
 		_foodGeneratorC = FindAnyObjectByType<FoodGeneratorController>();
 	}
 
-	
-	public GameObject GetAnimal() 
+    private void Update()
+    {
+		_canvas.transform.LookAt(GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Transform>());
+    }
+
+    public GameObject GetAnimal() 
 	{
 		return _animal;
 	}

@@ -220,6 +220,8 @@ MonoBehaviour:
   - {fileID: 9206671511306220918}
   _animal: {fileID: 2291966701789409142}
   _harvestAS: {fileID: 6671066575515494884}
+  _foodGeneratorC: {fileID: 0}
+  _canvas: {fileID: 4894671186215783378}
   anyStateActive: 0
   isEat: 0
   lastState: -1

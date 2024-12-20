@@ -2850,6 +2850,8 @@ MonoBehaviour:
   _pinchTransform: {fileID: 3297350655651882501}
   _harvestAmountTMP: {fileID: 8990369186258449083}
   _harvestAmountBackTMP: {fileID: 5953501779253421701}
+  _settingsButton: {fileID: 0}
+  _infoButton: {fileID: 0}
   _gameController: {fileID: 0}
   _maxHarvestAmount: 30
   _harvestAmount: 0
