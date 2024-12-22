@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EditorGhosts-Editor</name>
+    </assembly>
+    <members>
+        <member name="T:EditorGhosts.Editor.EditorGhostUtility">
+            <summary>
+            A public static class that provides some useful helper function(s) related to things like copying and instantiating visual-only representations of GameObjects.
+            This static class also manages the cleanup of editor ghost on scene change, scene save, etc.
+            </summary>
+            Author: Mathew Aloisio
+        </member>
+        <member name="F:EditorGhosts.Editor.EditorGhostUtility.m_TemporarySaveScene">
+            <summary>A temporary scene that can hold editor ghosts while a scene is being saving as to not include them in the scene.</summary>
+        </member>
+        <member name="M:EditorGhosts.Editor.EditorGhostUtility.#cctor">
+            <summary>The static constructor for the EditorGhostUtility static class.</summary>
+        </member>
+        <member name="M:EditorGhosts.Editor.EditorGhostUtility.OnPlayModeStateChanged(UnityEditor.PlayModeStateChange)">
+            <summary>Invoked by the 'EditorApplication.playModeStateChanged' event.</summary>
+            <param name="pChange"></param>
+        </member>
+        <member name="M:EditorGhosts.Editor.EditorGhostUtility.OnSceneSaving(UnityEngine.SceneManagement.Scene,System.String)">
+            <summary>Invoked by the 'EditorSceneManager.sceneSaving' event just before the scene is saved.</summary>
+            <param name="pScene"></param>
+            <param name="pPath"></param>
+        </member>
+        <member name="M:EditorGhosts.Editor.EditorGhostUtility.OnSceneSaved(UnityEngine.SceneManagement.Scene)">
+            <summary>Invoked by the 'EditorSceneManager.sceneSaved' event after the scene finishes saving.</summary>
+            <param name="pScene"></param>
+        </member>
+        <member name="M:EditorGhosts.Editor.EditorGhostUtility.OnSceneOpened(UnityEngine.SceneManagement.Scene,UnityEditor.SceneManagement.OpenSceneMode)">
+            <summary>Invoked by the 'EditorSceneManager.sceneOpened' event.</summary>
+            <param name="pScene"></param>
+            <param name="pOpenMode"></param>
+        </member>
+        <member name="M:EditorGhosts.Editor.EditorGhostUtility.OnSceneClosing(UnityEngine.SceneManagement.Scene,System.Boolean)">
+            <summary>Invoked by the 'EditorSceneManager.sceneClosing' event.</summary>
+            <param name="pScene"></param>
+            <param name="pRemovingScene"></param>
+        </member>
+        <member name="F:EditorGhosts.Editor.EditorGhostUtility.VisualComponentsWhitelist">
+            <summary>An array of components that are allowed on 'visual' representations of objects.</summary>
+        </member>
+        <member name="M:EditorGhosts.Editor.EditorGhostUtility.InstantiateGhost(UnityEngine.GameObject,UnityEngine.Transform,UnityEngine.Material)">
+            <summary>
+            Instantiates a visual instance of the GameObject, pObject, and returns it.
+            </summary>
+            <param name="pObject">The copy object to make a visual instance of.</param>
+            <param name="pParent">The parent Transform for the newly instantiated GameObject.</param>
+            <param name="pMaterialOverride">An optional material override parameter. If non-null all materials will be overridden with the referenced Material.</param>
+            <returns>a GameObject that is a visual-only copy of pObject.</returns>
+        </member>
+        <member name="M:EditorGhosts.Editor.EditorGhostUtility.SafeDestroy(UnityEngine.Object,System.Boolean)">
+            <summary>
+            Safely destroys a UnityEngine.Object based on whether or not the application is running. Registers an undo record for the destroy if the application is not running and 'pAddUndo' is true.
+            Destroys dependant components of MonoBehaviours automatically.
+            </summary>
+            <param name="pObject">The UnityEnigne.Object to destroy.</param>
+            <param name="pAddUndo">Should an undo entry be added when destroying in editor mode?</param>
+        </member>
+        <member name="M:EditorGhosts.Editor.EditorGhostUtility.DestroyRequiredComponents(UnityEngine.MonoBehaviour,System.Boolean)">
+            <summary>Destroys any RequireComponents required by pBehaviour.</summary>
+            <param name="pBehaviour"></param>
+            <param name="pAddUndo">Should an undo entry be added when destroying in editor mode?</param>
+        </member>
+        <member name="M:EditorGhosts.Editor.EditorGhostUtility.DestroyAllEditorGhosts">
+            <summary>Destroys all editor ghosts in the current scene.</summary>
+        </member>
+        <member name="M:EditorGhosts.Editor.EditorGhostUtility.Private_SafeDestroy(UnityEngine.Object,System.Boolean)">
+            <summary>Safely destroys a UnityEngine.Object based on whether or not the application is running. Registers an undo record for the destroy if the application is not running and 'pAddUndo' is true.</summary>
+            <param name="pObject">The UnityEngine.Object to destroy.</param>
+            <param name="pAddUndo">When in editor mode should an undo entry be added?</param>
+        </member>
+    </members>
+</doc>

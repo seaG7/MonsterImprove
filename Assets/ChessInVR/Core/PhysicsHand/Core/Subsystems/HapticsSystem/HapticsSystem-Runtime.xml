@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HapticsSystem-Runtime</name>
+    </assembly>
+    <members>
+        <member name="T:HapticsSystem.Actions.OneShotHaptic">
+            <summary>
+            A component that provides a simple public method, Play(), to play the haptic described by the component one time on the specified haptic device.
+            This method also provides a PlayIfEnabled() method that only plays the haptic if the componetn is marked as 'enabled'.
+            </summary>
+            Author: Mathew Aloisio
+        </member>
+        <member name="M:HapticsSystem.Actions.OneShotHaptic.Play">
+            <summary>Plays the haptic on the hapticDevice (if valid) once.</summary>
+        </member>
+        <member name="M:HapticsSystem.Actions.OneShotHaptic.PlayIfEnabled">
+            <summary>Plays a haptic impulse only if the component is 'enabled'.</summary>
+        </member>
+        <member name="T:HapticsSystem.PlayHapticsOnCollision">
+            <summary>A component that detects collisions of a modifiable severity and plays the configured haptics.</summary>
+            Author: Intuitive Gaming Solutions
+        </member>
+        <member name="P:HapticsSystem.PlayHapticsOnCollision.LastHapticsPlayRealTime">
+            <summary>Returns the last Time.realTimeSinceStartup this component played haptics.</summary>
+        </member>
+        <member name="M:HapticsSystem.PlayHapticsOnCollision.PlayHaptics(System.Single)">
+            <summary>
+            Plays haptics for a collision with a normalized severity (0 to 1) of pNormalizedSeverity.
+            Higher severity increases haptic amplitude within the specified range.
+            Higher severity increases haptic frequency within the specified range.
+            </summary>
+            <param name="pNormalizedSeverity"></param>
+        </member>
+        <member name="T:HapticsSystem.IHapticsDevice">
+            <summary>
+            The haptics driver is responsible for actually playing haptics for an input device.
+            </summary>
+            Author: Mathew Aloisio
+        </member>
+        <member name="M:HapticsSystem.IHapticsDevice.TryHapticImpulse(System.Single,System.Single,System.Single)">
+            <summary>
+            Attempts to play a haptic pulse with the specified parameters on all devices registered with this haptics device.
+            Note that haptics will only play while the haptics device component is enabled.
+            </summary>
+            <param name="pDuration"></param>
+            <param name="pAmplitude"></param>
+            <param name="pFrequency"></param>
+        </member>
+        <member name="M:HapticsSystem.IHapticsDevice.PlayHapticImpulse(System.Single,System.Single,System.Single)">
+            <summary>
+            Attempts to play a haptic pulse with the specified parameters on all devices registered with this haptics device.
+            NOTE: This differs from 'TryHapticImpulse' in that it will play the impulse regardless of whether or not the component is enabled.
+            </summary>
+            <param name="pDuration"></param>
+            <param name="pAmplitude"></param>
+            <param name="pFrequency"></param>
+        </member>
+        <member name="M:HapticsSystem.IHapticsDevice.StopHaptics">
+            <summary>Stops haptics on all registered haptic devices.</summary>
+        </member>
+    </members>
+</doc>

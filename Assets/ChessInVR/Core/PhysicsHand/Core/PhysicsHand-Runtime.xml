@@ -1,0 +1,526 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PhysicsHand-Runtime</name>
+    </assembly>
+    <members>
+        <member name="T:PhysicsHand.Collisions.HandsIntercollisionManager">
+            <summary>
+            A component that manages intercollisions between RigidbodyHand components.
+            By default this component makes a hand ignore intercollisions with a hand that is grabbing something while 'ignoreWhileGrabbing' is true.
+            </summary>
+            Author: Mathew Aloisio
+        </member>
+        <member name="P:PhysicsHand.Collisions.HandsIntercollisionManager.IgnoringDueToGrab">
+            <summary>Tracks whether or not this component is currently ignoring intercollisions due to a grab.</summary>
+        </member>
+        <member name="M:PhysicsHand.Collisions.HandsIntercollisionManager.IgnoreIntercollisionFor(System.Single)">
+            <summary>
+            Ignores intercollisions between the hands for the given number of seconds.
+            Will be ignored if intercollisions are already ignored due to a grab.
+            </summary>
+            <param name="pSeconds"></param>
+        </member>
+        <member name="M:PhysicsHand.Collisions.HandsIntercollisionManager.UnignoreIntercollisionIn(System.Single)">
+            <summary>
+            Unignores intercollisions between the hands after the given number of seconds.
+            Will be ignored if intercollisions are ignored due to a grab.
+            </summary>
+            <param name="pSeconds"></param>
+        </member>
+        <member name="M:PhysicsHand.Collisions.HandsIntercollisionManager.SetIgnoreIntercollisions(System.Boolean)">
+            <summary>
+            Sets the intercollision ignore state between hands registered with this components if nothing is overriding it.
+            Will not overwrite if intercollisions are already ignored due to a grab.
+            </summary>
+            <param name="pIgnore">Should intercollisions be ignored?</param>
+        </member>
+        <member name="M:PhysicsHand.Collisions.HandsIntercollisionManager.ForceIgnoreIntercollisions(System.Boolean)">
+            <summary>
+            Forces the intercollision ignore state between hands registered with this components regardless of grab state, etc.
+            </summary>
+            <param name="pIgnore">Should intercollisions be ignored?</param>
+        </member>
+        <member name="T:PhysicsHand.Events.RigidbodyHandUnityEvent">
+            <summary>
+            Arg0: The RigidbodyHand associated with the event.
+            </summary>
+        </member>
+        <member name="T:PhysicsHand.GrabbableHandBend">
+            <summary>
+            A component that allows you to specify the all-finger bend value for a hand that grabs a GrabbableObject on the same GameObject as this.
+            This component is attached to the same GameObject as a GrabbableObject to control the hands finger bend when it is grabbing it.
+            
+            If you want more precise control of finger bend consider using the HandPose component in conjunction wiht the GrabbableHandPose component instead.
+            
+            TODO: Make some conditions that give the user control over which pose entry is used. (COPY FROM GrabbableHandPose when done TODODODOTODO TODO todo)
+            
+            NOTE: This will only apply a pose to Grabbers that contain a KinematicHand component.
+            </summary>
+            Author: Mathew Aloisio
+        </member>
+        <member name="M:PhysicsHand.GrabbableHandBend.Entry.CheckBendConditions(GrabSystem.Grabber,GrabSystem.GrabbableObject)">
+            <summary>A public method that checks if the bend conditions are met for this entry when pGrabber is grabbing pGrabbable (this frame).</summary>
+            <param name="pGrabber"></param>
+            <param name="pGrabbable"></param>
+            <returns>true if the pose conditions for this entry are met, otherwise false.</returns>
+        </member>
+        <member name="P:PhysicsHand.GrabbableHandBend.Grabbable">
+            <summary>Returns the GrabbableObject reference associated with this component.</summary>
+        </member>
+        <member name="F:PhysicsHand.GrabbableHandBend.m_Grabbable">
+            <summary>The hidden backing field for the 'Grabbable' property.</summary>
+        </member>
+        <member name="M:PhysicsHand.GrabbableHandBend.OnGrabbed(GrabSystem.Grabber,GrabSystem.GrabbableObject)">
+            <summary>A callback that is invoked whenever the relevant Grabbable is grabbed.</summary>
+            <param name="pGrabber">The Grabber that grabbed the GrabbableObject.</param>
+            <param name="pGrabbable">The GrabbableObject that was grabbed.</param>
+        </member>
+        <member name="M:PhysicsHand.GrabbableHandBend.OnReleased(GrabSystem.Grabber,GrabSystem.GrabbableObject)">
+            <summary>A callback that is invoked whenever the relevant Grabbable is released.</summary>
+            <param name="pGrabber">The Grabber that released the GrabbableObject.</param>
+            <param name="pGrabbable">The GrabbableObject that was released.</param>
+        </member>
+        <member name="T:PhysicsHand.GrabbableHandPose">
+            <summary>
+            A component that allows you to specify the pose for a hand that grabs a GrabbableObject on the same GameObject as this.
+            This component is attached to the same GameObject as a GrabbableObject to control the hands pose when it is grabbing it.
+            
+            TODO: Make some conditions that give the user control over which pose entry is used.
+            
+            NOTE: This will only apply a pose to Grabbers that contain a HandPoser component.
+            </summary>
+            Author: Mathew Aloisio
+        </member>
+        <member name="M:PhysicsHand.GrabbableHandPose.Entry.CheckPoseConditions(GrabSystem.Grabber,GrabSystem.GrabbableObject)">
+            <summary>A public method that checks if the pose conditions are met for this entry when pGrabber is grabbing pGrabbable (this frame).</summary>
+            <param name="pGrabber"></param>
+            <param name="pGrabbable"></param>
+            <returns>true if the pose conditions for this entry are met, otherwise false.</returns>
+        </member>
+        <member name="P:PhysicsHand.GrabbableHandPose.Grabbable">
+            <summary>Returns the GrabbableObject reference associated with this component.</summary>
+        </member>
+        <member name="F:PhysicsHand.GrabbableHandPose.m_Grabbable">
+            <summary>The hidden backing field for the 'Grabbable' property.</summary>
+        </member>
+        <member name="M:PhysicsHand.GrabbableHandPose.OnGrabbed(GrabSystem.Grabber,GrabSystem.GrabbableObject)">
+            <summary>A callback that is invoked whenever the relevant Grabbable is grabbed.</summary>
+            <param name="pGrabber">The Grabber that grabbed the GrabbableObject.</param>
+            <param name="pGrabbable">The GrabbableObject that was grabbed.</param>
+        </member>
+        <member name="M:PhysicsHand.GrabbableHandPose.OnReleased(GrabSystem.Grabber,GrabSystem.GrabbableObject)">
+            <summary>A callback that is invoked whenever the relevant Grabbable is released.</summary>
+            <param name="pGrabber">The Grabber that released the GrabbableObject.</param>
+            <param name="pGrabbable">The GrabbableObject that was released.</param>
+        </member>
+        <member name="T:PhysicsHand.GrabSystem.GrabUtilities">
+            <summary>
+            Grab extension utility methods for the 'GrabSystem' for Physics Hand.
+            </summary>
+            Author: Intuitive Gaming Solutions
+        </member>
+        <member name="M:PhysicsHand.GrabSystem.GrabUtilities.GetFollowTransform(GrabSystem.Grabber)">
+            <summary>Returns the relevant 'follow' Transform for a given Grabber, pGrabber. This is either the controller of a RigidbodyHand or the pGrabber.transform itself.</summary>
+            <param name="pGrabber"></param>
+            <returns>the relevant 'follow' Transform for a given Grabber, pGrabber.</returns>
+        </member>
+        <member name="T:PhysicsHand.GrabSystem.ReleaseNocollideGrace">
+            <summary>
+            A component that allows release grace time to be overridden by attaching this component to the same GameObject as a GrabbableObject.
+            </summary>
+            Author: Mathew Aloisio
+        </member>
+        <member name="T:PhysicsHand.GrabSystem.Sliders.AnimatedGrabSlider">
+            <summary>
+            A component that allows a grabber to control a something signed distance driven sliding animation that sets normalized time in an animation clip
+            using the controller's signed distance along a direction vector from the slide grab starting point to determine
+            what point of the animation to play, the animation will be played in reverse to simulate the slide 'returning to start'.
+            
+            WARNING: This component assumes that the slide can only be operated with one hand and WILL cause problems if two hands can grab the slide.
+            </summary>
+            Author: Mathew Aloisio
+        </member>
+        <member name="P:PhysicsHand.GrabSystem.Sliders.AnimatedGrabSlider.AnimationNormalizedTime">
+            <summary>The normalized time the animation state is being played at. (If m_GrabHandFollowing is null the animation state is not being played.)</summary>
+        </member>
+        <member name="P:PhysicsHand.GrabSystem.Sliders.AnimatedGrabSlider.RelativeTo">
+            <summary>Returns the Transform that directions are considered relative to.</summary>
+        </member>
+        <member name="F:PhysicsHand.GrabSystem.Sliders.AnimatedGrabSlider.m_SlideGrabControllerRelativePosition">
+            <summary>The world space position of the controller when grabbing the slide initially relative to the animator's transform.</summary>
+        </member>
+        <member name="F:PhysicsHand.GrabSystem.Sliders.AnimatedGrabSlider.m_GrabberFollowing">
+            <summary>The default 'follow' transform for the grabber.</summary>
+        </member>
+        <member name="M:PhysicsHand.GrabSystem.Sliders.AnimatedGrabSlider.SetAnimationNormalizedTime(System.Single)">
+            <summary>
+            A public method that allows the 'animation normalized time', the time in animation scaled from 0->1, to be set directly.
+            EXAMPLE USAGE: This is used in scenarios where for example sometihng overrides the slide's behaviour, such as firing the gun which would want to instantly make this component stop animating the slide
+                         by setting the animation normalized time to 0.
+            </summary>
+        </member>
+        <member name="M:PhysicsHand.GrabSystem.Sliders.AnimatedGrabSlider.OnSlideGrabbed(GrabSystem.Grabber,GrabSystem.GrabbableObject)">
+            <summary>A callback that is intended to be invoked by the slide's GrabbableObject component's 'Grabbed' event.</summary>
+            <param name="pGrabber"></param>
+            <param name="pGrabbable"></param>
+        </member>
+        <member name="M:PhysicsHand.GrabSystem.Sliders.AnimatedGrabSlider.OnSlideReleased(GrabSystem.Grabber,GrabSystem.GrabbableObject)">
+            <summary>A callback that is intended to be invoked by the slide's GrabbableObjects component's 'Released' event..</summary>
+            <param name="pGrabber"></param>
+            <param name="pGrabbable"></param>
+        </member>
+        <member name="T:PhysicsHand.GrabSystem.Sliders.GrabSliderInvoker">
+            <summary>
+            A component that allows event(s) to be invoked when certain 'grab slider' conditions are met.
+            
+            WARNING: This component assumes that the slide can only be operated with one hand and WILL cause problems if two hands can grab the slide.
+            </summary>
+            Author: Mathew Aloisio
+        </member>
+        <member name="P:PhysicsHand.GrabSystem.Sliders.GrabSliderInvoker.RelativeTransform">
+            <summary>A reference to the Transform that pull directions are considered relative to.</summary>
+        </member>
+        <member name="F:PhysicsHand.GrabSystem.Sliders.GrabSliderInvoker.m_SlideGrabControllerRelativePosition">
+            <summary>The world space position of the controller when grabbing the slide initially relative to the animator's transform.</summary>
+        </member>
+        <member name="F:PhysicsHand.GrabSystem.Sliders.GrabSliderInvoker.m_GrabberFollowing">
+            <summary>The default 'follow' transform for the grabber.</summary>
+        </member>
+        <member name="F:PhysicsHand.GrabSystem.Sliders.GrabSliderInvoker.m_EntryConditionsMetLastFrame">
+            <summary>Tracks the 'Entry' whose conditions were met last frame to avoid re-invoking an entry whose conditions are met til they are not met again previously.</summary>
+        </member>
+        <member name="M:PhysicsHand.GrabSystem.Sliders.GrabSliderInvoker.RebuildEntries">
+            <summary>Rebuilds any internal data that is built using the 'entries' array.</summary>
+        </member>
+        <member name="M:PhysicsHand.GrabSystem.Sliders.GrabSliderInvoker.OnSlideGrabbed(GrabSystem.Grabber,GrabSystem.GrabbableObject)">
+            <summary>A callback that is intended to be invoked by the slide's GrabbableObject component's 'Grabbed' event.</summary>
+            <param name="pGrabber"></param>
+            <param name="pGrabbable"></param>
+        </member>
+        <member name="M:PhysicsHand.GrabSystem.Sliders.GrabSliderInvoker.OnSlideReleased(GrabSystem.Grabber,GrabSystem.GrabbableObject)">
+            <summary>A callback that is intended to be invoked by the slide's GrabbableObjects component's 'Released' event..</summary>
+            <param name="pGrabber"></param>
+            <param name="pGrabbable"></param>
+        </member>
+        <member name="T:PhysicsHand.Helpers.FlagsHelper">
+            <summary>
+            A component that helps check flags.
+            </summary>
+            Author: Mathew Aloisio
+        </member>
+        <member name="T:PhysicsHand.Rigidbodies.InheritRigidbodyVelocity">
+            <summary>
+            A component that can be attached to the same GameObject as a Rigidbody that allows you to specify another Rigidbody to inherit velocity from.
+            
+            NOTE: This component may not handle large sudden velocity changes of 'inheritFrom' well.
+            </summary>
+        </member>
+        <member name="P:PhysicsHand.Rigidbodies.InheritRigidbodyVelocity.Rigidbody">
+            <summary>A reference to the Rigidbody associated with this component.</summary>
+        </member>
+        <member name="F:PhysicsHand.Rigidbodies.InheritRigidbodyVelocity.m_Rigidbody">
+            <summary>The hidden backing field for the 'Rigidbody' property.</summary>
+        </member>
+        <member name="T:PhysicsHand.Rigidbodies.RigidbodyStabilizer">
+            <summary>
+            A component that can be attached to the same GameObject as a Rigidbody component that visually stabilizes the Rigidbody by modifying the position pre-and-post render.
+            This is useful for preventing jitter when Rigidbodies are jointed together.
+            
+            WARNING: This component may cause issues on pipelines other than the built-in render pipeline. It is not recommended to use this component on other render pipelines.
+            </summary>
+            Author: Mathew Aloisio
+        </member>
+        <member name="F:PhysicsHand.Rigidbodies.RigidbodyStabilizer.Target.transform">
+            <summary>The Transform of the target.</summary>
+        </member>
+        <member name="P:PhysicsHand.Rigidbodies.RigidbodyStabilizer.Rigidbody">
+            <summary>A reference to the Rigidbody associated with this component.</summary>
+        </member>
+        <member name="P:PhysicsHand.Rigidbodies.RigidbodyStabilizer.IsPreRenderAdjusted">
+            <summary>Returns true while this component is in the 'PreRender' state before reaching 'PostRender'.</summary>
+        </member>
+        <member name="P:PhysicsHand.Rigidbodies.RigidbodyStabilizer.PreRenderPosition">
+            <summary>The pre-render position of the transform before being stabilized.</summary>
+        </member>
+        <member name="P:PhysicsHand.Rigidbodies.RigidbodyStabilizer.PreRenderRotation">
+            <summary>The pre-render rotation of the transform before being stabilized.</summary>
+        </member>
+        <member name="P:PhysicsHand.Rigidbodies.RigidbodyStabilizer.StabilizeTarget">
+            <summary>The RigidbodyStabilizer.Target to place the stabilized transform at after storing pre-render position and rotation. (When null no stabilization occurs.)</summary>
+        </member>
+        <member name="F:PhysicsHand.Rigidbodies.RigidbodyStabilizer.m_Rigidbody">
+            <summary>The hidden backing field for the 'Rigidbody' property.</summary>
+        </member>
+        <member name="M:PhysicsHand.Rigidbodies.RigidbodyStabilizer.OnPreRenderRigidbody">
+            <summary>Intended to be invoked just before the component's GameObject is rendered.</summary>
+        </member>
+        <member name="T:PhysicsHand.RigidbodyHand">
+            <summary>A Rigidbody based physics hand.</summary>
+            Author: Mathew Aloisio
+        </member>
+        <member name="P:PhysicsHand.RigidbodyHand.Grabber">
+            <summary>A reference to the RayGrabber that is responsible for grabbing and throwing with this hand.</summary>
+        </member>
+        <member name="P:PhysicsHand.RigidbodyHand.Rigidbody">
+            <summary>A reference to the Rigidbody component that is associated with this hand.</summary>
+        </member>
+        <member name="P:PhysicsHand.RigidbodyHand.Stabilizer">
+            <summary>A reference to the RigidbodyStabilizer component that is associated with this hand.</summary>
+        </member>
+        <member name="P:PhysicsHand.RigidbodyHand.KinematicHand">
+            <summary>A reference to the KinematicHand that visually represents the phyiscs hand.</summary>
+        </member>
+        <member name="P:PhysicsHand.RigidbodyHand.CollisionIgnorer">
+            <summary>A reference to the CollisionIgnorer associated with this component</summary>
+        </member>
+        <member name="P:PhysicsHand.RigidbodyHand.CollisionTracker">
+            <summary>A reference to the CollisionTracker used by this component.</summary>
+        </member>
+        <member name="P:PhysicsHand.RigidbodyHand.ForceFollower">
+            <summary>A reference to the ForceFollowTransform component used by this component to position and orientate the hand.</summary>
+        </member>
+        <member name="P:PhysicsHand.RigidbodyHand.AverageVelocity">
+            <summary>Returns Grabber.velocityTracker.AverageVelocity if Grabber.velocityTracker is non-null, otherwise returns Rigidbody.velocity.</summary>
+        </member>
+        <member name="P:PhysicsHand.RigidbodyHand.IsLeft">
+            <summary>Returns true if this is a left hand, otherwise false.</summary>
+        </member>
+        <member name="P:PhysicsHand.RigidbodyHand.IsRight">
+            <summary>Returns true if this is a right hand, otherwise false.</summary>
+        </member>
+        <member name="P:PhysicsHand.RigidbodyHand.SkipMaintainOffsetFrames">
+            <summary>A simple integer that can be set to a number to skip any grabbable object 'Maintain Offset' updates for this many FixedUpdate() frames.</summary>
+        </member>
+        <member name="F:PhysicsHand.RigidbodyHand.m_BendDisableTime">
+            <summary>The Time.time that the KinematicHands finger bending will be disabled while grabbing an object. (If float.NegativeInfinity then it will never be disabled.)</summary>
+        </member>
+        <member name="F:PhysicsHand.RigidbodyHand.m_Grabber">
+            <summary>The hidden backing field for the 'Grabber' property.</summary>
+        </member>
+        <member name="F:PhysicsHand.RigidbodyHand.m_Rigidbody">
+            <summary>The hidden backing field for the 'Rigidbody' property.</summary>
+        </member>
+        <member name="F:PhysicsHand.RigidbodyHand.m_Stabilizer">
+            <summary>The hidden backing field for the 'Stabilizer' property.</summary>
+        </member>
+        <member name="F:PhysicsHand.RigidbodyHand.m_KinematicHand">
+            <summary>The hidden backing field for the 'KinematicHand' property.</summary>
+        </member>
+        <member name="F:PhysicsHand.RigidbodyHand.m_CollisionTracker">
+            <summary>The hidden backing field for the 'CollisionTracker' property.</summary>
+        </member>
+        <member name="F:PhysicsHand.RigidbodyHand.m_ForceFollower">
+            <summary>The hidden backing field for the 'ForceFollower' property.</summary>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.TeleportToFollow">
+            <summary>
+            Instantly teleports the hand (and anything it is grabbing) to the ForceFollower.follow Transform.
+            This only deals with position, not with rotation.
+            </summary>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.RebuildDynamicGrabBox">
+            <summary>Rebuilds the dynamic grab box for the RayGrabber component associated with this hand.</summary>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.RebuildCollisionIgnorer">
+            <summary>Rebuilds the collision ignorer using the Collider components found in this hands Rigidbody.</summary>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.PlayHapticImpulse(System.Single,System.Single,System.Single)">
+            <summary>Plays a haptic impulse using the 'hapticsDevice' associated with the hand (if one exists).</summary>
+            <param name="pDuration"></param>
+            <param name="pAmplitude"></param>
+            <param name="pFrequency"></param>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.StopHaptics">
+            <summary>Stops any haptics being palyed by the 'hapticsDevice' associated with the hand (if there is one).</summary>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.SetAllFingerBendToGrabTarget">
+            <summary>Sets all finger bend values for the hand to 'grabFingerBend'.</summary>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.SetAllFingerBendIfNotGrabbing(System.Single)">
+            <summary>Sets all finger bend values for the hand if not grabbing.</summary>
+            <param name="pBend"></param>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.RestAllFingers">
+            <summary>Sets all finger bend values for the hand to 'restingFingerBend'.</summary>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.RestAllFingersIfNotGrabbing">
+            <summary>Sets all finger bend values for the hand to 'restingFingerBend' if not grabbing.</summary>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.SetUnbendObstructedIfNotGrabbing(System.Boolean)">
+            <summary>Sets the value of 'unbend obstructed' for the relevant kinematic hand globally if not grabbing.</summary>
+            <param name="pUnbendObstructed"></param>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.SetDynamicGrabBoxEnabled(System.Boolean)">
+            <summary>Sets the 'dynamicGrabBox' field of this component. Useful for use with Unity Editor events.</summary>
+            <param name="pEnabled"></param>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.SetForceBendOnGrabEnabled(System.Boolean)">
+            <summary>Sets the 'forceBendOnGrab' field of this component. Useful for use with Unity Editor events.</summary>
+            <param name="pEnabled"></param>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.SetGrabFingerBend(System.Single)">
+            <summary>Sets the 'grabFingerBend' field of this component. Useful for use with Unity Editor events.</summary>
+            <param name="pBend"></param>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.SetRestingFingerBend(System.Single)">
+            <summary>Sets the 'defaultFingerBend' field of this component. Useful for use with Unity Editor events.</summary>
+            <param name="pBend"></param>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.OnPreGrabbedObject(GrabSystem.Grabber,GrabSystem.GrabbableObject)">
+            <summary>Invoked just before this hands Grabber, pGrabber, grabs a GrabbableObject.</summary>
+            <param name="pGrabber">The grabber that grabbed the object.</param>
+            <param name="pGrabbable">The object that was grabbed.</param>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.OnGrabbedObject(GrabSystem.Grabber,GrabSystem.GrabbableObject)">
+            <summary>Invoked whenever this hands Grabber, pGrabber, grabs a GrabbableObject.</summary>
+            <param name="pGrabber">The grabber that grabbed the object.</param>
+            <param name="pGrabbable">The object that was grabbed.</param>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.OnPreReleasedObject(GrabSystem.Grabber,GrabSystem.GrabbableObject)">
+            <summary>Invoked just before this hands Grabber, pGrabber, releases a GrabbableObject.</summary>
+            <param name="pGrabber">The grabber that released the object.</param>
+            <param name="pGrabbable">The object that was released.</param>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.OnReleasedObject(GrabSystem.Grabber,GrabSystem.GrabbableObject)">
+            <summary>Invoked whenever this hands Grabber, pGrabber, releases a GrabbableObject.</summary>
+            <param name="pGrabber">The grabber that released the object.</param>
+            <param name="pGrabbable">The object that was released.</param>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.OnShouldInterruptGrabRoutine(GrabSystem.Grabber,System.Boolean@)">
+            <summary>Invoked whenever a continous grab is about to be attempted, if pShouldInterrupt is made false before this function returns no grab attempt will be performed.</summary>
+            <param name="pGrabber"></param>
+            <param name="pShouldInterrupt">A reference to a boolean value that controls whether or not a grab routine should be interrupted.</param>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.OnShouldFingerUnbendObstructed(AdaptiveHands.KinematicFinger,System.Boolean@)">
+            <summary>Invoked whenever a finger is testing if it should unbend due to an obstruction to provide a chance to override the behaviour.</summary>
+            <param name="pFinger"></param>
+            <param name="pShouldUnbend"></param>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.OnGrabbingGrabModeChanged(GrabSystem.GrabbableObject.GrabMode,GrabSystem.GrabbableObject.GrabMode)">
+            <summary>Invoked whenever the GrabbaleObject that is being grabbed by this hands 'grab mode' is changed.</summary>
+            <param name="pOldGrabMode"></param>
+            <param name="pNewGrabMode"></param>
+        </member>
+        <member name="M:PhysicsHand.RigidbodyHand.OnMaintainOffsetOverride(GrabSystem.Grabber,GrabSystem.GrabbableObject,System.Boolean@)">
+            <summary>Invoked to give the RigidbodyHand a chance to skip the 'Maintain Offset' update for any maintain offset mode grabbable it may be holding.</summary>
+            <param name="pGrabber"></param>
+            <param name="pGrabbable"></param>
+            <param name="pSkipMaintainOffset"></param>
+        </member>
+        <member name="T:PhysicsHand.UI.Events.UIPointerUnityEvent">
+            <summary>
+            Arg0: Vector3 - The world space position the pointer hit.
+            Arg1: GameObject - The GameObject the pointer hit.
+            </summary>
+        </member>
+        <member name="T:PhysicsHand.UI.RigidbodyHandUIInputModule">
+            <summary>An input module that managements UI inputs for RigidbodyHandUIPointers.</summary>
+            Author: Mathew Aloisio
+        </member>
+        <member name="F:PhysicsHand.UI.RigidbodyHandUIInputModule.m_EventData">
+            <summary>An array of PointerEventData references.</summary>
+        </member>
+        <member name="F:PhysicsHand.UI.RigidbodyHandUIInputModule.m_Pointers">
+            <summary>A list of UI pointers.</summary>
+        </member>
+        <member name="M:PhysicsHand.UI.RigidbodyHandUIInputModule.RegisterUIPointer(PhysicsHand.UI.RigidbodyHandUIPointer)">
+            <summary>Registers a RigidbodyHandUIPointer, pPointer, with the input module.</summary>
+            <param name="pPointer"></param>
+            <returns>an integer representing the index of the newly added UI pointer in the internal pointers array.</returns>
+        </member>
+        <member name="M:PhysicsHand.UI.RigidbodyHandUIInputModule.UnregisterUIPointer(PhysicsHand.UI.RigidbodyHandUIPointer)">
+            <summary>Unregisters a RigidbodyHandUIPointer, pPointer, with the input module.</summary>
+            <param name="pPointer"></param>
+            <returns>true if the UI pointer was removed, otherwise false.</returns>
+        </member>
+        <member name="M:PhysicsHand.UI.RigidbodyHandUIInputModule.RebuildEventData">
+            <summary>Rebuilds the underlying event data array.</summary>
+        </member>
+        <member name="M:PhysicsHand.UI.RigidbodyHandUIInputModule.GetEventData(System.Int32)">
+            <summary>Returns the PointerEventData in the specified index, pIndex, from the underlying event data array.</summary>
+            <param name="pIndex"></param>
+            <returns>the PointerEventData in the specified index, pIndex, from the underlying event data array.</returns>
+        </member>
+        <member name="M:PhysicsHand.UI.RigidbodyHandUIInputModule.Press(System.Int32)">
+            <summary>Invokes a press event for the pointer in the given index.</summary>
+            <param name="pIndex"></param>
+        </member>
+        <member name="M:PhysicsHand.UI.RigidbodyHandUIInputModule.Release(System.Int32)">
+            <summary>Invokes a release event for the pointer in the given index.</summary>
+            <param name="pIndex"></param>
+        </member>
+        <member name="T:PhysicsHand.UI.RigidbodyHandUIPointer">
+            <summary>
+            A simple component that is attached to the same GameObject as a RigidbodyHand which enables UI interaction using the hand system.
+            NOTE: You may only have 1 of these components enabled in a scene at any given time unless you manually configure the 'worldCamera' field of the relevant Canvases.
+            </summary>
+            Author: Mathew Aloisio
+        </member>
+        <member name="T:PhysicsHand.UI.RigidbodyHandUIPointer.Vector3UnityEvent">
+            <summary>
+            Arg0: Vector3 - the Vector3 passed to the event.
+            </summary>
+        </member>
+        <member name="P:PhysicsHand.UI.RigidbodyHandUIPointer.Hand">
+            <summary>A reference to the RigidbodyHand this UI pointer is using.</summary>
+        </member>
+        <member name="P:PhysicsHand.UI.RigidbodyHandUIPointer.UIPointer">
+            <summary>A reference to the UI pointer Transform associated with this component.</summary>
+        </member>
+        <member name="P:PhysicsHand.UI.RigidbodyHandUIPointer.PointerIndex">
+            <summary>The index of this pointer in the relevant RigidbodyHandUIInputModule.</summary>
+        </member>
+        <member name="P:PhysicsHand.UI.RigidbodyHandUIPointer.EventSystem">
+            <summary>A reference to the EventSystem associated with this component.</summary>
+        </member>
+        <member name="P:PhysicsHand.UI.RigidbodyHandUIPointer.InputModule">
+            <summary>A reference to the input module that is managing this pointer.</summary>
+        </member>
+        <member name="P:PhysicsHand.UI.RigidbodyHandUIPointer.Target">
+            <summary>A reference to the current target of the UI pointer, otherwise null.</summary>
+        </member>
+        <member name="P:PhysicsHand.UI.RigidbodyHandUIPointer.LastPointerHit">
+            <summary>The last RaycastHit data from pointer cast.</summary>
+        </member>
+        <member name="P:PhysicsHand.UI.RigidbodyHandUIPointer.PointerRaycastCamera">
+            <summary>A reference to the Camera used by this component to raycast. (Automatically created.)</summary>
+        </member>
+        <member name="P:PhysicsHand.UI.RigidbodyHandUIPointer.IsHovering">
+            <summary>Returns true if this pointer is currently hovering over a target, otherwise false.</summary>
+        </member>
+        <member name="P:PhysicsHand.UI.RigidbodyHandUIPointer.IsAutoPressing">
+            <summary>Returns true if this component is currently auto pressing, otherwise false.</summary>
+        </member>
+        <member name="F:PhysicsHand.UI.RigidbodyHandUIPointer.m_LastPointerHit">
+            <summary>The hidden backing field for the 'LastPointerHit' property.</summary>
+        </member>
+        <member name="M:PhysicsHand.UI.RigidbodyHandUIPointer.Press">
+            <summary>Simulates a press using the UI pointer.</summary>
+        </member>
+        <member name="M:PhysicsHand.UI.RigidbodyHandUIPointer.Release">
+            <summary>Simulates a release using the UI pointer.</summary>
+        </member>
+        <member name="M:PhysicsHand.UI.RigidbodyHandUIPointer.TakeoverWorldCanvases(System.Boolean)">
+            <summary>Finds all Canvas components in the scene and takes control of them.</summary>
+            <param name="pOverride">Should non-null canvas.worldCamera references be overridden? If true yes, otherwise false if you don't want them overridden. (Default: false)</param>
+        </member>
+        <member name="M:PhysicsHand.UI.RigidbodyHandUIPointer.SetAutoPressUIDistance(System.Single)">
+            <summary>Sets the 'autoPressUIDistance' field of this component. Useful for use with Unity editor events.</summary>
+            <param name="pDistance"></param>
+        </member>
+        <member name="M:PhysicsHand.UI.RigidbodyHandUIPointer.SetMaxUIDistance(System.Single)">
+            <summary>A public method that sets the 'maxUIDistance' field of this component. Useful for use with Unity editor events.</summary>
+            <param name="pDistance"></param>
+        </member>
+        <member name="M:PhysicsHand.UI.RigidbodyHandUIPointer.Preprocess">
+            <summary>Gives a chance for RigidbodyHandUIPointers to perform any tasks required before being processed by a RigidbodyHandUIInputModule.</summary>
+        </member>
+        <member name="M:PhysicsHand.UI.RigidbodyHandUIPointer.Raycast(System.Single,UnityEngine.RaycastHit@)">
+            <summary>Performs a Raycast using the relevant UI pointer settings and returns true if something was hit, otherwise false.</summary>
+            <param name="pDistance"></param>
+            <param name="pHitInfo">The 'out' parameter that is filled with RaycastHit information.</param>
+            <returns>true if something was hit, otherwise false.</returns>
+        </member>
+    </members>
+</doc>

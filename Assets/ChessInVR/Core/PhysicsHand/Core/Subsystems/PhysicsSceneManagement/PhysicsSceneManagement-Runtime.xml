@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PhysicsSceneManagement-Runtime</name>
+    </assembly>
+    <members>
+        <member name="T:PhysicsSceneManagement.PhysicsSceneUtility">
+            <summary>
+            A public static class that provides useful methods for working with
+            PhysicsScenes in Unity.
+            </summary>
+            Author: Mathew Aloisio
+        </member>
+        <member name="M:PhysicsSceneManagement.PhysicsSceneUtility.GetLocalPhysicsScene(UnityEngine.GameObject)">
+            <summary>Returns the most appropriate PhysicsScene returning pGameObject's local scene if valid, otherwise Physics.defaultPhysicsScene.</summary>
+            <param name="pGameObject"></param>
+            <returns>the most appropriate PhysicsScene returning pGameObject's local scene if valid, otherwise Physics.defaultPhysicsScene.</returns>
+        </member>
+    </members>
+</doc>

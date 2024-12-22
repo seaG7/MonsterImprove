@@ -1,0 +1,1 @@
+These scripts simply register the types from relevant modules with the 'EditorGhosts' module.
