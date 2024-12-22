@@ -1,0 +1,222 @@
+{
+    "name": "XRHand_InputActions",
+    "maps": [
+        {
+            "name": "XRHand/Left",
+            "id": "ad9e4639-5237-45d4-a28c-290439e41c09",
+            "actions": [
+                {
+                    "name": "Grab",
+                    "type": "Button",
+                    "id": "f41143bd-4531-4b34-9df5-f586da3138d0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Release",
+                    "type": "Button",
+                    "id": "779a86d2-077f-48ef-97b7-15f477640d79",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "c5b4f7c0-7d08-490b-9004-68fe9d8e85d7",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "DistanceGrab",
+                    "type": "Button",
+                    "id": "f2743965-0f91-4654-a3c6-93094771824c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UISelect",
+                    "type": "Button",
+                    "id": "b0ccd4c9-8f5e-495f-8873-e5bfe640ff93",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "04990af3-45f1-42c3-a6db-fcfda55a9bb7",
+                    "path": "<XRController>{LeftHand}/gripPressed",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "70a96b1c-f42f-4295-9a17-8a8ceec25583",
+                    "path": "<XRController>{LeftHand}/gripPressed",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Release",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "87f1715f-ff06-48e4-aa42-8d9df1111a58",
+                    "path": "<XRController>{LeftHand}/thumbstick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "940359d1-1ec7-47c7-bd9e-4c4e1b4eee72",
+                    "path": "<XRController>{LeftHand}/triggerPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DistanceGrab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f03566aa-b1ad-4ca5-8449-f792ea3f27e5",
+                    "path": "<XRController>{LeftHand}/triggerPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UISelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "XRHand/Right",
+            "id": "92d9b2e9-89a2-45ef-a26b-03a0cf8937a9",
+            "actions": [
+                {
+                    "name": "Grab",
+                    "type": "Button",
+                    "id": "ebc133ab-b3d1-4f7a-b2c9-9aeecdb4af52",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Release",
+                    "type": "Button",
+                    "id": "b098bac6-0521-49c2-b5d9-9e5ca3529573",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Rotate",
+                    "type": "Value",
+                    "id": "48032f7a-1c10-48f9-98b5-0e08bd250c74",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "DistanceGrab",
+                    "type": "Button",
+                    "id": "5ac6085d-a9e5-4e39-9253-bd80e38c6d0b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UISelect",
+                    "type": "Button",
+                    "id": "74f9eb4c-6578-4474-b658-7fdf1e2aa407",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "ae5bb1f7-00dc-4c87-b7bc-823857f668ea",
+                    "path": "<XRController>{RightHand}/gripPressed",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Grab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bbec5a40-0186-4730-a1ca-0ceb531c4156",
+                    "path": "<XRController>{RightHand}/gripPressed",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Release",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b463cb55-4cb8-4648-96d4-a350605a1447",
+                    "path": "<XRController>{RightHand}/thumbstick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9a92c4f6-930c-4611-a6eb-6986d2bcb7ee",
+                    "path": "<XRController>{RightHand}/triggerPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DistanceGrab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1fc8a907-3bb7-474a-ae7a-1c8ede910358",
+                    "path": "<XRController>{RightHand}/triggerPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UISelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

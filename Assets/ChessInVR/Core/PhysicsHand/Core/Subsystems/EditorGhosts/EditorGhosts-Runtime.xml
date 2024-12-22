@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EditorGhosts-Runtime</name>
+    </assembly>
+    <members>
+        <member name="T:EditorGhosts.EditorGhost">
+            <summary>A component that is attached to editor ghosts to easily track them.</summary>
+            Author: Mathew Aloisio
+        </member>
+    </members>
+</doc>

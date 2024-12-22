@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PhysicsHand-Editor</name>
+    </assembly>
+    <members>
+        <member name="T:PhysicsHand.Editor.PhysicsHandEditorManager">
+            <summary>
+            A static class that provides some useful functionality for keeping everything calculated and up-to-date while working in the editor.
+            </summary>
+            Author: Mathew Aloisio
+        </member>
+    </members>
+</doc>
