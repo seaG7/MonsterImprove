@@ -73,8 +73,8 @@ namespace ChessInVR.Calibration
                 if (!gameManager.IsWhiteAIEnabled)
                 {
                     // Calibrate to white pose.
-                    desiredPosition = whiteReferenceTransform.TransformPoint(offset);
-                    positionTransform.forward = whiteReferenceTransform.forward;
+                    //desiredPosition = whiteReferenceTransform.TransformPoint(offset);
+                    //positionTransform.forward = whiteReferenceTransform.forward;
                 }
                 // OTherwise black must be a non-AI team, calibrate to black pose.
                 else
@@ -86,7 +86,7 @@ namespace ChessInVR.Calibration
             }
 
             // Move the entire 'positionTransform' so that the 'relativeTransform' is in the same position as the 'desiredPosition'.
-            positionTransform.position += desiredPosition - relativeTransform.position;
+            //positionTransform.position += desiredPosition - relativeTransform.position;
         }
         #endregion
     }
