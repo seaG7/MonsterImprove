@@ -3825,13 +3825,13 @@ MonoBehaviour:
   _cdController: {fileID: 0}
   _animator: {fileID: 0}
   _hp: 80
-  _speed: 1
+  _speed: 0.7
   _strength: 8
   _attackRange: 0.47
   isAttacking: 0
   _fireball: {fileID: 5906165136450168134, guid: 61e222fb0060a4142ba543cdabbaa719,
     type: 3}
-  _xpByKill: 40
+  _xpByKill: 10
   _hpSlider: {fileID: 294276033975550348}
   _canvasTransform: {fileID: 8325220482623156725}
 --- !u!54 &5685678188153345531

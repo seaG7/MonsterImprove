@@ -120,6 +120,7 @@ public class EnemyDragonBehaviour : MonoBehaviour
 		_game = FindAnyObjectByType<GameController>();
 		_menuController = FindAnyObjectByType<MenuController>();
 		_animator = GetComponent<Animator>();
+		_menuController.StartBattle();
 		_game._enemyDragon = gameObject;
 		_game._enemyStrength = _strength;
 		

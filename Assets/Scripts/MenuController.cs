@@ -243,7 +243,7 @@ public class MenuController : MonoBehaviour
 				_mainMenuButtons[_mainMenuButtons.Length-1].gameObject.SetActive(false);
 			_exitModeButtons[0].gameObject.SetActive(false);
 		}
-		_mainMenuButtons[2].gameObject.SetActive(true);
+		_mainMenuButtons[2].gameObject.SetActive(false);
 		_sectionIconsWindow.SetActive(true);
 		_volumeChangerWindow.SetActive(true);
 	}
@@ -285,6 +285,7 @@ public class MenuController : MonoBehaviour
 		{
 			_selectionWindows[i].SetActive(false);
 		}
+		ToSelectionByIndex(0);
 		_exitModeButtons[0].gameObject.SetActive(true);
 		_sectionIconsWindow.SetActive(false);
 		_volumeChangerWindow.SetActive(false);

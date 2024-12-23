@@ -128,7 +128,7 @@ public class DragonBehaviour : MonoBehaviour
 		_game._cdIndex = _id;
 		_game._cdController = GetComponent<DragonBehaviour>();
 		StartCoroutine(Turn(FindAnyObjectByType<Camera>().transform.position));
-		_menuController._mainMenuButtons[2].gameObject.SetActive(true);
+		_menuController._mainMenuButtons[2].gameObject.SetActive(false);
 		_menuController._mainMenuButtons[3].gameObject.SetActive(true);
 	}
 	public void EnableCanvas()
