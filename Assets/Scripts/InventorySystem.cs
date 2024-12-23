@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.XPath;
 using UnityEngine;
 using VRDebug;
 
@@ -56,10 +57,18 @@ public class InventorySystem : MonoBehaviour
 	}
 	public int CalculateMaxLevelXp(int id)
 	{
-		return _levelsXp[CalculateLevel(id)];
+		if (CalculateLevel(id) != 5)
+			return _levelsXp[CalculateLevel(id)];
+		else
+			return 215;
 	}
 	public void GainXp(int id, int amount)
 	{
+		if (_xp[id] != 0)
+		{
+			StopCoroutine(_game._cdController.DealDamage());
+			StartCoroutine(_game.Kill(_game._enemyDragon));
+		}
 		int _currentLevel = CalculateLevel(id);
 		_xp[id] += amount;
 		if (CalculateLevel(id) > _currentLevel)

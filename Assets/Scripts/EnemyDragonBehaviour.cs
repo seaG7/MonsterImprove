@@ -117,18 +117,18 @@ public class EnemyDragonBehaviour : MonoBehaviour
 		_cdController._edController = GetComponent<EnemyDragonBehaviour>();
 		EnableCanvas();
 		_cdController.EnableCanvas();
-		_game = FindAnyObjectByType<GameController>();
 		_menuController = FindAnyObjectByType<MenuController>();
+		_game = FindAnyObjectByType<GameController>();
 		_animator = GetComponent<Animator>();
-		_menuController.StartBattle();
 		_game._enemyDragon = gameObject;
 		_game._enemyStrength = _strength;
 		
 		_game.needToFight = true;
 		_cdController.needToTurn = true;
-		StartCoroutine(_cdController.TurnInFight());
+		StartCoroutine(_cdController.Turn(_game._enemyDragon.transform.position));
 		StartCoroutine(Turn(_game._currentDragon.transform.position));
 		StartCoroutine(FlyToTarget());
+		_menuController.StartBattle();
 	}
 	private void EnableCanvas()
 	{
@@ -167,11 +167,15 @@ public class EnemyDragonBehaviour : MonoBehaviour
 				_menuController.UpdateDragonsDisplay();
 				_menuController.UpdateEnemyDragonsDisplay();
 				_menuController.ExitMode();
+				StopCoroutine(DealDamage());
 			}
-			yield return new WaitForSeconds(0.6f);
-			_collisionDetected = false;
+			else
+			{
+				yield return new WaitForSeconds(0.6f);
+				_collisionDetected = false;
+			}
 		}
-		if (_cdController != null)
+		if (_menuController.edIndex != -1 && _menuController.cdIndex != -1)
 		{
 			StopCoroutine(_cdController.ComeCloser());
 			StartCoroutine(_cdController.ComeCloser());

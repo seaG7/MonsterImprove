@@ -22,7 +22,7 @@ public class EggBehaviour : MonoBehaviour
 		Vector3 _spawnPos = transform.position;
 		
 		yield return new WaitForSeconds(_hatchingTime);
-		_game._currentDragon = Instantiate(_dragon, _spawnPos, Quaternion.identity);
+		Instantiate(_dragon, _spawnPos, Quaternion.identity);
 		
 		_animator.SetInteger("Crack", 1);
 		

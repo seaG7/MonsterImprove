@@ -55,7 +55,7 @@ public class DragonBehaviour : MonoBehaviour
 	public IEnumerator SetHatchingFalse()
 	{
 		_animator.SetBool("IsLevelUp", true);
-		_inventory.GainXp(_id, 5);
+		_inventory.GainXp(_id, 10);
 		yield return new WaitForSeconds(2f);
 		_animator.SetBool("IsLevelUp", false);
 		_animator.SetBool("IsInspect", true);
@@ -63,7 +63,11 @@ public class DragonBehaviour : MonoBehaviour
 		_animator.SetBool("IsInspect", false);
 	}
 	private IEnumerator Inspect()
-	{
+	{	
+		if (_inventory._xp[_id] == 0)
+		{
+			_inventory.GainXp(_id, 10);
+		}
 		_animator.SetBool("IsInspect", true);
 		yield return new WaitForSeconds(3f);
 		_animator.SetBool("IsInspect", false);
@@ -99,7 +103,10 @@ public class DragonBehaviour : MonoBehaviour
 	{
 		_inventory = FindAnyObjectByType<InventorySystem>();
 		_game = FindAnyObjectByType<GameController>();
+		if (_game._cdIndex != -1 && !_game.isSwitching)
+			Destroy(_game._currentDragon);
 		_animator = GetComponent<Animator>();
+		_game._cdController = GetComponent<DragonBehaviour>();
 		if (!_game.isSwitching)
 		{
 			while (!FindAnyObjectByType<PlacementManager>().isDragged)
@@ -109,7 +116,7 @@ public class DragonBehaviour : MonoBehaviour
 			if (_inventory._xp[_id] == 0)
 			{
 				transform.Find("SelectionVisualization").gameObject.SetActive(false);
-				StartCoroutine(SetHatchingFalse());
+				_inventory.GainXp(_id, 10);
 			}
 			else
 			{
@@ -126,10 +133,8 @@ public class DragonBehaviour : MonoBehaviour
 		_hp = _inventory._hp[_id];
 		_game._currentDragon = gameObject;
 		_game._cdIndex = _id;
-		_game._cdController = GetComponent<DragonBehaviour>();
 		StartCoroutine(Turn(FindAnyObjectByType<Camera>().transform.position));
 		_menuController._mainMenuButtons[2].gameObject.SetActive(false);
-		_menuController._mainMenuButtons[3].gameObject.SetActive(true);
 	}
 	public void EnableCanvas()
 	{
@@ -164,6 +169,10 @@ public class DragonBehaviour : MonoBehaviour
 		_effectPos.y += 0.2f;
 		Instantiate(_game._levelUpEffect, _effectPos, Quaternion.identity);
 		_animator.SetBool("IsLevelUp", false);
+		if (_inventory._xp[_id] == 10)
+		{
+			StartCoroutine(Inspect());
+		}
 	}
 	public void FlyIdleShoot()
 	{
@@ -250,22 +259,12 @@ public class DragonBehaviour : MonoBehaviour
 		yield return new WaitForSeconds(1.5f);
 		needToShoot = true;
 	}
-	public IEnumerator TurnInFight()
-	{
-		while (_game.needToFight && _hp > 0)
-		{
-			if (needToTurn)
-			{
-				needToTurn = false;
-				StartCoroutine(Turn(_game._enemyDragon.transform.position));
-			}
-			yield return null;
-		}
-	}
 	public IEnumerator DealDamage()
 	{
 		if (isAttacking)
 		{
+			if (_game._enemyDragon != null)
+				StartCoroutine(Turn(_game._enemyDragon.transform.position));
 			_collisionDetected = true;
 			isAttacking = false;
 			_edController._hp -= _inventory._strength[_id];
@@ -280,15 +279,15 @@ public class DragonBehaviour : MonoBehaviour
 				
 				_menuController.edIndex = -1;
 				_inventory._kills++;
-				StartCoroutine(_game.Kill(_game._enemyDragon));
 				_hp = _inventory._hp[_id];
 				_inventory.GainXp(_id, _edController._xpByKill);
+				StopCoroutine(DealDamage());
 			}
 			
 			yield return new WaitForSeconds(0.6f);
 			_collisionDetected = false;
 		}
-		if (_edController != null)
+		if (_menuController.edIndex != -1)
 		{
 			StopCoroutine(_edController.ComeCloser());
 			StartCoroutine(_edController.ComeCloser());

@@ -136,12 +136,16 @@ public class MenuController : MonoBehaviour
 			}
 			_levelTexts[i].text = _inventory.CalculateLevel(i).ToString();
 			if (_inventory.CalculateLevel(i) == 5)
+			{
 				_xpTexts[i].text = "MAX";
+				_cdXpSliders[i].value = _cdXpSliders[i].maxValue;
+			}
 			else
 				_xpTexts[i].text = $"{_inventory.CalculateCurrentLevelXp(i)}/{_inventory.CalculateMaxLevelXp(i)}";
 			_cdXpSliders[i].minValue = 0;
+			if (_inventory.CalculateLevel(i) != 5)
+				_cdXpSliders[i].value = _inventory.CalculateCurrentLevelXp(i);
 			_cdXpSliders[i].maxValue = _inventory.CalculateMaxLevelXp(i);
-			_cdXpSliders[i].value = _inventory.CalculateCurrentLevelXp(i);
 		}
 	}
 	public void UpdateEnemyDragonsDisplay()
@@ -195,7 +199,7 @@ public class MenuController : MonoBehaviour
 		{
 			for (int i = 0; i < _enemyDragonButtons.Length; i++)
 			{
-				if (EventSystem.current.currentSelectedGameObject.GetComponent<Button>() == _enemyDragonButtons[i] && _awardObjects[i].activeInHierarchy)
+				if (EventSystem.current.currentSelectedGameObject.GetComponent<Button>() == _enemyDragonButtons[i] && _awardObjects[i].activeInHierarchy && cdIndex != -1)
 				{
 					if (edIndex > -1)
 						_chosenEDSprites[edIndex].SetActive(false);
@@ -238,10 +242,15 @@ public class MenuController : MonoBehaviour
 		}
 		else
 		{
+			edIndex = -1;
+			UpdateEnemyDragonsDisplay();
 			_game.needToFight = false;
 			if (_game._currentDragon == null)
 				_mainMenuButtons[_mainMenuButtons.Length-1].gameObject.SetActive(false);
 			_exitModeButtons[0].gameObject.SetActive(false);
+			StopCoroutine(_game._cdController.DealDamage());
+			Destroy(_game._enemyDragon);
+			_game._cdController.DisableCanvas();
 		}
 		_mainMenuButtons[2].gameObject.SetActive(false);
 		_sectionIconsWindow.SetActive(true);
@@ -289,7 +298,6 @@ public class MenuController : MonoBehaviour
 		_exitModeButtons[0].gameObject.SetActive(true);
 		_sectionIconsWindow.SetActive(false);
 		_volumeChangerWindow.SetActive(false);
-		StartCoroutine(_game.TurnCD(_game._enemyDragon.transform.position));
 	}
 	public void UpdateTargetCountDisplay()
 	{

@@ -31,7 +31,6 @@ public class GameController : MonoBehaviour
 	public bool isSwitching = false;
 	[SerializeField] public GameObject[] _fightEffects;
 	[SerializeField] public GameObject _levelUpEffect;
-	public bool isPlacingDragon = false;
 	void Start()
 	{
 		
@@ -39,8 +38,6 @@ public class GameController : MonoBehaviour
 	public void SelectCD(int index)
 	{
 		ClearQueueSpawn();
-		if (_cdIndex != -1)
-			Destroy(FindAnyObjectByType<DragonBehaviour>());
 		switch (_inventory.CalculateLevel(index))
 		{
 			case 0:
@@ -68,7 +65,6 @@ public class GameController : MonoBehaviour
 		ClearQueueSpawn();
 		if (_EDs.Length > index)
 			ToQueueSpawn(_EDs[index]);
-		isPlacingDragon = true;
 	}
 	public IEnumerator MinigameFireball(int _countOfTargets)
 	{
@@ -122,7 +118,6 @@ public class GameController : MonoBehaviour
 	{
 		if (needToFight)
 		{
-			StartCoroutine(TurnCD(_enemyDragon.transform.position));
 			StartCoroutine(_cdController.SetAttackState(1));
 		}
 	}
@@ -130,7 +125,6 @@ public class GameController : MonoBehaviour
 	{
 		if (needToFight)
 		{
-			StartCoroutine(TurnCD(_enemyDragon.transform.position));
 			StartCoroutine(_cdController.SetAttackState(2));
 		}
 	}
@@ -138,7 +132,6 @@ public class GameController : MonoBehaviour
 	{
 		if (needToFight)
 		{
-			StartCoroutine(TurnCD(_enemyDragon.transform.position));
 			StartCoroutine(_cdController.SetAttackState(3));
 		}
 	}
@@ -146,7 +139,6 @@ public class GameController : MonoBehaviour
 	{
 		if (needToFight)
 		{
-			StartCoroutine(TurnCD(_enemyDragon.transform.position));
 			StartCoroutine(_cdController.SetAttackState(4));
 		}
 	}
@@ -184,20 +176,9 @@ public class GameController : MonoBehaviour
 	{
 		_cdController.FlyIdleShoot();
 	}
-	public IEnumerator TurnCD(Vector3 lookAt)
-	{
-		lookAt = lookAt - _currentDragon.transform.position;
-		Quaternion _targetRot = Quaternion.LookRotation(lookAt);
-		_targetRot.x = _currentDragon.transform.rotation.x;
-		_targetRot.z = _currentDragon.transform.rotation.z;
-		while (transform.rotation != _targetRot)
-		{
-			_currentDragon.transform.rotation = Quaternion.Slerp(_currentDragon.transform.rotation, _targetRot, 4 * Time.deltaTime);
-			yield return null;
-		}
-	}
 	public void SwitchGrowth()
 	{
+		StartCoroutine(Kill(_enemyDragon));
 		Vector3 _dragonPos = FindAnyObjectByType<DragonBehaviour>().gameObject.transform.position;
 		Destroy(FindAnyObjectByType<DragonBehaviour>().gameObject);
 		isSwitching = true;
