@@ -280,16 +280,19 @@ public class DragonBehaviour : MonoBehaviour
 				
 				_menuController.edIndex = -1;
 				_inventory._kills++;
-				_inventory.GainXp(_id, _edController._xpByKill);
 				StartCoroutine(_game.Kill(_game._enemyDragon));
 				_hp = _inventory._hp[_id];
+				_inventory.GainXp(_id, _edController._xpByKill);
 			}
 			
 			yield return new WaitForSeconds(0.6f);
 			_collisionDetected = false;
 		}
-		StopCoroutine(_edController.ComeCloser());
-		StartCoroutine(_edController.ComeCloser());
+		if (_edController != null)
+		{
+			StopCoroutine(_edController.ComeCloser());
+			StartCoroutine(_edController.ComeCloser());
+		}
 	}
 	public IEnumerator ComeCloser()
 	{

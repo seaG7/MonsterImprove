@@ -178,7 +178,7 @@ public class MenuController : MonoBehaviour
 		{
 			if (EventSystem.current.currentSelectedGameObject.GetComponent<Button>() == _dragonButtons[i])
 			{
-				if (_inventory._dragonIndexes.Contains(i))
+				if (_inventory._dragonIndexes.Contains(i) && cdIndex != i)
 				{
 					if (cdIndex > -1)
 						_chosenCDSprites[cdIndex].SetActive(false);
@@ -306,5 +306,6 @@ public class MenuController : MonoBehaviour
 		Destroy(_game._currentDragon);
 		cdIndex = -1;
 		UpdateDragonsDisplay();
+		_mainMenuButtons[3].gameObject.SetActive(false);
 	}
 }

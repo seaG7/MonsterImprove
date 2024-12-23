@@ -170,8 +170,11 @@ public class EnemyDragonBehaviour : MonoBehaviour
 			yield return new WaitForSeconds(0.6f);
 			_collisionDetected = false;
 		}
-		StopCoroutine(_cdController.ComeCloser());
-		StartCoroutine(_cdController.ComeCloser());
+		if (_cdController != null)
+		{
+			StopCoroutine(_cdController.ComeCloser());
+			StartCoroutine(_cdController.ComeCloser());
+		}
 	}
 	public IEnumerator ComeCloser()
 	{

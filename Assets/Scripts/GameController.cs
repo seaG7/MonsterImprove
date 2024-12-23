@@ -38,6 +38,8 @@ public class GameController : MonoBehaviour
 	public void SelectCD(int index)
 	{
 		ClearQueueSpawn();
+		if (_cdIndex != -1)
+			Destroy(FindAnyObjectByType<DragonBehaviour>());
 		switch (_inventory.CalculateLevel(index))
 		{
 			case 0:
@@ -63,6 +65,7 @@ public class GameController : MonoBehaviour
 	public void SelectED(int index)
 	{
 		ClearQueueSpawn();
+		Destroy(FindAnyObjectByType<EnemyDragonBehaviour>());
 		if (_EDs.Length > index)
 			ToQueueSpawn(_EDs[index]);
 	}
@@ -101,8 +104,8 @@ public class GameController : MonoBehaviour
 		
 		while (!isColliding)
 		{
-			_spawnPos.x = _startPos.x + Random.Range(-1f, 1f);
-			_spawnPos.z = _startPos.z + Random.Range(-1f, 1f);
+			_spawnPos.x = _startPos.x + Random.Range(-0.8f, 0.8f);
+			_spawnPos.z = _startPos.z + Random.Range(-0.8f, 0.8f);
 			_spawnPos.y = _startPos.y + Random.Range(0.25f, 1.2f);
 			isColliding = true;
 			Ray _ray = new Ray(_spawnPos, Vector3.down);
