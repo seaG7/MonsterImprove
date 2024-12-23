@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
 public class GameController : MonoBehaviour
@@ -9,7 +8,7 @@ public class GameController : MonoBehaviour
 	[SerializeField] private InventorySystem _inventory;
 	[SerializeField] private PlacementManager _placementManager;
 	[SerializeField] private MenuController _menuController;
-	[SerializeField] private PlaneClassification targetPlaneClassification;
+	[SerializeField] private List<PlaneClassification> targetPlaneClassifications;
 	public DragonBehaviour _cdController;
 	[SerializeField] GameObject[] _eggs;
 	[SerializeField] GameObject[] _CDs;
@@ -30,49 +29,34 @@ public class GameController : MonoBehaviour
 	public int _enemyStrength = 0;
 	public bool isSwitching = false;
 	[SerializeField] public GameObject[] _fightEffects;
+	[SerializeField] public GameObject _levelUpEffect;
 	void Start()
 	{
 		
 	}
-	public void SpawnHatchingEgg()
-	{
-		if (!needToFight)
-		{
-			ClearQueueSpawn();
-			ToQueueSpawn(_eggs[0]);
-		}
-	}
-	public void StartFight()
+	public void SelectCD(int index)
 	{
 		ClearQueueSpawn();
-		ToQueueSpawn(_EDs[0]);
-	}
-	public void SelectCD(int index) // поставить префабы в порядке синий мал ср бол, красный мал ср бол и тд
-	{
-		ClearQueueSpawn();
-		if (_CDs.Length > 3*(index+1)-1 && _eggs.Length > index)
+		switch (_inventory.CalculateLevel(index))
 		{
-			switch (_inventory.CalculateLevel(index))
-			{
-				case 0:
-					ToQueueSpawn(_eggs[index]);
-					break;
-				case 1:
-					ToQueueSpawn(_CDs[3*(index+1)-3]);
-					break;
-				case 2:
-					ToQueueSpawn(_CDs[3*(index+1)-3]);
-					break;
-				case 3:
-					ToQueueSpawn(_CDs[3*(index-1)-2]);
-					break;
-				case 4:
-					ToQueueSpawn(_CDs[3*(index-1)-1]);
-					break;
-				case 5:
-					ToQueueSpawn(_CDs[3*(index-1)-1]);
-					break;
-			}
+			case 0:
+				ToQueueSpawn(_eggs[index]);
+				break;
+			case 1:
+				ToQueueSpawn(_CDs[3*(index+1)-3]);
+				break;
+			case 2:
+				ToQueueSpawn(_CDs[3*(index+1)-3]);
+				break;
+			case 3:
+				ToQueueSpawn(_CDs[3*(index+1)-2]);
+				break;
+			case 4:
+				ToQueueSpawn(_CDs[3*(index+1)-2]);
+				break;
+			case 5:
+				ToQueueSpawn(_CDs[3*(index+1)-1]);
+				break;
 		}
 	}
 	public void SelectED(int index)
@@ -95,7 +79,6 @@ public class GameController : MonoBehaviour
 			if (_destroyedTargetsAmount >= _countOfTargets)
 			{
 				_menuController.ExitMode();
-				isMiniGaming = false;
 			}
 			yield return null;
 		}
@@ -125,7 +108,7 @@ public class GameController : MonoBehaviour
 			// RaycastHit _hit;
 			// if (Physics.Raycast(_ray, out _hit))
 			// {
-			// 	isColliding = _hit.transform.TryGetComponent(out ARPlane arPlane) && ((arPlane.classification & targetPlaneClassification) != 0);
+			// 	isColliding = raycastHit.transform.TryGetComponent(out ARPlane arPlane) && targetPlaneClassifications.Contains(arPlane.classification);
 			// }
 		}
 		return _spawnPos;
@@ -136,7 +119,6 @@ public class GameController : MonoBehaviour
 		{
 			StartCoroutine(TurnCD(_enemyDragon.transform.position));
 			StartCoroutine(_cdController.SetAttackState(1));
-			FindAnyObjectByType<DragonBehaviour>().isAttacking = true;
 		}
 	}
 	public void GestureAttack2()
@@ -145,7 +127,6 @@ public class GameController : MonoBehaviour
 		{
 			StartCoroutine(TurnCD(_enemyDragon.transform.position));
 			StartCoroutine(_cdController.SetAttackState(2));
-			FindAnyObjectByType<DragonBehaviour>().isAttacking = true;
 		}
 	}
 	public void GestureAttack3()
@@ -154,7 +135,6 @@ public class GameController : MonoBehaviour
 		{
 			StartCoroutine(TurnCD(_enemyDragon.transform.position));
 			StartCoroutine(_cdController.SetAttackState(3));
-			FindAnyObjectByType<DragonBehaviour>().isAttacking = true;
 		}
 	}
 	public void GestureAttack4()
@@ -163,7 +143,6 @@ public class GameController : MonoBehaviour
 		{
 			StartCoroutine(TurnCD(_enemyDragon.transform.position));
 			StartCoroutine(_cdController.SetAttackState(4));
-			FindAnyObjectByType<DragonBehaviour>().isAttacking = true;
 		}
 	}
 	public void StopGestureAttack()
@@ -192,7 +171,7 @@ public class GameController : MonoBehaviour
 	}
 	public IEnumerator Kill(GameObject _object)
 	{
-		yield return new WaitForSecondsRealtime(2f);
+		yield return new WaitForSeconds(2f);
 		
 		Destroy(_object);
 	}
@@ -214,18 +193,12 @@ public class GameController : MonoBehaviour
 	}
 	public void SwitchGrowth()
 	{
-		Transform _transform = _currentDragon.transform;
-		Destroy(_currentDragon);
-		switch (_inventory.CalculateLevel(_cdIndex))
-		{
-			case 3:
-				_currentDragon = Instantiate(_CDs[3 * (_cdIndex - 1) - 2]);
-				isSwitching = true;
-				break;
-			case 5:
-				_currentDragon = Instantiate(_CDs[3 * (_cdIndex - 1) - 1]);
-				isSwitching = true;
-				break;
-		}
+		Vector3 _dragonPos = FindAnyObjectByType<DragonBehaviour>().gameObject.transform.position;
+		Destroy(FindAnyObjectByType<DragonBehaviour>().gameObject);
+		isSwitching = true;
+		if (_inventory.CalculateLevel(_cdIndex) == 3)
+			_currentDragon = Instantiate(_CDs[3 * (_cdIndex + 1) - 2], _dragonPos, Quaternion.identity);
+		else
+			_currentDragon = Instantiate(_CDs[3 * (_cdIndex + 1) - 1], _dragonPos, Quaternion.identity);
 	}
 }

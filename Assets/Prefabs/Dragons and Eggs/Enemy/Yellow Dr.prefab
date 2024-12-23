@@ -133,14 +133,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e1e41e348e3e1544bd76acd061e3100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cdController: {fileID: 0}
   _animator: {fileID: 0}
   _hp: 50
   _speed: 1
   _strength: 5
   _attackRange: 1.5
+  isAttacking: 0
   _fireball: {fileID: 5906165136450168134, guid: 61e222fb0060a4142ba543cdabbaa719,
     type: 3}
   _xpByKill: 0
+  _hpSlider: {fileID: 0}
+  _canvasTransform: {fileID: 0}
 --- !u!54 &1665828516737386185
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -971,7 +975,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ec619fc55edd2df4bb7a9d34f6105a5d, type: 2}
+  - {fileID: 2100000, guid: 9a98aa51cc3e297459e7b63213bc119c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

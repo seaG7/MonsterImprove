@@ -21,12 +21,12 @@ public class EggBehaviour : MonoBehaviour
 	{
 		Vector3 _spawnPos = transform.position;
 		
-		yield return new WaitForSecondsRealtime(_hatchingTime);
+		yield return new WaitForSeconds(_hatchingTime);
 		_game._currentDragon = Instantiate(_dragon, _spawnPos, Quaternion.identity);
 		
 		_animator.SetInteger("Crack", 1);
 		
-		yield return new WaitForSecondsRealtime(2f);
+		yield return new WaitForSeconds(2f);
 		Destroy(gameObject);
 	}
 	private IEnumerator Init()

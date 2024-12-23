@@ -13,8 +13,6 @@ public class QuickMenuUI : MonoBehaviour
 	{
 		_game = FindAnyObjectByType<GameController>();
 		resetRoomButton.onClick.AddListener(ResetRoom);
-		spawnEggButton.onClick.AddListener(_game.SpawnHatchingEgg);
-		battleButton.onClick.AddListener(_game.StartFight);
 	  	exitButton.onClick.AddListener(Exit);
 		minigameButton.onClick.AddListener(StartMinigame);
 	}

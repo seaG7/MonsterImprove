@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
-using Unity.VisualScripting;
+using System.Linq;
 
 public class MenuController : MonoBehaviour
 {
@@ -10,7 +10,7 @@ public class MenuController : MonoBehaviour
 	[SerializeField] Button[] _selectionButtons;
 	[SerializeField] Button[] _dragonButtons;
 	[SerializeField] Button[] _enemyDragonButtons;
-	[SerializeField] public Button[] _mainMenuButtons; // 0 - reset room 1 - exit 2 - minigame 3 - volume changer
+	[SerializeField] public Button[] _mainMenuButtons; // 0 - reset room 1 - exit 2 - minigame 3 - remove dragon
 	[SerializeField] Button[] _exitModeButtons; // 0 - exit minigame 1 - exit battle
 	[Header("GameObjects")]
 	[SerializeField] GameObject _volumeChangerWindow;
@@ -20,9 +20,16 @@ public class MenuController : MonoBehaviour
 	[SerializeField] GameObject _exitMiniGameWindow;
 	[SerializeField] GameObject[] _chosenCDSprites; // current dragon chosen sprites
 	[SerializeField] GameObject[] _chosenEDSprites; // enemy dragon chosen sprites
+	[SerializeField] GameObject[] _statsObjects;
+	[SerializeField] GameObject[] _lockedObjects;
+	[SerializeField] GameObject[] _awardObjects;
+	[SerializeField] GameObject[] _requiredObjects;
 	[Header("Texts")]
 	[SerializeField] TextMeshProUGUI[] _levelTexts;
 	[SerializeField] TextMeshProUGUI[] _xpTexts;
+	[SerializeField] TextMeshProUGUI[] _hpTexts;
+	[SerializeField] TextMeshProUGUI[] _killsTexts;
+	[SerializeField] TextMeshProUGUI[] _requiredTexts;
 	[SerializeField] TextMeshProUGUI _destroyedTargetsAmountText; // used in FireballBehaviour OnCollisionEnter
 	[SerializeField] TextMeshProUGUI _maxTargetsText;
 	[Header("Sliders")]
@@ -52,6 +59,7 @@ public class MenuController : MonoBehaviour
 		_mainMenuButtons[0].onClick.AddListener(ResetRoom);
 		_mainMenuButtons[1].onClick.AddListener(Exit);
 		_mainMenuButtons[2].onClick.AddListener(StartMiniGame);
+		_mainMenuButtons[3].onClick.AddListener(RemoveDragon);
 		foreach (var exitModeButton in _exitModeButtons)
 			exitModeButton.onClick.AddListener(ExitMode);
 		_volumeSlider.onValueChanged.AddListener(SetVolume);
@@ -95,6 +103,14 @@ public class MenuController : MonoBehaviour
 			}
 		}
 	}
+	private void ToSelectionByIndex(int index)
+	{
+		_selectionWindows[selectionIndex].SetActive(false);
+		_selectionFocuses[selectionIndex].SetActive(false);
+		selectionIndex = index;
+		_selectionWindows[index].SetActive(true);
+		_selectionFocuses[index].SetActive(true);
+	}
 	public void UpdateDragonsDisplay()
 	{
 		for (int i = 0; i < _dragonButtons.Length; i++)
@@ -106,6 +122,17 @@ public class MenuController : MonoBehaviour
 			else
 			{
 				_chosenCDSprites[i].SetActive(true);
+			}
+			if (_inventory._dragonIndexes.Contains(i))
+			{
+				_statsObjects[i].SetActive(true);
+				_lockedObjects[i].SetActive(false);
+				_hpTexts[i].text = _inventory._hp[i].ToString();
+			}
+			else
+			{
+				_statsObjects[i].SetActive(false);
+				_lockedObjects[i].SetActive(true);
 			}
 			_levelTexts[i].text = _inventory.CalculateLevel(i).ToString();
 			if (_inventory.CalculateLevel(i) == 5)
@@ -129,6 +156,20 @@ public class MenuController : MonoBehaviour
 			{
 				_chosenEDSprites[i].SetActive(true);
 			}
+			_killsTexts[i].text = $"{_inventory._kills}/";
+			if (int.TryParse(_requiredTexts[i].text, out int number))
+			{
+				if (_inventory._kills >= number)
+				{
+					_awardObjects[i].SetActive(true);
+					_requiredObjects[i].SetActive(false);
+				}
+				else
+				{
+					_awardObjects[i].SetActive(false);
+					_requiredObjects[i].SetActive(true);
+				}
+			}
 		}
 	}
 	private void SelectDragon()
@@ -150,15 +191,18 @@ public class MenuController : MonoBehaviour
 	}
 	private void SelectEnemyDragon()
 	{
-		for (int i = 0; i < _enemyDragonButtons.Length; i++)
+		if (cdIndex > -1)
 		{
-			if (EventSystem.current.currentSelectedGameObject.GetComponent<Button>() == _enemyDragonButtons[i])
+			for (int i = 0; i < _enemyDragonButtons.Length; i++)
 			{
-				if (edIndex > -1)
-					_chosenEDSprites[edIndex].SetActive(false);
-				edIndex = i;
-				_chosenEDSprites[i].SetActive(true);
-				_game.SelectED(edIndex);
+				if (EventSystem.current.currentSelectedGameObject.GetComponent<Button>() == _enemyDragonButtons[i] && _awardObjects[i].activeInHierarchy)
+				{
+					if (edIndex > -1)
+						_chosenEDSprites[edIndex].SetActive(false);
+					edIndex = i;
+					_chosenEDSprites[i].SetActive(true);
+					_game.SelectED(edIndex);
+				}
 			}
 		}
 	}
@@ -178,12 +222,11 @@ public class MenuController : MonoBehaviour
 	}
 	public void ExitMode()
 	{
-		if (_game.needToFight)
+		for (int i = 0; i < _mainMenuButtons.Length - 1; i++)
 		{
-			_game.needToFight = false;
-			_exitModeButtons[0].gameObject.SetActive(false);
+			_mainMenuButtons[i].gameObject.SetActive(true);
 		}
-		else if (_game.isMiniGaming)
+		if (_game.isMiniGaming)
 		{
 			_game.isMiniGaming = false;
 			foreach (var target in _game._targets)
@@ -191,12 +234,16 @@ public class MenuController : MonoBehaviour
 				Destroy(target);
 			}
 			_exitMiniGameWindow.SetActive(false);
+			_mainMenuButtons[_mainMenuButtons.Length-1].gameObject.SetActive(true);
 		}
-		foreach (var button in _mainMenuButtons)
+		else
 		{
-			button.gameObject.SetActive(true);
+			_game.needToFight = false;
+			if (_game._currentDragon == null)
+				_mainMenuButtons[_mainMenuButtons.Length-1].gameObject.SetActive(false);
+			_exitModeButtons[0].gameObject.SetActive(false);
 		}
-		_mainMenuButtons[2].gameObject.SetActive(false);
+		_mainMenuButtons[2].gameObject.SetActive(true);
 		_sectionIconsWindow.SetActive(true);
 		_volumeChangerWindow.SetActive(true);
 	}
@@ -211,6 +258,8 @@ public class MenuController : MonoBehaviour
 		StartCoroutine(_game.MinigameFireball(4));
 
 		_targetCountSlider.maxValue = _game._targetsCount;
+		_game._destroyedTargetsAmount = 0;
+		UpdateTargetCountDisplay();
 		_maxTargetsText.text = _game._targetsCount.ToString();
 		
 		foreach (var button in _mainMenuButtons)
@@ -221,6 +270,7 @@ public class MenuController : MonoBehaviour
 		{
 			_selectionWindows[i].SetActive(false);
 		}
+		ToSelectionByIndex(0);
 		_exitMiniGameWindow.SetActive(true);
 		_sectionIconsWindow.SetActive(false);
 		_volumeChangerWindow.SetActive(false);
@@ -251,18 +301,10 @@ public class MenuController : MonoBehaviour
 		_music.volume = _volume;
 		_sounds.volume = _volume;
 	}
-	public void ResetChosenSprites(bool state)
+	private void RemoveDragon()
 	{
-		if (state)
-		{
-			for (int i = 0; i < _dragonButtons.Length; i++)
-			{
-				_chosenCDSprites[i].SetActive(false);
-			}
-		}
-		for (int i = 0; i < _enemyDragonButtons.Length; i++)
-		{
-			_chosenEDSprites[i].SetActive(false);
-		}
+		Destroy(_game._currentDragon);
+		cdIndex = -1;
+		UpdateDragonsDisplay();
 	}
 }

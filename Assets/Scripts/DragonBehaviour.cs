@@ -1,13 +1,14 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine.UI;
-using UnityEngine.Rendering;
+using System.Linq;
 public class DragonBehaviour : MonoBehaviour
 {
 	private GameController _game;
 	private InventorySystem _inventory;
+	private MenuController _menuController;
+	public EnemyDragonBehaviour _edController;
 	public Animator _animator;
 	[Header("Your dragon Stats")]
 	[SerializeField] public int _id;
@@ -22,8 +23,9 @@ public class DragonBehaviour : MonoBehaviour
 	
 	[Header("Points")]
 	[SerializeField] public Transform[] pointsOfTarget;
+	[SerializeField] public Transform _pointEffect;
 	[SerializeField] public Slider _hpSlider;
-	[SerializeField] public GameObject[] _gestureIcons;
+	public Transform _canvasTransform;
 	
 	[Header("Value Setting")]
 	[SerializeField] private int _minigameBallXP;
@@ -34,7 +36,6 @@ public class DragonBehaviour : MonoBehaviour
 	public bool needToShoot = true;
 	public bool needToTurn = false;
 	public bool isAttacking = false;
-	public Rigidbody _rb;
 	void Start()
 	{
 		StartCoroutine(Init());
@@ -47,21 +48,7 @@ public class DragonBehaviour : MonoBehaviour
 	{
 		if ((collision.gameObject.tag == "Enemy") && !_collisionDetected)
 		{
-			if (isAttacking)
-			{
-				Instantiate(_game._fightEffects[Random.Range(1,_game._fightEffects.Length)], collision.contacts[0].point, Quaternion.identity);
-				if (!FindAnyObjectByType<MenuController>()._sounds.isPlaying)
-				{
-					FindAnyObjectByType<MenuController>()._sounds.PlayOneShot(FindAnyObjectByType<MenuController>()._sounds.clip);
-				}
-			}
-			StartCoroutine(DealDamage());
-		}
-	}
-	private void OnTriggerEnter(Collider other)
-	{
-		if (other.CompareTag("Enemy") && !_collisionDetected)
-		{
+			Effect(collision);
 			StartCoroutine(DealDamage());
 		}
 	}
@@ -99,9 +86,11 @@ public class DragonBehaviour : MonoBehaviour
 		Quaternion _targetRot = Quaternion.LookRotation(lookAt);
 		_targetRot.x = transform.rotation.x;
 		_targetRot.z = transform.rotation.z;
-		while (transform.rotation != _targetRot)
+		float elapsedTime = 0f;
+		while (elapsedTime < 0.5f)
 		{
 			transform.rotation = Quaternion.Slerp(transform.rotation, _targetRot, 5 * Time.deltaTime);
+			elapsedTime += Time.deltaTime;
 			yield return null;
 		}
 		needToTurn = true;
@@ -119,6 +108,7 @@ public class DragonBehaviour : MonoBehaviour
 			}
 			if (_inventory._xp[_id] == 0)
 			{
+				transform.Find("SelectionVisualization").gameObject.SetActive(false);
 				StartCoroutine(SetHatchingFalse());
 			}
 			else
@@ -126,67 +116,59 @@ public class DragonBehaviour : MonoBehaviour
 				StartCoroutine(Inspect());
 			}
 		}
-		_game._currentDragon = gameObject;
+		if (_game.isSwitching)
+		{
+			transform.Find("SelectionVisualization").gameObject.SetActive(false);
+			StartCoroutine(LevelUp());
+			_game.isSwitching = false;
+		}
+		_menuController = FindAnyObjectByType<MenuController>();
 		_hp = _inventory._hp[_id];
+		_game._currentDragon = gameObject;
 		_game._cdIndex = _id;
 		_game._cdController = GetComponent<DragonBehaviour>();
 		StartCoroutine(Turn(FindAnyObjectByType<Camera>().transform.position));
-		//FindAnyObjectByType<MenuController>()._mainMenuButtons[2].gameObject.SetActive(true);
-		_rb = GetComponent<Rigidbody>();
+		_menuController._mainMenuButtons[2].gameObject.SetActive(true);
+		_menuController._mainMenuButtons[3].gameObject.SetActive(true);
 	}
-	public void AnimGestureIcons()
+	public void EnableCanvas()
 	{
-		_hpSlider.gameObject.SetActive(true);
-		foreach (var icon in _gestureIcons)
-		{
-			icon.SetActive(true);
-		}
-		// Quaternion targetRotation = Quaternion.Euler(_gestureIcons[0].transform.rotation.eulerAngles.x, _gestureIcons[0].transform.rotation.eulerAngles.y, -20);
-		// while ((_gestureIcons[0].transform.rotation.z > -20) && _game.needToFight)
-		// {
-		// 	transform.rotation = Quaternion.Slerp(_gestureIcons[0].transform.rotation, targetRotation, 3f);
-		// 	transform.rotation = Quaternion.Slerp(_gestureIcons[1].transform.rotation, targetRotation, 3f);
-		// 	yield return null;
-		// }
-		// while ((_gestureIcons[0].transform.rotation.z < -20) && _game.needToFight)
-		// {
-		// 	transform.rotation = Quaternion.Slerp(_gestureIcons[0].transform.rotation, targetRotation, 3f);
-		// 	transform.rotation = Quaternion.Slerp(_gestureIcons[1].transform.rotation, targetRotation, 3f);
-		// 	yield return null;
-		// }
-		// if (_game.needToFight)
-		// 	StartCoroutine(AnimGestureIcons());
+		_canvasTransform = transform.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "Canvas");
+		_canvasTransform.gameObject.SetActive(true);
+		_hpSlider.maxValue = _hp;
+		_hpSlider.value = _hp;
+		_hpSlider.minValue = 0;
 	}
-	public void EndAnimGestureIcons()
+	public void DisableCanvas()
 	{
-		foreach (var icon in _gestureIcons)
+		if (_canvasTransform == null)
+			_canvasTransform = transform.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "Canvas");
+		_canvasTransform.gameObject.SetActive(false);
+	}
+	private void Effect(Collision collision)
+	{
+		if (isAttacking)
 		{
-			icon.SetActive(false);
+			Instantiate(_game._fightEffects[Random.Range(1,_game._fightEffects.Length)], collision.contacts[0].point, Quaternion.identity);
+			if (!FindAnyObjectByType<MenuController>()._sounds.isPlaying)
+			{
+					FindAnyObjectByType<MenuController>()._sounds.PlayOneShot(FindAnyObjectByType<MenuController>()._sounds.clip);
+			}
 		}
-		transform.Find("Canvas").gameObject.SetActive(false);
-		FindAnyObjectByType<EnemyDragonBehaviour>().transform.Find("Canvas").gameObject.SetActive(false);
 	}
 	public IEnumerator LevelUp()
 	{
 		_animator.SetBool("IsLevelUp", true);
-		// instantiate level up effects (visual + sound)
 		yield return new WaitForSeconds(1.5f);
+		Vector3 _effectPos = transform.position;
+		_effectPos.y += 0.2f;
+		Instantiate(_game._levelUpEffect, _effectPos, Quaternion.identity);
 		_animator.SetBool("IsLevelUp", false);
 	}
 	public void FlyIdleShoot()
 	{
-		StartCoroutine(Turn(_game._selectedTargets[0].transform.position));
-		// StopCoroutine(FixShootingMinigame());
 		StartCoroutine(SetAttackState(10));
 		StartCoroutine(SpawnFireball());
-	}
-	private IEnumerator FixShootingMinigame()
-	{
-		yield return new WaitForSeconds(3f);
-		if (!needToShoot && _game._selectedTargets.Count > 0)
-		{
-			FlyIdleShoot();
-		}
 	}
 	public IEnumerator SetAttackState(int number)
 	{
@@ -194,8 +176,6 @@ public class DragonBehaviour : MonoBehaviour
 		{
 			isAttacking = true;
 			_animator.SetInteger("AttackState", number);
-			// if (number == 4)
-			// 	StartCoroutine(SpawnFireball());
 			if (number != 0)
 			{
 				yield return new WaitForSeconds(0.1f);
@@ -238,11 +218,16 @@ public class DragonBehaviour : MonoBehaviour
 			transform.position = Vector3.MoveTowards(transform.position, _movePos, _speed * Time.deltaTime);
 			yield return null;
 		}
+		needToShoot = true;
+		Debug.Log("Взлетел");
 		while (_game.isMiniGaming)
 		{
 			if (_game._selectedTargets.Count > 0 && needToShoot)
 			{
+				Debug.Log("Нашёл цель и начал поворот");
 				needToShoot = false;
+				StartCoroutine(Turn(_game._selectedTargets[0].transform.position));
+				yield return new WaitForSeconds(0.5f);
 				FlyIdleShoot();
 				StartCoroutine(ShootDelay());
 			}
@@ -256,13 +241,13 @@ public class DragonBehaviour : MonoBehaviour
 		}
 		_animator.SetInteger("FlyState", 0);
 
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(1f);
 		_inventory.GainXp(_id, 10);
 		_game._targetsCount = 0;
 	}
 	public IEnumerator ShootDelay()
 	{
-		yield return new WaitForSeconds(0.7f);
+		yield return new WaitForSeconds(1.5f);
 		needToShoot = true;
 	}
 	public IEnumerator TurnInFight()
@@ -283,34 +268,41 @@ public class DragonBehaviour : MonoBehaviour
 		{
 			_collisionDetected = true;
 			isAttacking = false;
-			FindAnyObjectByType<EnemyDragonBehaviour>()._hp -= FindAnyObjectByType<InventorySystem>()._strength[_id];
-			FindAnyObjectByType<EnemyDragonBehaviour>()._hpSlider.value = FindAnyObjectByType<EnemyDragonBehaviour>()._hp;
-			Debug.Log($"ED got damage, hp = {FindAnyObjectByType<EnemyDragonBehaviour>()._hp}");
-			if (FindAnyObjectByType<EnemyDragonBehaviour>()._hp <= 0)
+			_edController._hp -= _inventory._strength[_id];
+			_edController._hpSlider.value = _edController._hp;
+			Debug.Log($"ED got damage, hp = {_edController._hp}");
+			if (_edController._hp <= 0)
 			{
-				FindAnyObjectByType<MenuController>().ResetChosenSprites(false);
-				EndAnimGestureIcons();
-				FindAnyObjectByType<MenuController>().edIndex = -1;
-				FindAnyObjectByType<EnemyDragonBehaviour>()._animator.SetBool("IsDie", true);
-				FindAnyObjectByType<InventorySystem>().GainXp(_id, FindAnyObjectByType<EnemyDragonBehaviour>()._xpByKill);
+				_edController._animator.SetBool("IsDie", true);
+				
+				DisableCanvas();
+				_menuController.ExitMode();
+				
+				_menuController.edIndex = -1;
+				_inventory._kills++;
+				_inventory.GainXp(_id, _edController._xpByKill);
 				StartCoroutine(_game.Kill(_game._enemyDragon));
-				FindAnyObjectByType<MenuController>().ExitMode();
+				_hp = _inventory._hp[_id];
 			}
 			
 			yield return new WaitForSeconds(0.6f);
 			_collisionDetected = false;
 		}
-		StopCoroutine(FindAnyObjectByType<EnemyDragonBehaviour>().ComeCloser());
-		StartCoroutine(FindAnyObjectByType<EnemyDragonBehaviour>().ComeCloser());
+		StopCoroutine(_edController.ComeCloser());
+		StartCoroutine(_edController.ComeCloser());
 	}
 	public IEnumerator ComeCloser()
 	{
 		float distance = Vector3.Distance(transform.position, _game._enemyDragon.transform.position);
-		while (distance > FindAnyObjectByType<EnemyDragonBehaviour>()._attackRange && _game.needToFight)
+		while (distance > _edController._attackRange && _game.needToFight)
 		{
 			transform.position = Vector3.MoveTowards(transform.position, _game._enemyDragon.transform.position, 0.05f * Time.deltaTime);
 			distance = Vector3.Distance(transform.position, _game._enemyDragon.transform.position);
 			yield return null;
 		}
+	}
+	public void SpawnEffect(GameObject _effect)
+	{
+		Instantiate(_effect, _pointEffect);
 	}
 }

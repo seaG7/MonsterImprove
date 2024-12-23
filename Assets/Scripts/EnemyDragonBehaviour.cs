@@ -2,10 +2,13 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System.Linq;
 
 public class EnemyDragonBehaviour : MonoBehaviour
 {
 	private GameController _game;
+	private MenuController _menuController;
+	public DragonBehaviour _cdController;
 	public Animator _animator;
 	
 	[Header("Enemy Dragon Stats")]
@@ -26,7 +29,7 @@ public class EnemyDragonBehaviour : MonoBehaviour
 	[Header("XP Rewards")]
 	[SerializeField] public int _xpByKill;
 	[SerializeField] public Slider _hpSlider;
-	public Rigidbody _rb;
+	public Transform _canvasTransform;
 	void Start()
 	{
 		StartCoroutine(Init());
@@ -35,21 +38,7 @@ public class EnemyDragonBehaviour : MonoBehaviour
 	{
 		if ((collision.gameObject.tag == "Player") && !_collisionDetected)
 		{
-			if (isAttacking)
-			{
-				Instantiate(_game._fightEffects[Random.Range(1, _game._fightEffects.Length)], collision.contacts[0].point, Quaternion.identity);
-				if (!FindAnyObjectByType<MenuController>()._sounds.isPlaying)
-				{
-					FindAnyObjectByType<MenuController>()._sounds.PlayOneShot(FindAnyObjectByType<MenuController>()._sounds.clip);
-				}
-			}
-			StartCoroutine(DealDamage());
-		}
-	}
-	private void OnTriggerEnter(Collider other)
-	{
-		if (other.CompareTag("Player") && !_collisionDetected)
-		{
+			Effect(collision);
 			StartCoroutine(DealDamage());
 		}
 	}
@@ -66,14 +55,18 @@ public class EnemyDragonBehaviour : MonoBehaviour
 			_animator.SetInteger("AttackState", number);
 			lastNumber = number;
 			isAttacking = true;
-			// if (_animator.GetInteger("AttackState") == 4)
-			// {
-			// 	StartCoroutine(SpawnFireball());
-			// }
 			yield return new WaitForSeconds(0.2f);
 			_animator.SetInteger("AttackState", 0);
 			distance = Vector3.Distance(transform.position, _game._currentDragon.transform.position);
 			yield return new WaitForSeconds(Random.Range(1f, 4f));
+		}
+	}
+	private void Effect(Collision collision)
+	{
+		Instantiate(_game._fightEffects[Random.Range(1, _game._fightEffects.Length)], collision.contacts[0].point, Quaternion.identity);
+		if (!FindAnyObjectByType<MenuController>()._sounds.isPlaying)
+		{
+			FindAnyObjectByType<MenuController>()._sounds.PlayOneShot(FindAnyObjectByType<MenuController>()._sounds.clip);
 		}
 	}
 	public IEnumerator SpawnFireball()
@@ -116,28 +109,39 @@ public class EnemyDragonBehaviour : MonoBehaviour
 	}
 	private IEnumerator Init()
 	{
-		FindAnyObjectByType<DragonBehaviour>()._hpSlider.maxValue = FindAnyObjectByType<InventorySystem>()._hp[FindAnyObjectByType<DragonBehaviour>()._id];
-		_hpSlider.maxValue = _hp;
-		transform.Find("Canvas").gameObject.SetActive(false);
 		while (!FindAnyObjectByType<PlacementManager>().isDragged)
 		{
 			yield return null;
 		}
-		FindAnyObjectByType<DragonBehaviour>()._hpSlider.value = FindAnyObjectByType<InventorySystem>()._hp[FindAnyObjectByType<DragonBehaviour>()._id];
-		_hpSlider.value = _hp;
-		transform.Find("Canvas").gameObject.SetActive(true);
-		FindAnyObjectByType<DragonBehaviour>().transform.Find("Canvas").gameObject.SetActive(true);
+		_cdController = FindAnyObjectByType<DragonBehaviour>();
+		_cdController._edController = GetComponent<EnemyDragonBehaviour>();
+		EnableCanvas();
+		_cdController.EnableCanvas();
 		_game = FindAnyObjectByType<GameController>();
+		_menuController = FindAnyObjectByType<MenuController>();
 		_animator = GetComponent<Animator>();
-		_game.needToFight = true;
 		_game._enemyDragon = gameObject;
-		FindAnyObjectByType<DragonBehaviour>().needToTurn = true;
-		FindAnyObjectByType<DragonBehaviour>().AnimGestureIcons();
 		_game._enemyStrength = _strength;
+		
+		_game.needToFight = true;
+		_cdController.needToTurn = true;
+		StartCoroutine(_cdController.TurnInFight());
 		StartCoroutine(Turn(_game._currentDragon.transform.position));
-		StartCoroutine(FindAnyObjectByType<DragonBehaviour>().TurnInFight());
 		StartCoroutine(FlyToTarget());
-		_rb = GetComponent<Rigidbody>();
+	}
+	private void EnableCanvas()
+	{
+		_canvasTransform = transform.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "Canvas");
+		_canvasTransform.gameObject.SetActive(true);
+		_hpSlider.maxValue = _hp;
+		_hpSlider.value = _hp;
+		_hpSlider.minValue = 0;
+	}
+	private void DisableCanvas()
+	{
+		if (_canvasTransform == null)
+			_canvasTransform = transform.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "Canvas");
+		_canvasTransform.gameObject.SetActive(false);
 	}
 	public IEnumerator DealDamage()
 	{
@@ -145,25 +149,29 @@ public class EnemyDragonBehaviour : MonoBehaviour
 		{
 			_collisionDetected = true;
 			isAttacking = false;
-			FindAnyObjectByType<DragonBehaviour>()._hp -= _strength;
-			FindAnyObjectByType<DragonBehaviour>()._hpSlider.value = FindAnyObjectByType<DragonBehaviour>()._hp;
-			Debug.Log($"СD got damage, hp = {FindAnyObjectByType<DragonBehaviour>()._hp}");
-			if (FindAnyObjectByType<DragonBehaviour>()._hp <= 0)
+			_cdController._hp -= _strength;
+			_cdController._hpSlider.value = _cdController._hp;
+			Debug.Log($"СD got damage, hp = {_cdController._hp}");
+			if (_cdController._hp <= 0)
 			{
-				FindAnyObjectByType<MenuController>().ResetChosenSprites(true);
-				FindAnyObjectByType<DragonBehaviour>().EndAnimGestureIcons();
-				FindAnyObjectByType<MenuController>().cdIndex = -1;
-				FindAnyObjectByType<MenuController>().edIndex = -1;
-				FindAnyObjectByType<DragonBehaviour>()._animator.SetBool("IsDie", true);
+				_cdController.DisableCanvas();
+				DisableCanvas();
+				
+				_cdController._animator.SetBool("IsDie", true);
 				StartCoroutine(_game.Kill(_game._currentDragon));
 				StartCoroutine(_game.Kill(_game._enemyDragon));
-				FindAnyObjectByType<MenuController>().ExitMode();
+				
+				_menuController.cdIndex = -1;
+				_menuController.edIndex = -1;
+				_menuController.UpdateDragonsDisplay();
+				_menuController.UpdateEnemyDragonsDisplay();
+				_menuController.ExitMode();
 			}
 			yield return new WaitForSeconds(0.6f);
 			_collisionDetected = false;
 		}
-		StopCoroutine(FindAnyObjectByType<DragonBehaviour>().ComeCloser());
-		StartCoroutine(FindAnyObjectByType<DragonBehaviour>().ComeCloser());
+		StopCoroutine(_cdController.ComeCloser());
+		StartCoroutine(_cdController.ComeCloser());
 	}
 	public IEnumerator ComeCloser()
 	{

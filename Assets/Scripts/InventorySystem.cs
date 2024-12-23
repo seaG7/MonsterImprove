@@ -1,22 +1,21 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
+using VRDebug;
 
 public class InventorySystem : MonoBehaviour
 {
 	GameController _game;
 	MenuController _menuController;
-	public int money = 0;
+	public int _kills = 0;
 	public int maxLevel = 5;
-	public List<int> _dragonIndexes = new List<int>(3) { 0, 1, 2 };
-	public List<int> _xp = new List<int>(8) { 0, 0, 0, 0, 0, 0, 0, 0 };
-	private List<int> _currentLevelXp = new List<int>(8) { 0, 0, 0, 0, 0, 0, 0, 0 };
-	private List<int> _maxLevelXp = new List<int>(8) { 0, 0, 0, 0, 0, 0, 0, 0 };
-	[SerializeField] public List<int> _levelsXp = new List<int>(6) { 10, 20, 50, 100 };
-	public List<int> _strength = new List<int>(8) { 5, 5, 5, 5, 5, 5, 5, 5 };
-	public List<int> _hp = new List<int>(8) { 1000, 100, 100, 100, 100, 100, 100, 100 };
+	public List<int> _dragonIndexes = new List<int>(3) { };
+	public List<int> _xp = new List<int>(8) { };
+	private List<int> _currentLevelXp = new List<int>(8) { 0, 0, 0, 0, 0};
+	private List<int> _maxLevelXp = new List<int>(8) { };
+	[SerializeField] public List<int> _levelsXp = new List<int>(6) { };
+	public List<int> _strength = new List<int>(8) { };
+	public List<int> _hp = new List<int>(8) { };
 	
 	void Start()
 	{
@@ -39,8 +38,6 @@ public class InventorySystem : MonoBehaviour
 		}
 		if (CalculateCurrentLevelXp(id) >= _levelsXp[_levelsXp.Count-1])
 			return _levelsXp.Count;
-		if (level == 1 && xp == 0)
-			return 0;
 		return level;
 	}
 	public int CalculateCurrentLevelXp(int id)
@@ -63,11 +60,14 @@ public class InventorySystem : MonoBehaviour
 	}
 	public void GainXp(int id, int amount)
 	{
+		int _currentLevel = CalculateLevel(id);
 		_xp[id] += amount;
-		if (CalculateCurrentLevelXp(id) >= CalculateMaxLevelXp(id))
+		if (CalculateLevel(id) > _currentLevel)
 		{
-			_strength[id] *= 3;
-			_game._cdController.LevelUp();
+			Debug.Log("Leveled up");
+			_strength[id] *= 2;
+			if (CalculateLevel(id) != 3 && CalculateLevel(id) != 5)
+				StartCoroutine(_game._cdController.LevelUp());
 			if (CalculateLevel(id) > 1)
 			{
 				_hp[id] += 50;
@@ -75,13 +75,18 @@ public class InventorySystem : MonoBehaviour
 			if (CalculateLevel(id) == 3)
 			{
 				_dragonIndexes.Add(_dragonIndexes.Max()+1);
+				_game.SwitchGrowth();
+			}
+			if (CalculateLevel(id) == 5)
+			{
+				_game.SwitchGrowth();
 			}
 		}
 		else
 		{
 			_currentLevelXp[id] = CalculateCurrentLevelXp(id);
-			// instantiate effect for gain xp;
 		}
 		_menuController.UpdateDragonsDisplay();
+		_menuController.UpdateEnemyDragonsDisplay();
 	}
 }
