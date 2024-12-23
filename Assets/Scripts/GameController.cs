@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.XR.ARSubsystems;
+using UnityEngine.XR.ARFoundation;
 
 public class GameController : MonoBehaviour
 {
@@ -104,12 +105,12 @@ public class GameController : MonoBehaviour
 			_spawnPos.z = _startPos.z + Random.Range(-1f, 1f);
 			_spawnPos.y = _startPos.y + Random.Range(0.25f, 1.2f);
 			isColliding = true;
-			// Ray _ray = new Ray(_spawnPos, Vector3.down);
-			// RaycastHit _hit;
-			// if (Physics.Raycast(_ray, out _hit))
-			// {
-			// 	isColliding = raycastHit.transform.TryGetComponent(out ARPlane arPlane) && targetPlaneClassifications.Contains(arPlane.classification);
-			// }
+			Ray _ray = new Ray(_spawnPos, Vector3.down);
+			RaycastHit _hit;
+			if (Physics.Raycast(_ray, out _hit))
+			{
+				isColliding = _hit.transform.TryGetComponent(out ARPlane arPlane) && targetPlaneClassifications.Contains(arPlane.classification);
+			}
 		}
 		return _spawnPos;
 	}

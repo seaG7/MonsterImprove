@@ -479,7 +479,7 @@ MonoBehaviour:
   _kills: 0
   maxLevel: 5
   _dragonIndexes: 00000000
-  _xp: 3c00000000000000000000000000000000000000
+  _xp: 0000000000000000000000000000000000000000
   _levelsXp: 0a00000014000000230000003200000064000000
   _strength: 0500000005000000050000000500000005000000
   _hp: 3200000032000000320000003200000032000000
@@ -16300,7 +16300,7 @@ Transform:
   m_GameObject: {fileID: 4195540987131235014}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.2, z: 0.697}
+  m_LocalPosition: {x: 0, y: 0.947, z: 0.663}
   m_LocalScale: {x: 0.059999976, y: 0.059999976, z: 0.059999976}
   m_ConstrainProportionsScale: 1
   m_Children:
