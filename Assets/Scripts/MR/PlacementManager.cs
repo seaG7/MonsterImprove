@@ -59,7 +59,13 @@ public class PlacementManager : MonoBehaviour
 			{
 				if (raycastHit.transform.TryGetComponent(out ARPlane arPlane) && targetPlaneClassifications.Contains(arPlane.classification))
 				{
-					_object.transform.position = raycastHit.point;
+					if (!_game.isPlacingDragon)
+						_object.transform.position = raycastHit.point;
+					else
+					{
+						if (Vector3.Distance(_game._currentDragon.transform.position, _object.transform.position) > 1.2f)
+							_object.transform.position = raycastHit.point;
+					}
 				}
 			}
 			yield return null;

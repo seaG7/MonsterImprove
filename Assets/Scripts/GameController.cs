@@ -31,6 +31,7 @@ public class GameController : MonoBehaviour
 	public bool isSwitching = false;
 	[SerializeField] public GameObject[] _fightEffects;
 	[SerializeField] public GameObject _levelUpEffect;
+	public bool isPlacingDragon = false;
 	void Start()
 	{
 		
@@ -65,9 +66,9 @@ public class GameController : MonoBehaviour
 	public void SelectED(int index)
 	{
 		ClearQueueSpawn();
-		Destroy(FindAnyObjectByType<EnemyDragonBehaviour>());
 		if (_EDs.Length > index)
 			ToQueueSpawn(_EDs[index]);
+		isPlacingDragon = true;
 	}
 	public IEnumerator MinigameFireball(int _countOfTargets)
 	{
