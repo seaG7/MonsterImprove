@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6613484835445457228}
   - component: {fileID: -2788062934500909202}
   - component: {fileID: 2903439776900904582}
-  - component: {fileID: 6171807084880732708}
+  - component: {fileID: -6268927458760195603}
   m_Layer: 0
   m_Name: object
   m_TagString: Untagged
@@ -214,8 +214,8 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!64 &6171807084880732708
-MeshCollider:
+--- !u!65 &-6268927458760195603
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -232,10 +232,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 3
+  m_Size: {x: 1.14, y: 1.66, z: 1}
+  m_Center: {x: 0, y: 0.88, z: 0}
 --- !u!1001 &6782340309877059223
 PrefabInstance:
   m_ObjectHideFlags: 0
