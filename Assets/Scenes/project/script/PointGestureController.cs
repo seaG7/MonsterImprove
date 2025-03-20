@@ -9,6 +9,7 @@ public class PointGestureController : MonoBehaviour
     public XRRayInteractor leftHandRay;  // Лазерный луч из левой руки
     public bool IsPointGestureDetected = false;
 
+
     void Update()
     {
         if (IsPointGestureDetected)
@@ -16,7 +17,7 @@ public class PointGestureController : MonoBehaviour
             // Проверяем, попал ли луч в объект
             if (leftHandRay != null && leftHandRay.TryGetCurrent3DRaycastHit(out RaycastHit hit))
             {
-                petMovement.MoveToPoint(hit.point);
+                petMovement.MoveToPoint(hit.point, hit.transform);
             }
         }
     }

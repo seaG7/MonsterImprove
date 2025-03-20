@@ -5,6 +5,7 @@ public class PetMovement : MonoBehaviour
     public float speed = 2f;
     private Vector3 targetPosition;
     private bool isMoving = false;
+    private Transform targetTransform;
 
     private Animator animator;
 
@@ -22,11 +23,13 @@ public class PetMovement : MonoBehaviour
         }
     }
 
-    public void MoveToPoint(Vector3 point)
+    public void MoveToPoint(Vector3 point, Transform pointtransform)
     {
+
         targetPosition = point;
         isMoving = true;
         animator.SetBool("IsFlying", true); // Включаем анимацию полета
+        transform.LookAt(pointtransform);
     }
 
     void MoveToTarget()
@@ -40,9 +43,5 @@ public class PetMovement : MonoBehaviour
         }
     }
 
-    public void Die()
-    {
-        animator.SetTrigger("Die"); // Запуск анимации смерти
-        Destroy(gameObject, 2f); // Удаляем объект после анимации
-    }
+
 }
