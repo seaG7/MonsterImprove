@@ -9,6 +9,7 @@ TagManager:
   - Target
   - Apple
   - PlayerHand
+  - Pat
   layers:
   - Default
   - TransparentFX

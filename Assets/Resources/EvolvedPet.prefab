@@ -78,6 +78,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: EvolvedPet
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 09fc5285d1c9a0649b4c563eb31030e7,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 09fc5285d1c9a0649b4c563eb31030e7,
         type: 3}
       propertyPath: m_Controller
@@ -158,6 +163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 377f474c374dd694fb868ba16abe03be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  experience: 0
+  experienceText: {fileID: 0}
   gameOverMenuController: {fileID: 0}
   happiness: 100
   hunger: 100

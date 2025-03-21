@@ -16,7 +16,7 @@ public class PetTouch : MonoBehaviour
         if (other.CompareTag("PlayerHand")) // Проверяем, коснулся ли питомца игрок
         {
             ShowHeart(); // Показываем сердечко
-            petStats.IncreaseHappiness(10); // Увеличиваем радость
+            petStats.IncreaseHappiness(5); // Увеличиваем радость
         }
     }
 

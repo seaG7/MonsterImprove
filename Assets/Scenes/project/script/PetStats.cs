@@ -6,8 +6,10 @@ using UnityEngine.UI;
 
 public class PetStats : MonoBehaviour
 {
+    public int experience = 0;  // Очки опыта
+
     public GameOverMenuController gameOverMenuController;  // Ссылка на скрипт UI
-    private int evolvecount = 0; // Переменная, отслеживающая количество эволюций
+    public int evolvecount = 0; // Переменная, отслеживающая количество эволюций
     public static PetStats instance;
 
     public int happiness = 50;
@@ -27,6 +29,8 @@ public class PetStats : MonoBehaviour
         StartCoroutine(DecreaseStatsOverTime()); // Запускаем корутину при старте
         animator = GetComponent<Animator>();
     }
+
+
 
     public void Die()
     {
@@ -68,7 +72,7 @@ public class PetStats : MonoBehaviour
         }
 
         // Если характеристики счастья или голода = 0, питомец умирает
-        if (happiness <= 2 || hunger <= 2)
+        if (happiness <= 5 || hunger <= 5)
         {
             Die();
         }
@@ -84,7 +88,6 @@ public class PetStats : MonoBehaviour
             happiness = Mathf.Max(happiness - 3, 0); // Уменьшаем счастье, но не ниже 0
             hunger = Mathf.Max(hunger - 3, 0); // Уменьшаем голод, но не ниже 0
 
-            Debug.Log($"Характеристики падают: Радость {happiness}, Голод {hunger}");
         }
     }
 

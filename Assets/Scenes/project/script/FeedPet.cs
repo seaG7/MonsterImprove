@@ -18,18 +18,18 @@ public class FeedPet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Apple"))  
+        if (other.CompareTag("Apple"))
         {
-            Destroy(other.gameObject); 
+            Destroy(other.gameObject);
 
             if (petStats != null)
             {
-                petStats.IncreaseHunger(20); // Повышаем сытость
-                ShowSmiley(); 
+                petStats.IncreaseHunger(15); // Повышаем сытость
+                ShowSmiley();
             }
             else
             {
-                Debug.LogError("PetStats не найден! Убедись, что у питомца есть этот компонент.");
+                Debug.LogError("PetStats не найден!");
             }
         }
     }
