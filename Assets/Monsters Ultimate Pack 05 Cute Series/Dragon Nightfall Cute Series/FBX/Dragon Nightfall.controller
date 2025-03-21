@@ -290,7 +290,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: isflying
+  - m_Name: IsFlying
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -317,8 +317,8 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 3
-    m_ConditionEvent: isflying
+  - m_ConditionMode: 1
+    m_ConditionEvent: IsFlying
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2346382466625072771}
@@ -372,7 +372,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: isflying
+    m_ConditionEvent: IsFlying
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1900439867022648803}
@@ -380,9 +380,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
-  m_TransitionOffset: 0
-  m_ExitTime: 0.625
+  m_TransitionDuration: 0.24999991
+  m_TransitionOffset: 0.06970963
+  m_ExitTime: 0.74699175
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0

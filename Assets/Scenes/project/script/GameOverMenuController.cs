@@ -20,12 +20,10 @@ public class GameOverMenuController : MonoBehaviour
     {
         if (!menuDisplayed)
         {
+            gameOverMenu.SetActive(true);   // Показываем меню смерти
             // Позиционируем меню перед камерой
-            gameOverMenu.transform.position = playerCamera.position + playerCamera.forward * 2f; // Расстояние 2 метра перед камерой
+            gameOverMenu.transform.position = playerCamera.position + playerCamera.forward * 0.4f; // Расстояние перед камерой
             gameOverMenu.transform.LookAt(playerCamera); //  меню на камеру
-
-            // Показываем меню смерти
-            gameOverMenu.SetActive(true);
 
             menuDisplayed = true; // Меню было отображено, флаг установлен
         }

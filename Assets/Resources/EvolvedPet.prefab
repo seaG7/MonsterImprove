@@ -102,10 +102,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 09fc5285d1c9a0649b4c563eb31030e7,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7785662472613655387}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 09fc5285d1c9a0649b4c563eb31030e7,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1890380380214023558}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 09fc5285d1c9a0649b4c563eb31030e7,
         type: 3}
@@ -162,24 +158,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 377f474c374dd694fb868ba16abe03be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameOverMenuController: {fileID: 0}
   happiness: 100
   hunger: 100
   evolutionTime: 90
---- !u!114 &7785662472613655387
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5981546600825182745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eaf3acb6c0235b45a89403248ac6f77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  petMovement: {fileID: 8986072466194135313}
-  leftHandRay: {fileID: 0}
-  IsPointGestureDetected: 0
+  evolutionEffectPrefab: {fileID: 0}
 --- !u!54 &1890380380214023558
 Rigidbody:
   m_ObjectHideFlags: 0

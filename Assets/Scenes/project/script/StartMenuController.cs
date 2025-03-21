@@ -21,7 +21,7 @@ public class StartMenuController : MonoBehaviour
     {
         if (schet == false)
         {        
-            Vector3 position = mainCamera.transform.position + mainCamera.transform.forward * 2f; // 2 метра перед камерой
+            Vector3 position = mainCamera.transform.position + mainCamera.transform.forward * 0.5f; //  перед камерой
             startMenu.transform.position = position;  // Задаем позицию меню перед камерой
             startMenu.transform.rotation = Quaternion.LookRotation(mainCamera.transform.forward);        // Задаем ориентацию меню, чтобы оно было обращено к камере
             schet = true;

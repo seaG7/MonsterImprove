@@ -24,13 +24,13 @@ public class PointGestureController : MonoBehaviour
 
     public void GestureTrue()
     {
-        // Здесь добавляем проверку на жест "указание пальцем"
-        IsPointGestureDetected = true; // Пока просто всегда включен
+        
+        IsPointGestureDetected = true; // просто всегда включен
     }
 
     public void GestureFalse()
     {
-        // Здесь добавляем проверку на жест "указание пальцем"
-        IsPointGestureDetected = false; // Пока просто всегда включен
+        
+        IsPointGestureDetected = false; // просто всегда включен
     }
 }

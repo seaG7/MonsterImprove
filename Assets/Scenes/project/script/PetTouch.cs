@@ -23,7 +23,7 @@ public class PetTouch : MonoBehaviour
     void ShowHeart()
     {
         Vector3 spawnpose = transform.position;
-        spawnpose.y += 0.4f;
+        spawnpose.y += 0.5f;
         GameObject Heart = Instantiate(heartPrefab, spawnpose, new Quaternion(0, 0, 0, 0));
         Destroy(Heart, 3f); // Удаляем через 3 секунды
     }

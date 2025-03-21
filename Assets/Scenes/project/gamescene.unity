@@ -1532,6 +1532,53 @@ Camera:
     type: 3}
   m_PrefabInstance: {fileID: 1508681561}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &558096456
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 558096458}
+  - component: {fileID: 558096457}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &558096457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558096456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eaf3acb6c0235b45a89403248ac6f77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  petMovement: {fileID: 4818635766063489664}
+  leftHandRay: {fileID: 1985594800}
+  IsPointGestureDetected: 0
+--- !u!4 &558096458
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558096456}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &570434851
 GameObject:
   m_ObjectHideFlags: 0
@@ -2554,6 +2601,39 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1057815534}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1093702228 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7100350694656232389, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+    type: 3}
+  m_PrefabInstance: {fileID: 1508681561}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &1093702233
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1093702228}
+  serializedVersion: 4
+  m_Mass: 0.0000001
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 0
+  m_ImplicitTensor: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1217845945
 GameObject:
   m_ObjectHideFlags: 0
@@ -3379,7 +3459,7 @@ MonoBehaviour:
   m_GesturePerformed:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4818635766063489663}
+      - m_Target: {fileID: 558096457}
         m_TargetAssemblyTypeName: PointGestureController, Assembly-CSharp
         m_MethodName: GestureTrue
         m_Mode: 1
@@ -3394,7 +3474,7 @@ MonoBehaviour:
   m_GestureEnded:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4818635766063489663}
+      - m_Target: {fileID: 558096457}
         m_TargetAssemblyTypeName: PointGestureController, Assembly-CSharp
         m_MethodName: GestureFalse
         m_Mode: 1
@@ -3858,6 +3938,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: w
       objectReference: {fileID: 0}
+    - target: {fileID: 8083751582310765598, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_TagString
+      value: PlayerHand
+      objectReference: {fileID: 0}
+    - target: {fileID: 9153272346877832867, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      propertyPath: m_TagString
+      value: PlayerHand
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -3894,6 +3984,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1508681566}
+    - targetCorrespondingSourceObject: {fileID: 7100350694656232389, guid: 5eccbf4be2c00e94689ee8062e4e7276,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1093702233}
   m_SourcePrefab: {fileID: 100100000, guid: 5eccbf4be2c00e94689ee8062e4e7276, type: 3}
 --- !u!1 &1508681562 stripped
 GameObject:
@@ -4621,7 +4715,7 @@ MonoBehaviour:
   m_GesturePerformed:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4818635766063489663}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PointGestureController, Assembly-CSharp
         m_MethodName: GestureTrue
         m_Mode: 1
@@ -4636,7 +4730,7 @@ MonoBehaviour:
   m_GestureEnded:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4818635766063489663}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PointGestureController, Assembly-CSharp
         m_MethodName: GestureFalse
         m_Mode: 1
@@ -5434,16 +5528,16 @@ Transform:
   - {fileID: 1834026921}
   m_Father: {fileID: 1284075188}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4818635766063489663 stripped
+--- !u!114 &4818635766063489664 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2893338574520897036, guid: 0bb1bd95ea387e6409575e61df0d97bb,
+  m_CorrespondingSourceObject: {fileID: 4487726751936499022, guid: 0bb1bd95ea387e6409575e61df0d97bb,
     type: 3}
   m_PrefabInstance: {fileID: 5922028080240752439}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eaf3acb6c0235b45a89403248ac6f77, type: 3}
+  m_Script: {fileID: 11500000, guid: 0cfcb3cbe78bf79458f6db0650d90715, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &5922028080240752439
@@ -5514,7 +5608,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 5289334069677789712, guid: 0bb1bd95ea387e6409575e61df0d97bb,
+        type: 3}
+      propertyPath: evolutionTime
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5289334069677789712, guid: 0bb1bd95ea387e6409575e61df0d97bb,
+        type: 3}
+      propertyPath: gameOverMenuController
+      value: 
+      objectReference: {fileID: 1272382649}
+    m_RemovedComponents:
+    - {fileID: 2893338574520897036, guid: 0bb1bd95ea387e6409575e61df0d97bb, type: 3}
+    - {fileID: 3417293865273991653, guid: 0bb1bd95ea387e6409575e61df0d97bb, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -5531,3 +5637,4 @@ SceneRoots:
   - {fileID: 138866859}
   - {fileID: 603749846}
   - {fileID: 1272382650}
+  - {fileID: 558096458}

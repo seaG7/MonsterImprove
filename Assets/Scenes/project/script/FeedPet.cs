@@ -5,7 +5,7 @@ using UnityEngine;
 public class FeedPet : MonoBehaviour
 {
     public GameObject smileyPrefab;  // Префаб смайлика
-    public Transform pet;  // Ссылка на питомца (назначь в Inspector)
+    public Transform pet;  // Ссылка на питомца 
     private PetStats petStats;
 
     void Start()
@@ -18,14 +18,14 @@ public class FeedPet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Apple"))  // Проверяем, яблоко ли это
+        if (other.CompareTag("Apple"))  
         {
-            Destroy(other.gameObject); // Удаляем яблоко
+            Destroy(other.gameObject); 
 
             if (petStats != null)
             {
                 petStats.IncreaseHunger(20); // Повышаем сытость
-                ShowSmiley(); // Показываем смайлик
+                ShowSmiley(); 
             }
             else
             {
@@ -37,7 +37,7 @@ public class FeedPet : MonoBehaviour
     void ShowSmiley()
     {
         Vector3 spawnpose = transform.position;
-        spawnpose.y += 0.4f;
+        spawnpose.y += 0.3f;
         GameObject smiley = Instantiate(smileyPrefab, spawnpose, new Quaternion(0,0,0,0));
         Destroy(smiley, 3f); // Удаляем через 3 секунды
     }

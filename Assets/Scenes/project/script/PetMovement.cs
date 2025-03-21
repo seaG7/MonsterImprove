@@ -28,7 +28,7 @@ public class PetMovement : MonoBehaviour
 
         targetPosition = point;
         isMoving = true;
-        animator.SetBool("IsFlying", true); // Включаем анимацию полета
+        animator.SetBool("IsFlying", true); // анимацию полета
         transform.LookAt(pointtransform);
     }
 
@@ -39,7 +39,7 @@ public class PetMovement : MonoBehaviour
         if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
         {
             isMoving = false;
-            animator.SetBool("IsFlying", false); // Возвращаемся в Idle
+            animator.SetBool("IsFlying", false); // В Idle
         }
     }
 
